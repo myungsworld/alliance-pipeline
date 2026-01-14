@@ -1,0 +1,43 @@
+# docker-compose.yaml - Alliance Pipeline
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: alliance-pipeline
+    volumes:
+      # 소스 코드 마운트 (개발용)
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./config:/app/config
+      # 데이터 영속화
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=development
+      - DEBUG=true
+      - BROWSER_HEADLESS=true
+      - PYTHONPATH=/app
+    # Chrome을 위한 공유 메모리
+    shm_size: '2gb'
+    # 헬스체크
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Redis (선택 - 큐/캐시용)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: alliance-redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+
+# volumes:
+#   redis_data:

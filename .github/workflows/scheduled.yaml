@@ -1,0 +1,50 @@
+# scheduled.yaml - GitHub Actions 스케줄러
+# 매일 자동으로 파이프라인 실행
+
+name: Scheduled Pipeline
+
+on:
+  # 수동 실행
+  workflow_dispatch:
+
+  # 스케줄 (UTC 기준)
+  # schedule:
+  #   - cron: '0 0 * * *'  # 매일 UTC 00:00 (KST 09:00)
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Install ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install undetected-chromedriver
+
+      - name: Create secrets file
+        run: |
+          echo "${{ secrets.SECRETS_YAML }}" > config/secrets.yaml
+
+      - name: Run pipeline
+        run: |
+          python scripts/run.py scrape coupang.deals --max 5
+        env:
+          BROWSER_HEADLESS: true
+
+      # - name: Run full pipeline
+      #   run: |
+      #     python scripts/run.py pipeline coupang-to-blog
