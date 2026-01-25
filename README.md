@@ -145,10 +145,74 @@ alliance-pipeline/
 ├── .env.example           # 환경변수 예시
 ├── .gitignore
 ├── init.sql               # DB 초기화 스크립트
-├── seed_more_data.sql     # 추가 데이터
 ├── files/                 # n8n 파일 저장소
-├── IDEAS.md               # 아이디어 정리
+├── workflows/             # n8n 워크플로우 백업 (JSON)
+├── DEVELOPMENT.md         # 개발 일지
 └── README.md              # 이 파일
+```
+
+## 다른 컴퓨터에서 환경 설정
+
+### 1. 프로젝트 클론
+```bash
+git clone https://github.com/your-repo/alliance-pipeline.git
+cd alliance-pipeline
+```
+
+### 2. 환경변수 설정
+```bash
+cp .env.example .env
+```
+
+`.env` 파일을 열어서 다음 값들을 입력:
+```bash
+POSTGRES_PASSWORD=your_password
+GEMINI_API_KEY=your_gemini_key
+TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_CHAT_ID=your_chat_id
+NGROK_AUTHTOKEN=your_ngrok_token
+WEBHOOK_URL=your_ngrok_url
+```
+
+### 3. Docker 실행
+```bash
+docker compose up -d
+```
+
+### 4. n8n 워크플로우 가져오기
+1. http://localhost:5678 접속
+2. 좌측 메뉴에서 `Import from File` 클릭
+3. `workflows/` 폴더의 JSON 파일 선택
+4. Credential 재설정 필요:
+   - PostgreSQL (Host: `postgres`, DB: `content_db`)
+   - Telegram Bot Token
+   - Google Gemini API Key
+
+### 5. ngrok 설정 (Telegram Webhook용)
+```bash
+ngrok http 5678
+```
+생성된 HTTPS URL을 `.env`의 `WEBHOOK_URL`에 업데이트 후 컨테이너 재시작:
+```bash
+docker compose down && docker compose up -d
+```
+
+## 워크플로우 관리
+
+### 백업/내보내기
+워크플로우 수정 후 다음 명령으로 백업:
+```bash
+docker exec n8n n8n export:workflow --backup --output=/workflows/
+```
+
+### 삭제
+```bash
+# 1. JSON 파일 삭제
+rm workflows/워크플로우ID.json
+
+# 2. n8n API로 완전 삭제 (API 키: n8n UI > Settings > API에서 생성)
+curl -X DELETE "http://localhost:5678/api/v1/workflows/워크플로우ID" \
+  -H "X-N8N-API-KEY: your_api_key"
 ```
 
 ## 예상 비용 (콘텐츠 1개당)
