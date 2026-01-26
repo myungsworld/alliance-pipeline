@@ -1,0 +1,544 @@
+{
+  "updatedAt": "2026-01-26T08:08:24.741Z",
+  "createdAt": "2026-01-26T04:20:45.865Z",
+  "id": "Nhs2jfOUJcVaRAI3JoE4O",
+  "name": "flow2",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        0
+      ],
+      "id": "98448859-806b-408d-8843-f88bfe515dc6",
+      "name": "Telegram Trigger",
+      "webhookId": "f3106585-addc-41cf-9ce6-3d0131bebdf9",
+      "credentials": {
+        "telegramApi": {
+          "id": "5DNhH1gEdL8It8Ou",
+          "name": "myungsworld-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// callback_data에서 object_id, creature_id 추출\nconst callbackData = $input.first().json.callback_query.data;\n// \"select_204_141\" → [\"select\", \"204\", \"141\"]\nconst parts = callbackData.split('_');\n\nreturn {\n  object_id: parseInt(parts[1]),\n  creature_id: parseInt(parts[2])\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        -160
+      ],
+      "id": "44b45ef1-0bdf-44ea-9818-56b4fda0580a",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  o.id as object_id,\n  o.name as object_name,\n  c.id as creature_id,\n  c.name as creature_name\nFROM objects o, creatures c\nWHERE o.id = {{ $json.object_id }} AND c.id = {{ $json.creature_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        656,
+        -160
+      ],
+      "id": "62a78dd3-b872-4668-a83c-5cc05701d523",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 1,
+          "topK": 32,
+          "topP": 1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        960,
+        -48
+      ],
+      "id": "3c7666eb-d92e-4810-8685-439995cff554",
+      "name": "Google Gemini Chat Model",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "T6hLQOKnt40dUWSA",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7d8de42e-3b07-462f-a863-d9adf073a812",
+              "leftValue": "={{ $json.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data }}",
+              "rightValue": "select_",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "bbcd8d4f-42cb-4bba-a437-4522c56c2f5e",
+      "name": "조우"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4862a4c6-dfa1-44f3-8a7b-8c36e2415c32",
+              "leftValue": "={{ $json.callback_query.data }}",
+              "rightValue": "vs_",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            },
+            {
+              "id": "d4fcf321-0633-4e58-87cb-8df1fca87240",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        144
+      ],
+      "id": "1f1e2495-36d1-471a-b97b-0db9aa4829ac",
+      "name": "대결"
+    },
+    {
+      "parameters": {
+        "jsCode": "const callbackData = $input.first().json.callback_query.data;\n// \"vs_204_141_55_78\" → [\"vs\", \"204\", \"141\", \"55\", \"78\"]\nconst parts = callbackData.split('_');\n\nreturn {\n  team1_object_id: parseInt(parts[1]),\n  team1_creature_id: parseInt(parts[2]),\n  team2_object_id: parseInt(parts[3]),\n  team2_creature_id: parseInt(parts[4])\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        128
+      ],
+      "id": "8b15c2ac-d98d-41c6-9428-b59394462d8e",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  o1.name as team1_object, c1.name as team1_creature,\n  o2.name as team2_object, c2.name as team2_creature\nFROM objects o1, creatures c1, objects o2, creatures c2\nWHERE o1.id = {{ $json.team1_object_id }}\n  AND c1.id = {{ $json.team1_creature_id }}\n  AND o2.id = {{ $json.team2_object_id }}\n  AND c2.id = {{ $json.team2_creature_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        656,
+        128
+      ],
+      "id": "72c9e2a3-fc3b-42d0-89a2-9857c56f4a91",
+      "name": "Execute a SQL query1",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "8201163317",
+        "text": "=🎬 새 스크립트 생성됨!  조합: {{ $('Execute a SQL query').item.json.creature_name }} + {{ $('Execute a SQL query').item.json.object_name }}  스크립트: {{ $('생물+물건 랜덤조합 스토리 작성').item.json.text }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "다음",
+                    "additionalFields": {
+                      "callback_data": "approve"
+                    }
+                  },
+                  {
+                    "text": "재생성",
+                    "additionalFields": {
+                      "callback_data": "retry"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1664,
+        -256
+      ],
+      "id": "808c39fb-aa8f-416b-a88a-9933f3bd3c1c",
+      "name": "send to script-bot",
+      "webhookId": "576ba25b-54fa-44e4-8cd8-390593daa8ab",
+      "credentials": {
+        "telegramApi": {
+          "id": "hjKKDhzAr95XXqw9",
+          "name": "script-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "8201163317",
+        "text": "={{ $json.text }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "이미지생성",
+                    "additionalFields": {
+                      "callback_data": "create_image"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        128
+      ],
+      "id": "351bf0e1-d223-4372-8a10-021c6cfc9680",
+      "name": "Send a text message",
+      "webhookId": "7b27604d-fc4d-46b7-805e-763a29d7c51c",
+      "credentials": {
+        "telegramApi": {
+          "id": "hjKKDhzAr95XXqw9",
+          "name": "script-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\"{{ $json.team1_object }} 을(를) 가진 {{ $json.team1_creature }}\" vs \"{{ $json.team2_object }} 을(를) 가진 {{ $json.team2_creature }}\"\n\n위의 소재로 숏폼 컨텐츠를 생성하고 싶어\n현실적인건 상관없어 그냥 재밌으면 돼 \n만약 두 소재가 터무니없이 밸런스가 맞지 않으면 환경이나 상황을 마음대로 웃기게 추가해서 밸런스를 맞춰주면 돼\n\n이걸 기반으로 시나리오를 써줘\n\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        880,
+        128
+      ],
+      "id": "d079983f-bb6e-4996-8d6d-36303fdacd07",
+      "name": "대결 시나리오 작성"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.creature_name }} 이(가) {{ $json.object_name }} 을(를) 마주했을때 일어날수 있는 웃긴 상황들을 5가지로 정리\n\ngo to the point , do not verbose.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        880,
+        -256
+      ],
+      "id": "1d32927c-398f-45ae-ac68-e845bce3a931",
+      "name": "생물+물건 랜덤조합 스토리 작성"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -96,
+        448
+      ],
+      "id": "e0c51af0-55c3-4284-9063-3a457bbbda86",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"object_name\": \"pencil\",\n    \"creature_name\": \"robot\",\n    \"situation\" : [\"\",\"\",\"\",\"\",\"\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1104,
+        -48
+      ],
+      "id": "38ecdef8-48c3-49f5-a054-e548dc15dff5",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json.output;  // output 안에 있음!\nconst creature = input.creature_name;\nconst object = input.object_name;\nconst situations = input.situation;\n\nconst situationList = situations\n  .map((s, i) => `${i + 1}. ${s}`)\n  .join('\\n');\n\nconst message = `🎬 새 스크립트 생성됨!\n\n조합: ${creature} + ${object}\n\n상황:\n${situationList}`;\n\nreturn {\n  text: message\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        -256
+      ],
+      "id": "df49dcb2-5dc5-4e9e-9c34-31946adc6e25",
+      "name": "Code in JavaScript2"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "조우",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "생물+물건 랜덤조합 스토리 작성",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "대결 시나리오 작성",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "생물+물건 랜덤조합 스토리 작성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "조우": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "대결",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "대결": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query1": {
+      "main": [
+        [
+          {
+            "node": "대결 시나리오 작성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "대결 시나리오 작성": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "생물+물건 랜덤조합 스토리 작성": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "생물+물건 랜덤조합 스토리 작성",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "send to script-bot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "4858faa0-43df-4297-8fa0-b02d8de30498",
+  "activeVersionId": null,
+  "versionCounter": 229,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-01-26T04:20:45.868Z",
+      "createdAt": "2026-01-26T04:20:45.868Z",
+      "role": "workflow:owner",
+      "workflowId": "Nhs2jfOUJcVaRAI3JoE4O",
+      "projectId": "OXeW9s41dXHR20eI",
+      "project": {
+        "updatedAt": "2026-01-24T02:28:30.655Z",
+        "createdAt": "2026-01-24T02:27:33.046Z",
+        "id": "OXeW9s41dXHR20eI",
+        "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "e2a50ebe-382d-4360-bacf-362d1e04f653"
+      }
+    }
+  ]
+}

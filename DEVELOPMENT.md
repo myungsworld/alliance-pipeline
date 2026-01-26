@@ -24,8 +24,8 @@
    - Docker 컨테이너에 WEBHOOK_URL 적용 완료
 
 4. **텔레그램 봇 설정**
-   - 봇 이름: @myungsworldbot
-   - Chat ID: 8201163317
+   - 봇 이름: @your_bot_name
+   - Chat ID: .env 파일 참조
    - 메시지 전송 정상 작동 확인
 
 5. **워크플로우 1: llmFlow (조합 선택)**
@@ -123,11 +123,11 @@ GEMINI_API_KEY=****
 
 # Telegram
 TELEGRAM_BOT_TOKEN=****
-TELEGRAM_CHAT_ID=8201163317
+TELEGRAM_CHAT_ID=****
 
 # ngrok
 NGROK_AUTHTOKEN=****
-WEBHOOK_URL=https://propolitics-rena-nonchangeable.ngrok-free.dev
+WEBHOOK_URL=https://your-ngrok-url.ngrok-free.dev
 
 # n8n API (워크플로우 관리용)
 N8N_API_KEY=****

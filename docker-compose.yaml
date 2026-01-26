@@ -15,6 +15,17 @@ services:
       - WEBHOOK_URL=${WEBHOOK_URL}
     depends_on:
       - postgres
+      - ngrok
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok
+    restart: unless-stopped
+    command: http n8n:5678 --domain=${NGROK_DOMAIN}
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    ports:
+      - "4040:4040"
 
   postgres:
     image: postgres:16-alpine
