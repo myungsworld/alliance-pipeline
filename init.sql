@@ -311,3 +311,33 @@ INSERT INTO creatures (name, category) VALUES
 ('어쌔신', '캐릭터'), ('궁사', '캐릭터'), ('소환사', '캐릭터'), ('연금술사', '캐릭터'),
 ('바드', '캐릭터'), ('팔라딘', '캐릭터'), ('네크로맨서', '캐릭터'), ('드루이드', '캐릭터')
 ON CONFLICT (name) DO NOTHING;
+
+-- =====================
+-- 조우 스크립트 테이블
+-- =====================
+CREATE TABLE encounter_scripts (
+    id SERIAL PRIMARY KEY,
+
+    -- 조합 정보
+    object_id INTEGER REFERENCES objects(id),
+    creature_id INTEGER REFERENCES creatures(id),
+    object_name VARCHAR(100),
+    creature_name VARCHAR(100),
+
+    -- LLM 생성 결과 (5개 상황)
+    situations JSONB NOT NULL,
+
+    -- 선택 정보
+    selected_index INTEGER,
+
+    -- 상태 관리
+    -- pending: 생성됨, selected: 상황 선택됨, approved: 승인, rejected: 폐기
+    status VARCHAR(20) DEFAULT 'pending',
+
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 인덱스
+CREATE INDEX idx_encounter_scripts_status ON encounter_scripts(status);
+CREATE INDEX idx_encounter_scripts_object_creature ON encounter_scripts(object_id, creature_id);

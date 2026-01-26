@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-01-26T05:31:39.079Z",
-  "createdAt": "2026-01-26T04:20:27.004Z",
-  "id": "EZ9hMLEAVSKrazyQpqszb",
-  "name": "flow1",
+  "updatedAt": "2026-01-26T11:36:34.181Z",
+  "createdAt": "2026-01-26T11:03:20.377Z",
+  "id": "ShK7FKUMNCnDWcq3EqfAA",
+  "name": "start",
   "description": null,
   "active": false,
   "isArchived": false,
@@ -16,17 +16,144 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        0,
+        -112,
         0
       ],
-      "id": "0339c3d1-2db4-4990-afcd-cf85b1778165",
+      "id": "c563714b-79ca-49d3-a042-d14f964ca875",
       "name": "Execute a SQL query",
       "credentials": {
         "postgres": {
-          "id": "ZwpbCKcvAHS9Ywfz",
+          "id": "7YVz70FvVAJ4KXbv",
           "name": "Postgres account"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst buttons = items.map(item => [{\n  text: `${item.json.object_name} + ${item.json.creature_name}`,\n  callback_data: `select_${item.json.object_id}_${item.json.creature_id}`\n}]);\n\nreturn [{\n  json: {\n    chat_id: \"8201163317\",\n    text: \"🎲 랜덤조합 명이의 선택은?:\",\n    reply_markup: {\n      inline_keyboard: buttons\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        0
+      ],
+      "id": "f6471842-e9c6-4e80-98ac-c59ad2041cdd",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot8550742589:AAFNn4FR-0cEPPOqEkAZsXTo-lL-85CtkUo/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        336,
+        96
+      ],
+      "id": "e01e5366-0a95-41a5-b69b-00655200dfe1",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    o.id as object_id,\n    o.name as object_name,\n    c.id as creature_id,\n    c.name as creature_name\nFROM objects o\nCROSS JOIN creatures c\nWHERE NOT EXISTS (\n    SELECT 1 FROM combinations_used cu\n    WHERE cu.object_id = o.id AND cu.creature_id = c.id\n)\nORDER BY RANDOM()\nLIMIT 10;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -112,
+        192
+      ],
+      "id": "74c1d2ef-6aa7-4da1-8fbb-a798dce2241c",
+      "name": "Execute a SQL query1",
+      "credentials": {
+        "postgres": {
+          "id": "7YVz70FvVAJ4KXbv",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// 2개씩 묶어서 vs 버튼 생성\nconst buttons = [];\nfor (let i = 0; i < items.length - 1; i += 2) {\n  const item1 = items[i].json;\n  const item2 = items[i + 1].json;\n  \n  buttons.push([{\n    text: `${item1.creature_name} + ${item1.object_name} vs ${item2.creature_name} + ${item2.object_name}`,\n    callback_data: `vs_${item1.object_id}_${item1.creature_id}_${item2.object_id}_${item2.creature_id}`\n  }]);\n}\n\n// ✅ 반드시 배열 안에 json 객체로 반환해야 함\nreturn [{\n  json: {\n    chat_id: \"8201163317\",\n    text: \"⚔️ 대결! 어떤 조합이 이길까?\",\n    reply_markup: {\n      inline_keyboard: buttons\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        192
+      ],
+      "id": "872071e1-af02-430e-bb15-feda4639c04e",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "조우",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "884eb7aa-ef71-4d22-9a84-11895c5b79b4"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f08b5471-61ba-4000-b360-4cd0e2b9e9b5",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "대결",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -336,
+        96
+      ],
+      "id": "9bfe1d11-01fa-4d5b-9894-1efcc429b90c",
+      "name": "Switch"
     },
     {
       "parameters": {
@@ -39,150 +166,17 @@
       "typeVersion": 1.2,
       "position": [
         -560,
-        160
+        96
       ],
-      "id": "ecebf985-7fc0-46d2-b0af-b317de248840",
-      "name": "Telegram Trigger",
+      "id": "e0039219-3bab-40ba-91e8-7f6e8772fa64",
+      "name": "start channel",
       "webhookId": "ecc2bbaa-3376-4eb1-992d-5f480e1df106",
       "credentials": {
         "telegramApi": {
-          "id": "5DNhH1gEdL8It8Ou",
-          "name": "Telegram account"
+          "id": "tbkFQK4UE1q4woVI",
+          "name": "start"
         }
       }
-    },
-    {
-      "parameters": {
-        "jsCode": "const items = $input.all();\n\nconst buttons = items.map(item => [{\n  text: `${item.json.object_name} + ${item.json.creature_name}`,\n  callback_data: `select_${item.json.object_id}_${item.json.creature_id}`\n}]);\n\nreturn [{\n  json: {\n    chat_id: \"8201163317\",\n    text: \"🎲 랜덤조합 명이의 선택은?:\",\n    reply_markup: {\n      inline_keyboard: buttons\n    }\n  }\n}];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        208,
-        0
-      ],
-      "id": "f0fb6a81-e2ce-402f-9522-fa8902d3556c",
-      "name": "Code in JavaScript"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.telegram.org/bot8553929993:AAEIMbFBGxG0vjO1J6LevwWInHQ07agN7-U/sendMessage",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ $json }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        416,
-        128
-      ],
-      "id": "f3fee42f-0e0c-46af-863c-5c70e88bcb9e",
-      "name": "HTTP Request"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "037b4941-1360-4cf0-98cb-59361e3d09a2",
-              "leftValue": "={{ $json.message.text }}",
-              "rightValue": "조우",
-              "operator": {
-                "type": "string",
-                "operation": "startsWith"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "looseTypeValidation": "={{ false }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        -272,
-        16
-      ],
-      "id": "c7d25cc3-7280-4615-9462-6ebb4d6886a8",
-      "name": "(입력)조우"
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "SELECT \n    o.id as object_id,\n    o.name as object_name,\n    c.id as creature_id,\n    c.name as creature_name\nFROM objects o\nCROSS JOIN creatures c\nWHERE NOT EXISTS (\n    SELECT 1 FROM combinations_used cu\n    WHERE cu.object_id = o.id AND cu.creature_id = c.id\n)\nORDER BY RANDOM()\nLIMIT 10;",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        0,
-        288
-      ],
-      "id": "1370787f-193e-4075-8abb-803bcbc6422a",
-      "name": "Execute a SQL query1",
-      "credentials": {
-        "postgres": {
-          "id": "ZwpbCKcvAHS9Ywfz",
-          "name": "Postgres account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const items = $input.all();\n\n// 2개씩 묶어서 vs 버튼 생성\nconst buttons = [];\nfor (let i = 0; i < items.length - 1; i += 2) {\n  const item1 = items[i].json;\n  const item2 = items[i + 1].json;\n  \n  buttons.push([{\n    text: `${item1.creature_name} + ${item1.object_name} vs ${item2.creature_name} + ${item2.object_name}`,\n    callback_data: `vs_${item1.object_id}_${item1.creature_id}_${item2.object_id}_${item2.creature_id}`\n  }]);\n}\n\n// ✅ 반드시 배열 안에 json 객체로 반환해야 함\nreturn [{\n  json: {\n    chat_id: \"8201163317\",\n    text: \"⚔️ 대결! 어떤 조합이 이길까?\",\n    reply_markup: {\n      inline_keyboard: buttons\n    }\n  }\n}];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        208,
-        288
-      ],
-      "id": "16eb0e89-b373-4bcd-a681-6a91b05923a5",
-      "name": "Code in JavaScript1"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "ece1ef5d-4608-4830-8ad8-ca616634a044",
-              "leftValue": "={{ $json.message.text }}",
-              "rightValue": "대결",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        -272,
-        304
-      ],
-      "id": "6c547890-add7-499c-a06b-724426fecf6f",
-      "name": "(입력)대결"
     }
   ],
   "connections": {
@@ -197,40 +191,11 @@
         ]
       ]
     },
-    "Telegram Trigger": {
-      "main": [
-        [
-          {
-            "node": "(입력)조우",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Code in JavaScript": {
       "main": [
         [
           {
             "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "(입력)조우": {
-      "main": [
-        [
-          {
-            "node": "Execute a SQL query",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "(입력)대결",
             "type": "main",
             "index": 0
           }
@@ -259,11 +224,29 @@
         ]
       ]
     },
-    "(입력)대결": {
+    "Switch": {
       "main": [
         [
           {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
             "node": "Execute a SQL query1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "start channel": {
+      "main": [
+        [
+          {
+            "node": "Switch",
             "type": "main",
             "index": 0
           }
@@ -280,27 +263,27 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "506e94c5-1b18-4ecb-9fbc-1668cd657c3d",
+  "versionId": "cb15ad55-f3f5-4da4-9b8f-4fad5ae66a02",
   "activeVersionId": null,
-  "versionCounter": 52,
+  "versionCounter": 22,
   "triggerCount": 0,
   "tags": [],
   "shared": [
     {
-      "updatedAt": "2026-01-26T04:20:27.008Z",
-      "createdAt": "2026-01-26T04:20:27.008Z",
+      "updatedAt": "2026-01-26T11:03:20.381Z",
+      "createdAt": "2026-01-26T11:03:20.381Z",
       "role": "workflow:owner",
-      "workflowId": "EZ9hMLEAVSKrazyQpqszb",
-      "projectId": "OXeW9s41dXHR20eI",
+      "workflowId": "ShK7FKUMNCnDWcq3EqfAA",
+      "projectId": "wsi12X4QrdMacbjH",
       "project": {
-        "updatedAt": "2026-01-24T02:28:30.655Z",
-        "createdAt": "2026-01-24T02:27:33.046Z",
-        "id": "OXeW9s41dXHR20eI",
-        "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
+        "updatedAt": "2026-01-24T05:18:18.642Z",
+        "createdAt": "2026-01-24T04:36:02.627Z",
+        "id": "wsi12X4QrdMacbjH",
+        "name": "동명 송 <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "e2a50ebe-382d-4360-bacf-362d1e04f653"
+        "creatorId": "cbfc2e4f-eabe-46b4-9a88-c2f16fb6083a"
       }
     }
   ]
