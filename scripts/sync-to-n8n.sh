@@ -53,7 +53,7 @@ echo ""
 # =============================================
 # 1. Credentials import (CLI - 동일 ID 덮어쓰기)
 # =============================================
-echo -e "${YELLOW}[1/3] credentials import 중...${NC}"
+echo -e "${YELLOW}[1/4] credentials import 중...${NC}"
 
 if [ ! -f "$CREDENTIALS_FILE" ]; then
   echo -e "${RED}오류: credentials.json 파일을 찾을 수 없습니다.${NC}"
@@ -72,7 +72,7 @@ echo ""
 # =============================================
 # 2. Workflows 삭제 (REST API)
 # =============================================
-echo -e "${YELLOW}[2/3] 기존 workflows 삭제 중...${NC}"
+echo -e "${YELLOW}[2/4] 기존 workflows 삭제 중...${NC}"
 
 WORKFLOWS=$(curl -s "$N8N_URL/api/v1/workflows" \
   -H "X-N8N-API-KEY: $N8N_API_KEY")
@@ -94,7 +94,7 @@ echo ""
 # =============================================
 # 3. Workflows import (REST API + 활성화)
 # =============================================
-echo -e "${YELLOW}[3/3] workflows import 중...${NC}"
+echo -e "${YELLOW}[3/4] workflows import 중...${NC}"
 
 if [ ! -d "$WORKFLOWS_DIR" ]; then
   echo -e "${RED}오류: workflows/ 폴더를 찾을 수 없습니다.${NC}"
@@ -133,6 +133,32 @@ else
       echo -e "${RED}실패${NC} ($ERROR)"
     fi
   done
+fi
+
+echo ""
+
+# =============================================
+# 4. Telegram Webhook allowed_updates 설정
+# =============================================
+echo -e "${YELLOW}[4/4] Telegram webhook allowed_updates 설정 중...${NC}"
+
+TELEGRAM_START_BOT_TOKEN=$(grep -E '^TELEGRAM_START_BOT_TOKEN=' "$ENV_FILE" | cut -d '=' -f2)
+WEBHOOK_URL=$(grep -E '^WEBHOOK_URL=' "$ENV_FILE" | cut -d '=' -f2)
+
+if [ -n "$TELEGRAM_START_BOT_TOKEN" ] && [ -n "$WEBHOOK_URL" ]; then
+  # 현재 webhook URL 가져오기
+  CURRENT_WEBHOOK=$(curl -s "https://api.telegram.org/bot${TELEGRAM_START_BOT_TOKEN}/getWebhookInfo" | jq -r '.result.url' 2>/dev/null)
+
+  if [ -n "$CURRENT_WEBHOOK" ] && [ "$CURRENT_WEBHOOK" != "null" ]; then
+    curl -s "https://api.telegram.org/bot${TELEGRAM_START_BOT_TOKEN}/setWebhook" \
+      -d "url=${CURRENT_WEBHOOK}" \
+      -d 'allowed_updates=["message","callback_query"]' > /dev/null 2>&1
+    echo -e "  ${GREEN}완료${NC} (message + callback_query)"
+  else
+    echo -e "  ${YELLOW}건너뜀${NC} (webhook URL 없음)"
+  fi
+else
+  echo -e "  ${YELLOW}건너뜀${NC} (TELEGRAM_START_BOT_TOKEN 또는 WEBHOOK_URL 없음)"
 fi
 
 echo ""
