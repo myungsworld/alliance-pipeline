@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-01-26T11:36:34.181Z",
-  "createdAt": "2026-01-26T11:03:20.377Z",
-  "id": "ShK7FKUMNCnDWcq3EqfAA",
+  "updatedAt": "2026-01-27T02:10:08.620Z",
+  "createdAt": "2026-01-27T02:02:57.673Z",
+  "id": "3VVqdyFHZOyyLbgv",
   "name": "start",
   "description": null,
   "active": false,
@@ -23,7 +23,7 @@
       "name": "Execute a SQL query",
       "credentials": {
         "postgres": {
-          "id": "7YVz70FvVAJ4KXbv",
+          "id": "ZwpbCKcvAHS9Ywfz",
           "name": "Postgres account"
         }
       }
@@ -75,7 +75,7 @@
       "name": "Execute a SQL query1",
       "credentials": {
         "postgres": {
-          "id": "7YVz70FvVAJ4KXbv",
+          "id": "ZwpbCKcvAHS9Ywfz",
           "name": "Postgres account"
         }
       }
@@ -173,8 +173,8 @@
       "webhookId": "ecc2bbaa-3376-4eb1-992d-5f480e1df106",
       "credentials": {
         "telegramApi": {
-          "id": "tbkFQK4UE1q4woVI",
-          "name": "start"
+          "id": "zO8pBT6fKs3aHm6n",
+          "name": "start channel"
         }
       }
     }
@@ -256,35 +256,67 @@
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "staticData": null,
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
+  "meta": null,
   "pinData": {},
-  "versionId": "cb15ad55-f3f5-4da4-9b8f-4fad5ae66a02",
+  "versionId": "1a20afbd-fb8c-479c-bf18-f53072db604a",
   "activeVersionId": null,
-  "versionCounter": 22,
+  "versionCounter": 4,
   "triggerCount": 0,
-  "tags": [],
   "shared": [
     {
-      "updatedAt": "2026-01-26T11:03:20.381Z",
-      "createdAt": "2026-01-26T11:03:20.381Z",
+      "updatedAt": "2026-01-27T02:02:57.674Z",
+      "createdAt": "2026-01-27T02:02:57.674Z",
       "role": "workflow:owner",
-      "workflowId": "ShK7FKUMNCnDWcq3EqfAA",
-      "projectId": "wsi12X4QrdMacbjH",
+      "workflowId": "3VVqdyFHZOyyLbgv",
+      "projectId": "OXeW9s41dXHR20eI",
       "project": {
-        "updatedAt": "2026-01-24T05:18:18.642Z",
-        "createdAt": "2026-01-24T04:36:02.627Z",
-        "id": "wsi12X4QrdMacbjH",
-        "name": "동명 송 <myungsworld@gmail.com>",
+        "updatedAt": "2026-01-24T02:28:30.655Z",
+        "createdAt": "2026-01-24T02:27:33.046Z",
+        "id": "OXeW9s41dXHR20eI",
+        "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "cbfc2e4f-eabe-46b4-9a88-c2f16fb6083a"
+        "creatorId": "e2a50ebe-382d-4360-bacf-362d1e04f653",
+        "projectRelations": [
+          {
+            "updatedAt": "2026-01-24T02:27:33.046Z",
+            "createdAt": "2026-01-24T02:27:33.046Z",
+            "userId": "e2a50ebe-382d-4360-bacf-362d1e04f653",
+            "projectId": "OXeW9s41dXHR20eI",
+            "user": {
+              "updatedAt": "2026-01-27T01:31:33.000Z",
+              "createdAt": "2026-01-24T02:27:32.928Z",
+              "id": "e2a50ebe-382d-4360-bacf-362d1e04f653",
+              "email": "myungsworld@gmail.com",
+              "firstName": "동명",
+              "lastName": "myungsworld@gmail.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2026-01-24T02:29:51.710Z",
+                "personalization_survey_n8n_version": "2.4.5",
+                "automationGoalDevops": [],
+                "companyType": "saas",
+                "role": "it"
+              },
+              "settings": {
+                "userActivated": false,
+                "easyAIWorkflowOnboarded": true
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2026-01-27",
+              "isPending": false
+            }
+          }
+        ]
       }
     }
-  ]
+  ],
+  "tags": [],
+  "activeVersion": null
 }

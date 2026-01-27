@@ -1,0 +1,318 @@
+{
+  "updatedAt": "2026-01-27T02:14:01.554Z",
+  "createdAt": "2026-01-27T02:02:58.106Z",
+  "id": "jsV0TSoVE7xfB3N3",
+  "name": "create",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c44ca9ff-ecd2-4593-b3fb-c526359d44cf",
+      "name": "script button handler",
+      "webhookId": "e208720f-2758-4c30-afd2-f889a2b5d099",
+      "credentials": {
+        "telegramApi": {
+          "id": "hjKKDhzAr95XXqw9",
+          "name": "script-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data }}",
+                    "rightValue": "encounter_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "75020585-3f98-47bc-93dd-7be0926e0c42"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "92fd8234-ec16-40f2-a0af-846d5e372c93",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM encounter_scripts \nWHERE id = CAST(SPLIT_PART('{{ $json.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data }}', '_', 2) AS INTEGER);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        416,
+        0
+      ],
+      "id": "f7ecd388-3cc6-4372-9658-cb7e5fcad654",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"version\": \"39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b\",\n  \"input\": {\n    \"prompt\": \"{{ $json.creature_name }} holding {{ $json.object_name }}, cartoon style, funny, colorful, high quality illustration\",\n    \"negative_prompt\": \"ugly, blurry, low quality, text, watermark\",\n    \"width\": 1024,\n    \"height\": 1024\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "Replicate 이미지 생성"
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "name": "Wait",
+      "webhookId": "wait-webhook-id-1"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Replicate 이미지 생성').item.json.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+      "name": "Replicate 결과 확인"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "condition-succeeded"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "d4e5f6a7-b8c9-0123-defa-456789012345",
+      "name": "이미지 완료?"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "file": "={{ $json.output[0] }}",
+        "additionalFields": {
+          "caption": "=🎨 {{ $('Execute a SQL query').item.json.creature_name }} + {{ $('Execute a SQL query').item.json.object_name }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1456,
+        -100
+      ],
+      "id": "e5f6a7b8-c9d0-1234-efab-567890123456",
+      "name": "Telegram 이미지 전송",
+      "credentials": {
+        "telegramApi": {
+          "id": "hjKKDhzAr95XXqw9",
+          "name": "script-bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "script button handler": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Replicate 이미지 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 이미지 생성": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Replicate 결과 확인",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 결과 확인": {
+      "main": [
+        [
+          {
+            "node": "이미지 완료?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 완료?": {
+      "main": [
+        [
+          {
+            "node": "Telegram 이미지 전송",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "eaedea4d-85d7-41c1-a939-5bebb3684de0",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "shared": [],
+  "tags": [],
+  "activeVersion": null
+}

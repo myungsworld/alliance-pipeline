@@ -138,15 +138,19 @@ TZ=Asia/Seoul
 
 # API Keys
 GEMINI_API_KEY=your_gemini_key
+REPLICATE_API_TOKEN=your_replicate_token
 
 # Telegram
-TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_START_BOT_TOKEN=your_start_bot_token
+TELEGRAM_SCRIPT_BOT_TOKEN=your_script_bot_token
 TELEGRAM_CHAT_ID=your_chat_id
 
 # ngrok
 NGROK_AUTHTOKEN=your_ngrok_token
-NGROK_DOMAIN=your-domain.ngrok-free.dev
-WEBHOOK_URL=https://your-domain.ngrok-free.dev
+WEBHOOK_URL=https://your-ngrok-url.ngrok-free.app
+
+# n8n API
+N8N_API_KEY=your_n8n_api_key
 ```
 
 ### 3. Docker 실행
@@ -154,17 +158,18 @@ WEBHOOK_URL=https://your-domain.ngrok-free.dev
 docker compose up -d
 ```
 
-### 4. n8n 워크플로우 가져오기
-1. http://localhost:5678 접속
-2. 좌측 메뉴 → `Import from File`
-3. `workflows/` 폴더의 JSON 파일 선택
-4. Credential 재설정:
-   - PostgreSQL (Host: `postgres`, DB: `content_db`)
-   - Telegram Bot Token
-   - Google Gemini API Key
+### 4. Credentials 가져오기
+```bash
+./scripts/import-credentials.sh
+```
 
-### 5. 워크플로우 활성화
-n8n UI에서 각 워크플로우 우상단 토글 ON
+### 5. 워크플로우 가져오기
+```bash
+./scripts/update-workflow.sh
+```
+
+### 6. 워크플로우 활성화
+n8n API로 활성화하거나 UI에서 토글 ON
 
 ## 사용 방법
 
@@ -187,31 +192,61 @@ alliance-pipeline/
 ├── .env                   # 환경변수 (git 제외)
 ├── .env.example           # 환경변수 템플릿
 ├── init.sql               # DB 스키마 + 시드 데이터
-├── files/                 # n8n 파일 저장소
 ├── workflows/             # n8n 워크플로우 백업 (JSON)
-│   ├── ShK7FKUMNCnDWcq3EqfAA.json  # start
-│   ├── 0Rb2NJ6aEsIw1Tyl1j78s.json  # write
-│   └── JdaAIf4dJ8KnOYhjiZB55.json  # My workflow
+├── credentials/           # n8n credentials (환경변수 참조)
+│   └── credentials.json
 ├── scripts/
-│   └── delete-workflow.sh # 워크플로우 삭제 스크립트
+│   ├── export-credentials.sh  # credentials 내보내기
+│   ├── import-credentials.sh  # credentials 가져오기
+│   ├── export-workflow.sh     # 워크플로우 내보내기
+│   ├── update-workflow.sh     # 워크플로우 가져오기
+│   └── pre-commit.sh          # git pre-commit hook
 ├── DEVELOPMENT.md         # 개발 일지
 └── README.md
 ```
 
-## 워크플로우 관리
+## 멀티 PC 동기화 워크플로우
 
-### 백업 (내보내기)
+### Git Pre-commit Hook 설정
 ```bash
-docker exec n8n n8n export:workflow --backup --output=/workflows/
+ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
 ```
 
-### 삭제
-```bash
-# JSON 파일 삭제
-rm workflows/<워크플로우ID>.json
+### 작업 흐름
 
-# n8n에서 완전 삭제
-./scripts/delete-workflow.sh <워크플로우ID>
+**로컬에서 작업 후 커밋:**
+1. n8n UI에서 워크플로우/credentials 수정
+2. `git commit` 실행 → pre-commit hook이 자동으로:
+   - credentials 내보내기
+   - workflows 내보내기
+3. `git push`
+
+**다른 PC에서 동기화:**
+1. `git pull`
+2. `docker compose up -d`
+3. `./scripts/import-credentials.sh`
+4. `./scripts/update-workflow.sh`
+
+### 수동 관리
+
+**Credentials 내보내기:**
+```bash
+./scripts/export-credentials.sh
+```
+
+**Credentials 가져오기:**
+```bash
+./scripts/import-credentials.sh
+```
+
+**워크플로우 내보내기:**
+```bash
+./scripts/export-workflow.sh
+```
+
+**워크플로우 가져오기:**
+```bash
+./scripts/update-workflow.sh
 ```
 
 ## n8n PostgreSQL 연결 정보
@@ -246,9 +281,11 @@ rm workflows/<워크플로우ID>.json
 - [x] 워크플로우 2: write (LLM 스크립트 생성)
 - [x] encounter_scripts 테이블 (LLM 결과 저장)
 - [x] 워크플로우 백업 시스템
+- [x] 멀티 PC 동기화 (credentials/workflows)
+- [x] 환경변수 기반 credentials 관리
 
 ### 진행 중
-- [ ] 이미지 생성 API 연동 (DALL-E / Midjourney)
+- [ ] 이미지 생성 API 연동 (Replicate SDXL)
 
 ### 예정
 - [ ] 영상 생성 API 연동 (Runway / Kling)
@@ -260,7 +297,7 @@ rm workflows/<워크플로우ID>.json
 | 항목 | 비용 |
 |------|------|
 | Gemini (스토리) | ~$0.01 |
-| DALL-E 3 (이미지) | ~$0.08 |
+| Replicate SDXL (이미지) | ~$0.003 |
 | Runway (영상 10초) | ~$0.50 |
 | **합계** | **~$0.59** |
 
