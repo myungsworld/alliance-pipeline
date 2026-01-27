@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-27T07:16:49.239Z",
+  "updatedAt": "2026-01-27T07:46:33.590Z",
   "createdAt": "2026-01-27T07:02:26.334Z",
   "id": "903ZCytvfLPWUcrf",
   "name": "create",
@@ -105,7 +105,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"version\": \"39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b\",\n  \"input\": {\n    \"prompt\": \"{{ $json.situations[0] }}\",\n    \"negative_prompt\": \"ugly,text,watermark\",\n    \"width\": 1024,\n    \"height\": 1024\n  }\n}",
+        "jsonBody": "={\n  \"version\": \"39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b\",\n  \"input\": {\n    \"prompt\": \"{{ $json.situations[0] }}, very low effort doodle drawing, intentionally badly drawn, childlike mouse drawing, uneven thick lines, poor proportions, simple face with dot eyes and round mouth, minimal colors, black background, looks silly and pointless\",\n    \"negative_prompt\": \"realistic, detailed, professional, masterpiece, anime, smooth lines, shading, 3d, render, high quality, text, watermark, logo\",\n    \n    \"width\": 1024,\n    \"height\": 1024\n  }\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -307,9 +307,9 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "6514c440-91cd-42c3-b19e-0f9a687cdf4f",
+  "versionId": "b2af2900-a5c8-4004-a8f7-6fa7143afe21",
   "activeVersionId": null,
-  "versionCounter": 8,
+  "versionCounter": 10,
   "triggerCount": 1,
   "shared": [
     {
