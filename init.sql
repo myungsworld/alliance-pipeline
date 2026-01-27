@@ -1,20 +1,24 @@
--- 물건 테이블
+-- Objects table
 CREATE TABLE objects (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
+    name_en VARCHAR(100) NOT NULL,
     category VARCHAR(50) NOT NULL,
+    category_en VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
--- 생명체 테이블
+-- Creatures table
 CREATE TABLE creatures (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
+    name_en VARCHAR(100) NOT NULL,
     category VARCHAR(50) NOT NULL,
+    category_en VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
--- 사용된 조합 기록 (중복 방지)
+-- Used combinations (prevent duplicates)
 CREATE TABLE combinations_used (
     id SERIAL PRIMARY KEY,
     object_id INT REFERENCES objects(id),
@@ -24,117 +28,204 @@ CREATE TABLE combinations_used (
     UNIQUE(object_id, creature_id, content_type)
 );
 
--- 인덱스 생성
+-- Indexes
 CREATE INDEX idx_objects_category ON objects(category);
 CREATE INDEX idx_creatures_category ON creatures(category);
 
 -- =====================
--- 초기 데이터: 물건
+-- Seed data: Objects
 -- =====================
 
--- 도구
-INSERT INTO objects (name, category) VALUES
-('망치', '도구'), ('칼', '도구'), ('우산', '도구'), ('가위', '도구'),
-('열쇠', '도구'), ('손전등', '도구'), ('망원경', '도구'), ('돋보기', '도구'),
-('낚싯대', '도구'), ('삽', '도구'), ('톱', '도구'), ('펜치', '도구');
+-- 도구 / Tools
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('망치', 'Hammer', '도구', 'Tool'), ('칼', 'Knife', '도구', 'Tool'), ('우산', 'Umbrella', '도구', 'Tool'), ('가위', 'Scissors', '도구', 'Tool'),
+('열쇠', 'Key', '도구', 'Tool'), ('손전등', 'Flashlight', '도구', 'Tool'), ('망원경', 'Telescope', '도구', 'Tool'), ('돋보기', 'Magnifying Glass', '도구', 'Tool'),
+('낚싯대', 'Fishing Rod', '도구', 'Tool'), ('삽', 'Shovel', '도구', 'Tool'), ('톱', 'Saw', '도구', 'Tool'), ('펜치', 'Pliers', '도구', 'Tool');
 
--- 가전
-INSERT INTO objects (name, category) VALUES
-('에어컨', '가전'), ('냉장고', '가전'), ('TV', '가전'), ('세탁기', '가전'),
-('전자레인지', '가전'), ('청소기', '가전'), ('선풍기', '가전'), ('토스터', '가전'),
-('믹서기', '가전'), ('다리미', '가전'), ('헤어드라이어', '가전'), ('전기밥솥', '가전');
+-- 가전제품 / Appliances
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('에어컨', 'Air Conditioner', '가전제품', 'Appliance'), ('냉장고', 'Refrigerator', '가전제품', 'Appliance'), ('TV', 'TV', '가전제품', 'Appliance'), ('세탁기', 'Washing Machine', '가전제품', 'Appliance'),
+('전자레인지', 'Microwave', '가전제품', 'Appliance'), ('청소기', 'Vacuum Cleaner', '가전제품', 'Appliance'), ('선풍기', 'Fan', '가전제품', 'Appliance'), ('토스터', 'Toaster', '가전제품', 'Appliance'),
+('믹서기', 'Blender', '가전제품', 'Appliance'), ('다리미', 'Iron', '가전제품', 'Appliance'), ('헤어드라이어', 'Hair Dryer', '가전제품', 'Appliance'), ('밥솥', 'Rice Cooker', '가전제품', 'Appliance');
 
--- 탈것
-INSERT INTO objects (name, category) VALUES
-('자동차', '탈것'), ('비행기', '탈것'), ('로켓', '탈것'), ('자전거', '탈것'),
-('오토바이', '탈것'), ('헬리콥터', '탈것'), ('잠수함', '탈것'), ('요트', '탈것'),
-('스케이트보드', '탈것'), ('썰매', '탈것'), ('열기구', '탈것'), ('제트스키', '탈것');
+-- 탈것 / Vehicles
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('자동차', 'Car', '탈것', 'Vehicle'), ('비행기', 'Airplane', '탈것', 'Vehicle'), ('로켓', 'Rocket', '탈것', 'Vehicle'), ('자전거', 'Bicycle', '탈것', 'Vehicle'),
+('오토바이', 'Motorcycle', '탈것', 'Vehicle'), ('헬리콥터', 'Helicopter', '탈것', 'Vehicle'), ('잠수함', 'Submarine', '탈것', 'Vehicle'), ('요트', 'Yacht', '탈것', 'Vehicle'),
+('스케이트보드', 'Skateboard', '탈것', 'Vehicle'), ('썰매', 'Sled', '탈것', 'Vehicle'), ('열기구', 'Hot Air Balloon', '탈것', 'Vehicle'), ('제트스키', 'Jet Ski', '탈것', 'Vehicle');
 
--- 악기
-INSERT INTO objects (name, category) VALUES
-('피아노', '악기'), ('기타', '악기'), ('드럼', '악기'), ('바이올린', '악기'),
-('트럼펫', '악기'), ('플루트', '악기'), ('하프', '악기'), ('색소폰', '악기'),
-('아코디언', '악기'), ('탬버린', '악기'), ('실로폰', '악기'), ('우쿨렐레', '악기');
+-- 악기 / Instruments
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('피아노', 'Piano', '악기', 'Instrument'), ('기타', 'Guitar', '악기', 'Instrument'), ('드럼', 'Drum', '악기', 'Instrument'), ('바이올린', 'Violin', '악기', 'Instrument'),
+('트럼펫', 'Trumpet', '악기', 'Instrument'), ('플루트', 'Flute', '악기', 'Instrument'), ('하프', 'Harp', '악기', 'Instrument'), ('색소폰', 'Saxophone', '악기', 'Instrument'),
+('아코디언', 'Accordion', '악기', 'Instrument'), ('탬버린', 'Tambourine', '악기', 'Instrument'), ('실로폰', 'Xylophone', '악기', 'Instrument'), ('우쿨렐레', 'Ukulele', '악기', 'Instrument');
 
--- 무기
-INSERT INTO objects (name, category) VALUES
-('검', '무기'), ('방패', '무기'), ('활', '무기'), ('창', '무기'),
-('도끼', '무기'), ('석궁', '무기'), ('삼지창', '무기'), ('철퇴', '무기'),
-('부메랑', '무기'), ('표창', '무기'), ('쌍절곤', '무기'), ('채찍', '무기');
+-- 무기 / Weapons
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('검', 'Sword', '무기', 'Weapon'), ('방패', 'Shield', '무기', 'Weapon'), ('활', 'Bow', '무기', 'Weapon'), ('창', 'Spear', '무기', 'Weapon'),
+('도끼', 'Axe', '무기', 'Weapon'), ('석궁', 'Crossbow', '무기', 'Weapon'), ('삼지창', 'Trident', '무기', 'Weapon'), ('철퇴', 'Mace', '무기', 'Weapon'),
+('부메랑', 'Boomerang', '무기', 'Weapon'), ('수리검', 'Shuriken', '무기', 'Weapon'), ('쌍절곤', 'Nunchaku', '무기', 'Weapon'), ('채찍', 'Whip', '무기', 'Weapon');
 
--- 일상용품
-INSERT INTO objects (name, category) VALUES
-('물컵', '일상용품'), ('휴대폰', '일상용품'), ('책', '일상용품'), ('신발', '일상용품'),
-('안경', '일상용품'), ('시계', '일상용품'), ('지갑', '일상용품'), ('가방', '일상용품'),
-('모자', '일상용품'), ('장갑', '일상용품'), ('목도리', '일상용품'), ('양말', '일상용품');
+-- 생활용품 / Everyday Items
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('컵', 'Cup', '생활용품', 'Everyday'), ('스마트폰', 'Smartphone', '생활용품', 'Everyday'), ('책', 'Book', '생활용품', 'Everyday'), ('신발', 'Shoes', '생활용품', 'Everyday'),
+('안경', 'Glasses', '생활용품', 'Everyday'), ('시계', 'Watch', '생활용품', 'Everyday'), ('지갑', 'Wallet', '생활용품', 'Everyday'), ('가방', 'Bag', '생활용품', 'Everyday'),
+('모자', 'Hat', '생활용품', 'Everyday'), ('장갑', 'Gloves', '생활용품', 'Everyday'), ('목도리', 'Scarf', '생활용품', 'Everyday'), ('양말', 'Socks', '생활용품', 'Everyday');
 
--- 가구
-INSERT INTO objects (name, category) VALUES
-('의자', '가구'), ('책상', '가구'), ('침대', '가구'), ('소파', '가구'),
-('옷장', '가구'), ('책장', '가구'), ('식탁', '가구'), ('서랍장', '가구'),
-('거울', '가구'), ('화장대', '가구'), ('신발장', '가구'), ('행거', '가구');
+-- 가구 / Furniture
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('의자', 'Chair', '가구', 'Furniture'), ('책상', 'Desk', '가구', 'Furniture'), ('침대', 'Bed', '가구', 'Furniture'), ('소파', 'Sofa', '가구', 'Furniture'),
+('옷장', 'Wardrobe', '가구', 'Furniture'), ('책장', 'Bookshelf', '가구', 'Furniture'), ('식탁', 'Dining Table', '가구', 'Furniture'), ('서랍장', 'Drawer', '가구', 'Furniture'),
+('거울', 'Mirror', '가구', 'Furniture'), ('화장대', 'Vanity', '가구', 'Furniture'), ('신발장', 'Shoe Rack', '가구', 'Furniture'), ('옷걸이', 'Hanger', '가구', 'Furniture');
 
--- 스포츠용품
-INSERT INTO objects (name, category) VALUES
-('축구공', '스포츠'), ('야구방망이', '스포츠'), ('테니스라켓', '스포츠'), ('골프채', '스포츠'),
-('농구공', '스포츠'), ('배드민턴라켓', '스포츠'), ('스키', '스포츠'), ('스노보드', '스포츠'),
-('권투글러브', '스포츠'), ('볼링공', '스포츠'), ('다트', '스포츠'), ('탁구채', '스포츠');
+-- 스포츠 / Sports
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('축구공', 'Soccer Ball', '스포츠', 'Sports'), ('야구방망이', 'Baseball Bat', '스포츠', 'Sports'), ('테니스라켓', 'Tennis Racket', '스포츠', 'Sports'), ('골프채', 'Golf Club', '스포츠', 'Sports'),
+('농구공', 'Basketball', '스포츠', 'Sports'), ('배드민턴라켓', 'Badminton Racket', '스포츠', 'Sports'), ('스키', 'Ski', '스포츠', 'Sports'), ('스노보드', 'Snowboard', '스포츠', 'Sports'),
+('권투글러브', 'Boxing Gloves', '스포츠', 'Sports'), ('볼링공', 'Bowling Ball', '스포츠', 'Sports'), ('다트', 'Dart', '스포츠', 'Sports'), ('탁구채', 'Ping Pong Paddle', '스포츠', 'Sports');
+
+-- 음식 / Food
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('피자', 'Pizza', '음식', 'Food'), ('햄버거', 'Hamburger', '음식', 'Food'), ('김치', 'Kimchi', '음식', 'Food'), ('초밥', 'Sushi', '음식', 'Food'),
+('타코', 'Taco', '음식', 'Food'), ('파스타', 'Pasta', '음식', 'Food'), ('치킨', 'Fried Chicken', '음식', 'Food'), ('스테이크', 'Steak', '음식', 'Food'),
+('라면', 'Ramen', '음식', 'Food'), ('떡볶이', 'Tteokbokki', '음식', 'Food'), ('아이스크림', 'Ice Cream', '음식', 'Food'), ('케이크', 'Cake', '음식', 'Food'),
+('도넛', 'Donut', '음식', 'Food'), ('샌드위치', 'Sandwich', '음식', 'Food'), ('핫도그', 'Hot Dog', '음식', 'Food'), ('감자튀김', 'French Fries', '음식', 'Food')
+ON CONFLICT (name) DO NOTHING;
+
+-- 건물 / Buildings
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('성', 'Castle', '건물', 'Building'), ('피라미드', 'Pyramid', '건물', 'Building'), ('등대', 'Lighthouse', '건물', 'Building'), ('풍차', 'Windmill', '건물', 'Building'),
+('탑', 'Tower', '건물', 'Building'), ('다리', 'Bridge', '건물', 'Building'), ('댐', 'Dam', '건물', 'Building'), ('터널', 'Tunnel', '건물', 'Building'),
+('정글짐', 'Jungle Gym', '건물', 'Building'), ('미끄럼틀', 'Slide', '건물', 'Building'), ('관람차', 'Ferris Wheel', '건물', 'Building'), ('롤러코스터', 'Roller Coaster', '건물', 'Building'),
+('텐트', 'Tent', '건물', 'Building'), ('이글루', 'Igloo', '건물', 'Building'), ('나무집', 'Treehouse', '건물', 'Building'), ('벙커', 'Bunker', '건물', 'Building')
+ON CONFLICT (name) DO NOTHING;
+
+-- 자연 / Nature
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('바위', 'Rock', '자연', 'Nature'), ('나무', 'Tree', '자연', 'Nature'), ('구름', 'Cloud', '자연', 'Nature'), ('번개', 'Lightning', '자연', 'Nature'),
+('무지개', 'Rainbow', '자연', 'Nature'), ('폭포', 'Waterfall', '자연', 'Nature'), ('화산', 'Volcano', '자연', 'Nature'), ('빙하', 'Glacier', '자연', 'Nature'),
+('모래', 'Sand', '자연', 'Nature'), ('진흙', 'Mud', '자연', 'Nature'), ('이끼', 'Moss', '자연', 'Nature'), ('산호', 'Coral', '자연', 'Nature'),
+('조개껍데기', 'Seashell', '자연', 'Nature'), ('깃털', 'Feather', '자연', 'Nature'), ('뿔', 'Horn', '자연', 'Nature'), ('상어이빨', 'Shark Tooth', '자연', 'Nature')
+ON CONFLICT (name) DO NOTHING;
+
+-- SF / Sci-Fi
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('광선검', 'Lightsaber', 'SF', 'Sci-Fi'), ('타임머신', 'Time Machine', 'SF', 'Sci-Fi'), ('텔레포터', 'Teleporter', 'SF', 'Sci-Fi'), ('홀로그램', 'Hologram', 'SF', 'Sci-Fi'),
+('로봇팔', 'Robot Arm', 'SF', 'Sci-Fi'), ('제트팩', 'Jetpack', 'SF', 'Sci-Fi'), ('레이저총', 'Laser Gun', 'SF', 'Sci-Fi'), ('방어막', 'Force Field', 'SF', 'Sci-Fi'),
+('우주복', 'Space Suit', 'SF', 'Sci-Fi'), ('냉동캡슐', 'Cryo Pod', 'SF', 'Sci-Fi'), ('복제기', 'Cloning Machine', 'SF', 'Sci-Fi'), ('무중력부츠', 'Anti-Gravity Boots', 'SF', 'Sci-Fi'),
+('나노봇', 'Nanobot', 'SF', 'Sci-Fi'), ('사이버눈', 'Cyber Eye', 'SF', 'Sci-Fi'), ('두뇌칩', 'Brain Chip', 'SF', 'Sci-Fi'), ('플라즈마포', 'Plasma Cannon', 'SF', 'Sci-Fi')
+ON CONFLICT (name) DO NOTHING;
+
+-- 판타지 / Fantasy
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('마법지팡이', 'Magic Wand', '판타지', 'Fantasy'), ('수정구슬', 'Crystal Ball', '판타지', 'Fantasy'), ('마법책', 'Spell Book', '판타지', 'Fantasy'), ('물약', 'Potion', '판타지', 'Fantasy'),
+('마법양탄자', 'Magic Carpet', '판타지', 'Fantasy'), ('투명망토', 'Invisibility Cloak', '판타지', 'Fantasy'), ('요술램프', 'Genie Lamp', '판타지', 'Fantasy'), ('마법거울', 'Magic Mirror', '판타지', 'Fantasy'),
+('부두인형', 'Voodoo Doll', '판타지', 'Fantasy'), ('봉인석', 'Seal Stone', '판타지', 'Fantasy'), ('소환진', 'Summoning Circle', '판타지', 'Fantasy'), ('룬', 'Rune', '판타지', 'Fantasy'),
+('성배', 'Holy Grail', '판타지', 'Fantasy'), ('엑스칼리버', 'Excalibur', '판타지', 'Fantasy'), ('힘의반지', 'Ring of Power', '판타지', 'Fantasy'), ('왕관', 'Crown', '판타지', 'Fantasy')
+ON CONFLICT (name) DO NOTHING;
+
+-- 문구 / Stationery
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('연필', 'Pencil', '문구', 'Stationery'), ('지우개', 'Eraser', '문구', 'Stationery'), ('자', 'Ruler', '문구', 'Stationery'), ('컴퍼스', 'Compass', '문구', 'Stationery'),
+('스테이플러', 'Stapler', '문구', 'Stationery'), ('테이프', 'Tape', '문구', 'Stationery'), ('클립', 'Paper Clip', '문구', 'Stationery'), ('포스트잇', 'Post-it', '문구', 'Stationery'),
+('화이트보드', 'Whiteboard', '문구', 'Stationery'), ('프로젝터', 'Projector', '문구', 'Stationery'), ('프린터', 'Printer', '문구', 'Stationery'), ('복사기', 'Copy Machine', '문구', 'Stationery')
+ON CONFLICT (name) DO NOTHING;
+
+-- 장난감 / Toys
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('레고', 'Lego', '장난감', 'Toy'), ('인형', 'Doll', '장난감', 'Toy'), ('요요', 'Yo-Yo', '장난감', 'Toy'), ('팽이', 'Spinning Top', '장난감', 'Toy'),
+('퍼즐', 'Puzzle', '장난감', 'Toy'), ('루빅스큐브', 'Rubiks Cube', '장난감', 'Toy'), ('슬라임', 'Slime', '장난감', 'Toy'), ('비눗방울', 'Soap Bubbles', '장난감', 'Toy'),
+('물총', 'Water Gun', '장난감', 'Toy'), ('너프건', 'Nerf Gun', '장난감', 'Toy'), ('장난감드론', 'Toy Drone', '장난감', 'Toy'), ('RC카', 'RC Car', '장난감', 'Toy'),
+('보드게임', 'Board Game', '장난감', 'Toy'), ('트럼프카드', 'Playing Cards', '장난감', 'Toy'), ('주사위', 'Dice', '장난감', 'Toy'), ('다트판', 'Dartboard', '장난감', 'Toy')
+ON CONFLICT (name) DO NOTHING;
+
+-- 의료 / Medical
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('주사기', 'Syringe', '의료', 'Medical'), ('청진기', 'Stethoscope', '의료', 'Medical'), ('붕대', 'Bandage', '의료', 'Medical'), ('목발', 'Crutch', '의료', 'Medical'),
+('휠체어', 'Wheelchair', '의료', 'Medical'), ('깁스', 'Cast', '의료', 'Medical'), ('체온계', 'Thermometer', '의료', 'Medical'), ('혈압계', 'Blood Pressure Monitor', '의료', 'Medical'),
+('현미경', 'Microscope', '의료', 'Medical'), ('엑스레이', 'X-Ray Machine', '의료', 'Medical'), ('MRI', 'MRI Machine', '의료', 'Medical'), ('제세동기', 'Defibrillator', '의료', 'Medical')
+ON CONFLICT (name) DO NOTHING;
+
+-- 주방 / Kitchen
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('프라이팬', 'Frying Pan', '주방', 'Kitchen'), ('냄비', 'Pot', '주방', 'Kitchen'), ('국자', 'Ladle', '주방', 'Kitchen'), ('뒤집개', 'Spatula', '주방', 'Kitchen'),
+('도마', 'Cutting Board', '주방', 'Kitchen'), ('믹서', 'Mixer', '주방', 'Kitchen'), ('오븐', 'Oven', '주방', 'Kitchen'), ('에어프라이어', 'Air Fryer', '주방', 'Kitchen'),
+('커피머신', 'Coffee Machine', '주방', 'Kitchen'), ('와플메이커', 'Waffle Maker', '주방', 'Kitchen'), ('식기세척기', 'Dishwasher', '주방', 'Kitchen'), ('정수기', 'Water Purifier', '주방', 'Kitchen')
+ON CONFLICT (name) DO NOTHING;
+
+-- 캠핑 / Camping
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('캠핑의자', 'Camp Chair', '캠핑', 'Camping'), ('랜턴', 'Lantern', '캠핑', 'Camping'), ('침낭', 'Sleeping Bag', '캠핑', 'Camping'), ('해먹', 'Hammock', '캠핑', 'Camping'),
+('쿨러', 'Cooler', '캠핑', 'Camping'), ('버너', 'Burner', '캠핑', 'Camping'), ('코펠', 'Mess Kit', '캠핑', 'Camping'), ('타프', 'Tarp', '캠핑', 'Camping'),
+('등산스틱', 'Hiking Pole', '캠핑', 'Camping'), ('나침반', 'Compass', '캠핑', 'Camping'), ('맥가이버칼', 'Swiss Army Knife', '캠핑', 'Camping'), ('라이터', 'Lighter', '캠핑', 'Camping')
+ON CONFLICT (name) DO NOTHING;
+
+-- 전자기기 / Electronics
+INSERT INTO objects (name, name_en, category, category_en) VALUES
+('노트북', 'Laptop', '전자기기', 'Electronics'), ('태블릿', 'Tablet', '전자기기', 'Electronics'), ('스마트워치', 'Smartwatch', '전자기기', 'Electronics'), ('이어폰', 'Earbuds', '전자기기', 'Electronics'),
+('스피커', 'Speaker', '전자기기', 'Electronics'), ('카메라', 'Camera', '전자기기', 'Electronics'), ('빔프로젝터', 'Beam Projector', '전자기기', 'Electronics'), ('게임기', 'Game Console', '전자기기', 'Electronics'),
+('VR헤드셋', 'VR Headset', '전자기기', 'Electronics'), ('킨들', 'Kindle', '전자기기', 'Electronics'), ('GPS', 'GPS', '전자기기', 'Electronics'), ('웹캠', 'Webcam', '전자기기', 'Electronics')
+ON CONFLICT (name) DO NOTHING;
 
 -- =====================
--- 초기 데이터: 생명체
+-- Seed data: Creatures
 -- =====================
 
--- 포유류
-INSERT INTO creatures (name, category) VALUES
-('고양이', '포유류'), ('강아지', '포유류'), ('사자', '포유류'), ('호랑이', '포유류'),
-('코끼리', '포유류'), ('기린', '포유류'), ('곰', '포유류'), ('늑대', '포유류'),
-('여우', '포유류'), ('토끼', '포유류'), ('다람쥐', '포유류'), ('햄스터', '포유류'),
-('판다', '포유류'), ('코알라', '포유류'), ('캥거루', '포유류'), ('하마', '포유류');
+-- 포유류 / Mammals
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('고양이', 'Cat', '포유류', 'Mammal'), ('강아지', 'Dog', '포유류', 'Mammal'), ('사자', 'Lion', '포유류', 'Mammal'), ('호랑이', 'Tiger', '포유류', 'Mammal'),
+('코끼리', 'Elephant', '포유류', 'Mammal'), ('기린', 'Giraffe', '포유류', 'Mammal'), ('곰', 'Bear', '포유류', 'Mammal'), ('늑대', 'Wolf', '포유류', 'Mammal'),
+('여우', 'Fox', '포유류', 'Mammal'), ('토끼', 'Rabbit', '포유류', 'Mammal'), ('다람쥐', 'Squirrel', '포유류', 'Mammal'), ('햄스터', 'Hamster', '포유류', 'Mammal'),
+('판다', 'Panda', '포유류', 'Mammal'), ('코알라', 'Koala', '포유류', 'Mammal'), ('캥거루', 'Kangaroo', '포유류', 'Mammal'), ('하마', 'Hippo', '포유류', 'Mammal');
 
--- 조류
-INSERT INTO creatures (name, category) VALUES
-('펭귄', '조류'), ('닭', '조류'), ('독수리', '조류'), ('앵무새', '조류'),
-('부엉이', '조류'), ('플라밍고', '조류'), ('공작', '조류'), ('까마귀', '조류'),
-('비둘기', '조류'), ('참새', '조류'), ('오리', '조류'), ('거위', '조류');
+-- 조류 / Birds
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('펭귄', 'Penguin', '조류', 'Bird'), ('치킨', 'Chicken', '조류', 'Bird'), ('독수리', 'Eagle', '조류', 'Bird'), ('앵무새', 'Parrot', '조류', 'Bird'),
+('부엉이', 'Owl', '조류', 'Bird'), ('플라밍고', 'Flamingo', '조류', 'Bird'), ('공작새', 'Peacock', '조류', 'Bird'), ('까마귀', 'Crow', '조류', 'Bird'),
+('비둘기', 'Pigeon', '조류', 'Bird'), ('참새', 'Sparrow', '조류', 'Bird'), ('오리', 'Duck', '조류', 'Bird'), ('거위', 'Goose', '조류', 'Bird');
 
--- 수중생물
-INSERT INTO creatures (name, category) VALUES
-('상어', '수중생물'), ('고래', '수중생물'), ('돌고래', '수중생물'), ('문어', '수중생물'),
-('오징어', '수중생물'), ('해파리', '수중생물'), ('거북이', '수중생물'), ('게', '수중생물'),
-('새우', '수중생물'), ('불가사리', '수중생물'), ('조개', '수중생물'), ('해마', '수중생물');
+-- 해양생물 / Sea Creatures
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('상어', 'Shark', '해양생물', 'Sea Creature'), ('고래', 'Whale', '해양생물', 'Sea Creature'), ('돌고래', 'Dolphin', '해양생물', 'Sea Creature'), ('문어', 'Octopus', '해양생물', 'Sea Creature'),
+('오징어', 'Squid', '해양생물', 'Sea Creature'), ('해파리', 'Jellyfish', '해양생물', 'Sea Creature'), ('거북이', 'Turtle', '해양생물', 'Sea Creature'), ('게', 'Crab', '해양생물', 'Sea Creature'),
+('새우', 'Shrimp', '해양생물', 'Sea Creature'), ('불가사리', 'Starfish', '해양생물', 'Sea Creature'), ('조개', 'Clam', '해양생물', 'Sea Creature'), ('해마', 'Seahorse', '해양생물', 'Sea Creature');
 
--- 파충류/양서류
-INSERT INTO creatures (name, category) VALUES
-('공룡', '파충류'), ('악어', '파충류'), ('뱀', '파충류'), ('도마뱀', '파충류'),
-('카멜레온', '파충류'), ('이구아나', '파충류'), ('개구리', '양서류'), ('도롱뇽', '양서류');
+-- 파충류 & 양서류 / Reptiles & Amphibians
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('공룡', 'Dinosaur', '파충류', 'Reptile'), ('악어', 'Crocodile', '파충류', 'Reptile'), ('뱀', 'Snake', '파충류', 'Reptile'), ('도마뱀', 'Lizard', '파충류', 'Reptile'),
+('카멜레온', 'Chameleon', '파충류', 'Reptile'), ('이구아나', 'Iguana', '파충류', 'Reptile'), ('개구리', 'Frog', '양서류', 'Amphibian'), ('도롱뇽', 'Salamander', '양서류', 'Amphibian');
 
--- 곤충
-INSERT INTO creatures (name, category) VALUES
-('꿀벌', '곤충'), ('나비', '곤충'), ('개미', '곤충'), ('무당벌레', '곤충'),
-('잠자리', '곤충'), ('반딧불이', '곤충'), ('귀뚜라미', '곤충'), ('사마귀', '곤충');
+-- 곤충 / Insects
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('벌', 'Bee', '곤충', 'Insect'), ('나비', 'Butterfly', '곤충', 'Insect'), ('개미', 'Ant', '곤충', 'Insect'), ('무당벌레', 'Ladybug', '곤충', 'Insect'),
+('잠자리', 'Dragonfly', '곤충', 'Insect'), ('반딧불이', 'Firefly', '곤충', 'Insect'), ('귀뚜라미', 'Cricket', '곤충', 'Insect'), ('사마귀', 'Mantis', '곤충', 'Insect');
 
--- 상상의 동물
-INSERT INTO creatures (name, category) VALUES
-('드래곤', '상상'), ('유니콘', '상상'), ('피닉스', '상상'), ('그리핀', '상상'),
-('페가수스', '상상'), ('켄타우로스', '상상'), ('미노타우로스', '상상'), ('키메라', '상상'),
-('크라켄', '상상'), ('고블린', '상상'), ('트롤', '상상'), ('오크', '상상'),
-('엘프', '상상'), ('요정', '상상'), ('인어', '상상'), ('늑대인간', '상상');
+-- 신화 생물 / Mythical Creatures
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('드래곤', 'Dragon', '신화', 'Mythical'), ('유니콘', 'Unicorn', '신화', 'Mythical'), ('불사조', 'Phoenix', '신화', 'Mythical'), ('그리핀', 'Griffin', '신화', 'Mythical'),
+('페가수스', 'Pegasus', '신화', 'Mythical'), ('켄타우로스', 'Centaur', '신화', 'Mythical'), ('미노타우로스', 'Minotaur', '신화', 'Mythical'), ('키메라', 'Chimera', '신화', 'Mythical'),
+('크라켄', 'Kraken', '신화', 'Mythical'), ('고블린', 'Goblin', '신화', 'Mythical'), ('트롤', 'Troll', '신화', 'Mythical'), ('오크', 'Orc', '신화', 'Mythical'),
+('엘프', 'Elf', '신화', 'Mythical'), ('요정', 'Fairy', '신화', 'Mythical'), ('인어', 'Mermaid', '신화', 'Mythical'), ('늑대인간', 'Werewolf', '신화', 'Mythical');
 
--- 인간형/기타
-INSERT INTO creatures (name, category) VALUES
-('로봇', '기타'), ('외계인', '기타'), ('좀비', '기타'), ('해골', '기타'),
-('유령', '기타'), ('닌자', '기타'), ('해적', '기타'), ('기사', '기타'),
-('마법사', '기타'), ('슈퍼히어로', '기타'), ('거인', '기타'), ('난쟁이', '기타');
+-- 기타 / Humanoid / Misc
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('로봇', 'Robot', '기타', 'Misc'), ('외계인', 'Alien', '기타', 'Misc'), ('좀비', 'Zombie', '기타', 'Misc'), ('해골', 'Skeleton', '기타', 'Misc'),
+('유령', 'Ghost', '기타', 'Misc'), ('닌자', 'Ninja', '기타', 'Misc'), ('해적', 'Pirate', '기타', 'Misc'), ('기사', 'Knight', '기타', 'Misc'),
+('마법사', 'Wizard', '기타', 'Misc'), ('슈퍼히어로', 'Superhero', '기타', 'Misc'), ('거인', 'Giant', '기타', 'Misc'), ('난쟁이', 'Dwarf', '기타', 'Misc');
 
--- 랜덤 조합 뷰 (사용 안 된 조합만)
+-- Random unused combination view
 CREATE VIEW random_unused_combination AS
 SELECT
     o.id as object_id,
     o.name as object_name,
+    o.name_en as object_name_en,
     o.category as object_category,
+    o.category_en as object_category_en,
     c.id as creature_id,
     c.name as creature_name,
-    c.category as creature_category
+    c.name_en as creature_name_en,
+    c.category as creature_category,
+    c.category_en as creature_category_en
 FROM objects o
 CROSS JOIN creatures c
 WHERE NOT EXISTS (
@@ -145,199 +236,114 @@ ORDER BY RANDOM()
 LIMIT 1;
 
 -- =====================
--- 추가 데이터: 물건
+-- Additional: Creatures
 -- =====================
 
--- 음식
-INSERT INTO objects (name, category) VALUES
-('피자', '음식'), ('햄버거', '음식'), ('김치', '음식'), ('초밥', '음식'),
-('타코', '음식'), ('파스타', '음식'), ('치킨', '음식'), ('스테이크', '음식'),
-('라면', '음식'), ('떡볶이', '음식'), ('아이스크림', '음식'), ('케이크', '음식'),
-('도넛', '음식'), ('샌드위치', '음식'), ('핫도그', '음식'), ('감자튀김', '음식')
+-- 직업 / Professions
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('소방관', 'Firefighter', '직업', 'Profession'), ('경찰관', 'Police Officer', '직업', 'Profession'), ('셰프', 'Chef', '직업', 'Profession'), ('과학자', 'Scientist', '직업', 'Profession'),
+('의사', 'Doctor', '직업', 'Profession'), ('간호사', 'Nurse', '직업', 'Profession'), ('선생님', 'Teacher', '직업', 'Profession'), ('변호사', 'Lawyer', '직업', 'Profession'),
+('건축가', 'Architect', '직업', 'Profession'), ('화가', 'Painter', '직업', 'Profession'), ('음악가', 'Musician', '직업', 'Profession'), ('배우', 'Actor', '직업', 'Profession'),
+('운동선수', 'Athlete', '직업', 'Profession'), ('우주비행사', 'Astronaut', '직업', 'Profession'), ('탐험가', 'Explorer', '직업', 'Profession'), ('사육사', 'Zookeeper', '직업', 'Profession'),
+('조종사', 'Pilot', '직업', 'Profession'), ('선장', 'Captain', '직업', 'Profession'), ('광부', 'Miner', '직업', 'Profession'), ('농부', 'Farmer', '직업', 'Profession')
 ON CONFLICT (name) DO NOTHING;
 
--- 건물/구조물
-INSERT INTO objects (name, category) VALUES
-('성', '건물'), ('피라미드', '건물'), ('등대', '건물'), ('풍차', '건물'),
-('탑', '건물'), ('다리', '건물'), ('댐', '건물'), ('터널', '건물'),
-('정글짐', '건물'), ('미끄럼틀', '건물'), ('관람차', '건물'), ('롤러코스터', '건물'),
-('텐트', '건물'), ('이글루', '건물'), ('트리하우스', '건물'), ('벙커', '건물')
+-- 역사 캐릭터 / Historical Characters
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('바이킹', 'Viking', '역사', 'Historical'), ('사무라이', 'Samurai', '역사', 'Historical'), ('검투사', 'Gladiator', '역사', 'Historical'), ('스파르탄', 'Spartan', '역사', 'Historical'),
+('카우보이', 'Cowboy', '역사', 'Historical'), ('전사', 'Warrior', '역사', 'Historical'), ('궁수', 'Archer', '역사', 'Historical'), ('십자군', 'Crusader', '역사', 'Historical'),
+('파라오', 'Pharaoh', '역사', 'Historical'), ('황제', 'Emperor', '역사', 'Historical'), ('여왕', 'Queen', '역사', 'Historical'), ('왕자', 'Prince', '역사', 'Historical'),
+('공주', 'Princess', '역사', 'Historical'), ('귀족', 'Noble', '역사', 'Historical'), ('농노', 'Serf', '역사', 'Historical'), ('대장장이', 'Blacksmith', '역사', 'Historical')
 ON CONFLICT (name) DO NOTHING;
 
--- 자연물
-INSERT INTO objects (name, category) VALUES
-('바위', '자연물'), ('나무', '자연물'), ('구름', '자연물'), ('번개', '자연물'),
-('무지개', '자연물'), ('폭포', '자연물'), ('화산', '자연물'), ('빙하', '자연물'),
-('모래', '자연물'), ('진흙', '자연물'), ('이끼', '자연물'), ('산호', '자연물'),
-('조개껍데기', '자연물'), ('깃털', '자연물'), ('뿔', '자연물'), ('상어이빨', '자연물')
+-- 추가 신화 생물 / More Mythical Creatures
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('히드라', 'Hydra', '신화', 'Mythical'), ('케르베로스', 'Cerberus', '신화', 'Mythical'), ('바실리스크', 'Basilisk', '신화', 'Mythical'), ('만티코어', 'Manticore', '신화', 'Mythical'),
+('스핑크스', 'Sphinx', '신화', 'Mythical'), ('하피', 'Harpy', '신화', 'Mythical'), ('키클롭스', 'Cyclops', '신화', 'Mythical'), ('메두사', 'Medusa', '신화', 'Mythical'),
+('골렘', 'Golem', '신화', 'Mythical'), ('슬라임', 'Slime', '신화', 'Mythical'), ('도깨비불', 'Wisp', '신화', 'Mythical'), ('임프', 'Imp', '신화', 'Mythical'),
+('가고일', 'Gargoyle', '신화', 'Mythical'), ('뱀파이어', 'Vampire', '신화', 'Mythical'), ('미라', 'Mummy', '신화', 'Mythical'), ('프랑켄슈타인', 'Frankenstein', '신화', 'Mythical'),
+('늑대인간왕', 'Werewolf King', '신화', 'Mythical'), ('예티', 'Yeti', '신화', 'Mythical'), ('빅풋', 'Bigfoot', '신화', 'Mythical'), ('네시', 'Nessie', '신화', 'Mythical')
 ON CONFLICT (name) DO NOTHING;
 
--- SF/미래
-INSERT INTO objects (name, category) VALUES
-('광선검', 'SF'), ('타임머신', 'SF'), ('텔레포터', 'SF'), ('홀로그램', 'SF'),
-('로봇팔', 'SF'), ('제트팩', 'SF'), ('레이저건', 'SF'), ('포스필드', 'SF'),
-('우주복', 'SF'), ('냉동캡슐', 'SF'), ('클론머신', 'SF'), ('반중력부츠', 'SF'),
-('나노봇', 'SF'), ('사이버눈', 'SF'), ('뇌칩', 'SF'), ('플라즈마캐논', 'SF')
+-- 귀여운 동물 / Cute Animals
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('치와와', 'Chihuahua', '포유류', 'Mammal'), ('포메라니안', 'Pomeranian', '포유류', 'Mammal'), ('시바이누', 'Shiba Inu', '포유류', 'Mammal'), ('골든리트리버', 'Golden Retriever', '포유류', 'Mammal'),
+('페르시안고양이', 'Persian Cat', '포유류', 'Mammal'), ('먼치킨고양이', 'Munchkin Cat', '포유류', 'Mammal'), ('래그돌고양이', 'Ragdoll Cat', '포유류', 'Mammal'), ('수달', 'Otter', '포유류', 'Mammal'),
+('미어캣', 'Meerkat', '포유류', 'Mammal'), ('친칠라', 'Chinchilla', '포유류', 'Mammal'), ('페럿', 'Ferret', '포유류', 'Mammal'), ('고슴도치', 'Hedgehog', '포유류', 'Mammal'),
+('슈가글라이더', 'Sugar Glider', '포유류', 'Mammal'), ('카피바라', 'Capybara', '포유류', 'Mammal'), ('알파카', 'Alpaca', '포유류', 'Mammal'), ('라마', 'Llama', '포유류', 'Mammal')
 ON CONFLICT (name) DO NOTHING;
 
--- 마법/판타지
-INSERT INTO objects (name, category) VALUES
-('마법지팡이', '판타지'), ('수정구슬', '판타지'), ('마법책', '판타지'), ('포션', '판타지'),
-('마법카펫', '판타지'), ('투명망토', '판타지'), ('소원램프', '판타지'), ('마법거울', '판타지'),
-('저주인형', '판타지'), ('봉인석', '판타지'), ('소환진', '판타지'), ('룬문자', '판타지'),
-('성배', '판타지'), ('엑스칼리버', '판타지'), ('반지', '판타지'), ('왕관', '판타지')
+-- 추가 해양생물 / More Sea Creatures
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('대왕오징어', 'Giant Squid', '해양생물', 'Sea Creature'), ('흰동가리', 'Clownfish', '해양생물', 'Sea Creature'), ('해룡', 'Sea Dragon', '해양생물', 'Sea Creature'), ('만타가오리', 'Manta Ray', '해양생물', 'Sea Creature'),
+('바다코끼리', 'Walrus', '해양생물', 'Sea Creature'), ('물개', 'Seal', '해양생물', 'Sea Creature'), ('황제펭귄', 'Emperor Penguin', '해양생물', 'Sea Creature'), ('바다거북', 'Sea Turtle', '해양생물', 'Sea Creature'),
+('산호초', 'Coral Polyp', '해양생물', 'Sea Creature'), ('말미잘', 'Sea Anemone', '해양생물', 'Sea Creature'), ('성게', 'Sea Urchin', '해양생물', 'Sea Creature'), ('랍스터', 'Lobster', '해양생물', 'Sea Creature')
 ON CONFLICT (name) DO NOTHING;
 
--- 문구/사무용품
-INSERT INTO objects (name, category) VALUES
-('연필', '문구'), ('지우개', '문구'), ('자', '문구'), ('컴퍼스', '문구'),
-('스테이플러', '문구'), ('테이프', '문구'), ('클립', '문구'), ('포스트잇', '문구'),
-('화이트보드', '문구'), ('프로젝터', '문구'), ('프린터', '문구'), ('복사기', '문구')
+-- 공룡 / Dinosaurs
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('티라노사우루스', 'Tyrannosaurus Rex', '공룡', 'Dinosaur'), ('트리케라톱스', 'Triceratops', '공룡', 'Dinosaur'), ('브라키오사우루스', 'Brachiosaurus', '공룡', 'Dinosaur'), ('벨로키랍토르', 'Velociraptor', '공룡', 'Dinosaur'),
+('스테고사우루스', 'Stegosaurus', '공룡', 'Dinosaur'), ('안킬로사우루스', 'Ankylosaurus', '공룡', 'Dinosaur'), ('프테라노돈', 'Pteranodon', '공룡', 'Dinosaur'), ('스피노사우루스', 'Spinosaurus', '공룡', 'Dinosaur'),
+('파라사우롤로푸스', 'Parasaurolophus', '공룡', 'Dinosaur'), ('딜로포사우루스', 'Dilophosaurus', '공룡', 'Dinosaur'), ('이구아노돈', 'Iguanodon', '공룡', 'Dinosaur'), ('알로사우루스', 'Allosaurus', '공룡', 'Dinosaur')
 ON CONFLICT (name) DO NOTHING;
 
--- 장난감
-INSERT INTO objects (name, category) VALUES
-('레고', '장난감'), ('인형', '장난감'), ('요요', '장난감'), ('팽이', '장난감'),
-('퍼즐', '장난감'), ('루빅스큐브', '장난감'), ('슬라임', '장난감'), ('비눗방울', '장난감'),
-('물총', '장난감'), ('네프건', '장난감'), ('드론장난감', 'RC'), ('RC카', '장난감'),
-('보드게임', '장난감'), ('카드', '장난감'), ('주사위', '장난감'), ('다트판', '장난감')
+-- 로봇 / AI / Robots / AI
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('안드로이드', 'Android', '기계', 'Machine'), ('사이보그', 'Cyborg', '기계', 'Machine'), ('드로이드', 'Droid', '기계', 'Machine'), ('메카', 'Mecha', '기계', 'Machine'),
+('청소로봇', 'Cleaning Robot', '기계', 'Machine'), ('배달로봇', 'Delivery Robot', '기계', 'Machine'), ('의료로봇', 'Medical Robot', '기계', 'Machine'), ('군사로봇', 'Military Robot', '기계', 'Machine'),
+('AI비서', 'AI Assistant', '기계', 'Machine'), ('챗봇', 'Chatbot', '기계', 'Machine'), ('자율주행차', 'Self-Driving Car', '기계', 'Machine'), ('배달드론', 'Delivery Drone', '기계', 'Machine')
 ON CONFLICT (name) DO NOTHING;
 
--- 의료용품
-INSERT INTO objects (name, category) VALUES
-('주사기', '의료'), ('청진기', '의료'), ('붕대', '의료'), ('목발', '의료'),
-('휠체어', '의료'), ('깁스', '의료'), ('체온계', '의료'), ('혈압계', '의료'),
-('현미경', '의료'), ('X레이', '의료'), ('MRI', '의료'), ('제세동기', '의료')
+-- 신화 신 / Mythology Gods
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('천사', 'Angel', '신화신', 'Mythology'), ('악마', 'Demon', '신화신', 'Mythology'), ('신', 'God', '신화신', 'Mythology'), ('여신', 'Goddess', '신화신', 'Mythology'),
+('큐피드', 'Cupid', '신화신', 'Mythology'), ('제우스', 'Zeus', '신화신', 'Mythology'), ('포세이돈', 'Poseidon', '신화신', 'Mythology'), ('하데스', 'Hades', '신화신', 'Mythology'),
+('아테나', 'Athena', '신화신', 'Mythology'), ('아폴로', 'Apollo', '신화신', 'Mythology'), ('토르', 'Thor', '신화신', 'Mythology'), ('오딘', 'Odin', '신화신', 'Mythology'),
+('손오공', 'Sun Wukong', '신화신', 'Mythology'), ('저팔계', 'Zhu Bajie', '신화신', 'Mythology'), ('삼장법사', 'Tang Sanzang', '신화신', 'Mythology'), ('사오정', 'Sha Wujing', '신화신', 'Mythology')
 ON CONFLICT (name) DO NOTHING;
 
--- 주방용품
-INSERT INTO objects (name, category) VALUES
-('프라이팬', '주방'), ('냄비', '주방'), ('국자', '주방'), ('뒤집개', '주방'),
-('도마', '주방'), ('믹서기', '주방'), ('오븐', '주방'), ('에어프라이어', '주방'),
-('커피머신', '주방'), ('와플기계', '주방'), ('식기세척기', '주방'), ('정수기', '주방')
+-- 공포 / Horror
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('저승사자', 'Specter', '공포', 'Horror'), ('반시', 'Banshee', '공포', 'Horror'), ('도깨비왕', 'Goblin King', '공포', 'Horror'), ('구미호', 'Nine-Tailed Fox', '공포', 'Horror'),
+('사신', 'Grim Reaper', '공포', 'Horror'), ('강시', 'Jiangshi', '공포', 'Horror'), ('원귀', 'Wraith', '공포', 'Horror'), ('물귀신', 'Water Spirit', '공포', 'Horror'),
+('산신령', 'Mountain Spirit', '공포', 'Horror'), ('수호수', 'Guardian Beast', '공포', 'Horror'), ('철우', 'Iron Bull', '공포', 'Horror'), ('삼족오', 'Three-Legged Crow', '공포', 'Horror')
 ON CONFLICT (name) DO NOTHING;
 
--- 캠핑용품
-INSERT INTO objects (name, category) VALUES
-('캠핑의자', '캠핑'), ('랜턴', '캠핑'), ('침낭', '캠핑'), ('해먹', '캠핑'),
-('쿨러', '캠핑'), ('버너', '캠핑'), ('코펠', '캠핑'), ('타프', '캠핑'),
-('등산스틱', '캠핑'), ('나침반', '캠핑'), ('맥가이버칼', '캠핑'), ('라이터', '캠핑')
-ON CONFLICT (name) DO NOTHING;
-
--- 전자기기
-INSERT INTO objects (name, category) VALUES
-('노트북', '전자기기'), ('태블릿', '전자기기'), ('스마트워치', '전자기기'), ('이어폰', '전자기기'),
-('스피커', '전자기기'), ('카메라', '전자기기'), ('빔프로젝터', '전자기기'), ('게임기', '전자기기'),
-('VR헤드셋', '전자기기'), ('킨들', '전자기기'), ('GPS', '전자기기'), ('웹캠', '전자기기')
+-- 게임/애니 캐릭터 / Game / Anime Character Types
+INSERT INTO creatures (name, name_en, category, category_en) VALUES
+('용사', 'Hero', '캐릭터', 'Character'), ('마왕', 'Demon Lord', '캐릭터', 'Character'), ('힐러', 'Healer', '캐릭터', 'Character'), ('탱커', 'Tank', '캐릭터', 'Character'),
+('암살자', 'Assassin', '캐릭터', 'Character'), ('레인저', 'Ranger', '캐릭터', 'Character'), ('소환사', 'Summoner', '캐릭터', 'Character'), ('연금술사', 'Alchemist', '캐릭터', 'Character'),
+('음유시인', 'Bard', '캐릭터', 'Character'), ('성기사', 'Paladin', '캐릭터', 'Character'), ('강령술사', 'Necromancer', '캐릭터', 'Character'), ('드루이드', 'Druid', '캐릭터', 'Character')
 ON CONFLICT (name) DO NOTHING;
 
 -- =====================
--- 추가 데이터: 생명체
--- =====================
-
--- 직업
-INSERT INTO creatures (name, category) VALUES
-('소방관', '직업'), ('경찰관', '직업'), ('요리사', '직업'), ('과학자', '직업'),
-('의사', '직업'), ('간호사', '직업'), ('선생님', '직업'), ('변호사', '직업'),
-('건축가', '직업'), ('화가', '직업'), ('음악가', '직업'), ('배우', '직업'),
-('운동선수', '직업'), ('우주비행사', '직업'), ('탐험가', '직업'), ('사육사', '직업'),
-('조종사', '직업'), ('선장', '직업'), ('광부', '직업'), ('농부', '직업')
-ON CONFLICT (name) DO NOTHING;
-
--- 역사적 캐릭터
-INSERT INTO creatures (name, category) VALUES
-('바이킹', '역사'), ('사무라이', '역사'), ('검투사', '역사'), ('스파르탄', '역사'),
-('카우보이', '역사'), ('무사', '역사'), ('궁수', '역사'), ('십자군', '역사'),
-('파라오', '역사'), ('황제', '역사'), ('여왕', '역사'), ('왕자', '역사'),
-('공주', '역사'), ('귀족', '역사'), ('농노', '역사'), ('대장장이', '역사')
-ON CONFLICT (name) DO NOTHING;
-
--- 더 많은 상상 동물
-INSERT INTO creatures (name, category) VALUES
-('히드라', '상상'), ('케르베로스', '상상'), ('바실리스크', '상상'), ('만티코어', '상상'),
-('스핑크스', '상상'), ('하피', '상상'), ('사이클롭스', '상상'), ('메두사', '상상'),
-('골렘', '상상'), ('슬라임', '상상'), ('위습', '상상'), ('임프', '상상'),
-('가고일', '상상'), ('뱀파이어', '상상'), ('미라', '상상'), ('프랑켄슈타인', '상상'),
-('워울프', '상상'), ('설인', '상상'), ('빅풋', '상상'), ('네시', '상상')
-ON CONFLICT (name) DO NOTHING;
-
--- 귀여운 동물
-INSERT INTO creatures (name, category) VALUES
-('치와와', '포유류'), ('포메라니안', '포유류'), ('시바견', '포유류'), ('골든리트리버', '포유류'),
-('페르시안고양이', '포유류'), ('먼치킨', '포유류'), ('래그돌', '포유류'), ('수달', '포유류'),
-('미어캣', '포유류'), ('친칠라', '포유류'), ('페럿', '포유류'), ('고슴도치', '포유류'),
-('슈가글라이더', '포유류'), ('카피바라', '포유류'), ('알파카', '포유류'), ('라마', '포유류')
-ON CONFLICT (name) DO NOTHING;
-
--- 바다생물 추가
-INSERT INTO creatures (name, category) VALUES
-('대왕오징어', '수중생물'), ('흰동가리', '수중생물'), ('해룡', '수중생물'), ('만타레이', '수중생물'),
-('바다코끼리', '수중생물'), ('물개', '수중생물'), ('펭귄황제', '수중생물'), ('바다거북', '수중생물'),
-('산호', '수중생물'), ('말미잘', '수중생물'), ('성게', '수중생물'), ('랍스터', '수중생물')
-ON CONFLICT (name) DO NOTHING;
-
--- 공룡 종류
-INSERT INTO creatures (name, category) VALUES
-('티라노사우루스', '공룡'), ('트리케라톱스', '공룡'), ('브라키오사우루스', '공룡'), ('벨로키랍토르', '공룡'),
-('스테고사우루스', '공룡'), ('안킬로사우루스', '공룡'), ('프테라노돈', '공룡'), ('스피노사우루스', '공룡'),
-('파라사우롤로푸스', '공룡'), ('딜로포사우루스', '공룡'), ('이구아노돈', '공룡'), ('알로사우루스', '공룡')
-ON CONFLICT (name) DO NOTHING;
-
--- 로봇/AI 종류
-INSERT INTO creatures (name, category) VALUES
-('안드로이드', '기계'), ('사이보그', '기계'), ('드로이드', '기계'), ('메카', '기계'),
-('자동청소로봇', '기계'), ('배달로봇', '기계'), ('의료로봇', '기계'), ('군사로봇', '기계'),
-('AI비서', '기계'), ('챗봇', '기계'), ('자율주행차', '기계'), ('드론배송', '기계')
-ON CONFLICT (name) DO NOTHING;
-
--- 신화 속 존재
-INSERT INTO creatures (name, category) VALUES
-('천사', '신화'), ('악마', '신화'), ('신', '신화'), ('여신', '신화'),
-('큐피드', '신화'), ('제우스', '신화'), ('포세이돈', '신화'), ('하데스', '신화'),
-('아테나', '신화'), ('아폴로', '신화'), ('토르', '신화'), ('오딘', '신화'),
-('손오공', '신화'), ('저팔계', '신화'), ('삼장법사', '신화'), ('사오정', '신화')
-ON CONFLICT (name) DO NOTHING;
-
--- 귀신/공포
-INSERT INTO creatures (name, category) VALUES
-('귀신', '공포'), ('처녀귀신', '공포'), ('도깨비', '공포'), ('구미호', '공포'),
-('저승사자', '공포'), ('강시', '공포'), ('원귀', '공포'), ('물귀신', '공포'),
-('산신령', '공포'), ('해태', '공포'), ('불가사리', '공포'), ('삼족오', '공포')
-ON CONFLICT (name) DO NOTHING;
-
--- 게임/애니 캐릭터 타입
-INSERT INTO creatures (name, category) VALUES
-('용사', '캐릭터'), ('마왕', '캐릭터'), ('힐러', '캐릭터'), ('탱커', '캐릭터'),
-('어쌔신', '캐릭터'), ('궁사', '캐릭터'), ('소환사', '캐릭터'), ('연금술사', '캐릭터'),
-('바드', '캐릭터'), ('팔라딘', '캐릭터'), ('네크로맨서', '캐릭터'), ('드루이드', '캐릭터')
-ON CONFLICT (name) DO NOTHING;
-
--- =====================
--- 조우 스크립트 테이블
+-- Encounter scripts table
 -- =====================
 CREATE TABLE encounter_scripts (
     id SERIAL PRIMARY KEY,
 
-    -- 조합 정보
+    -- Combination info
     object_id INTEGER REFERENCES objects(id),
     creature_id INTEGER REFERENCES creatures(id),
     object_name VARCHAR(100),
+    object_name_en VARCHAR(100),
     creature_name VARCHAR(100),
+    creature_name_en VARCHAR(100),
 
-    -- LLM 생성 결과 (5개 상황)
+    -- LLM generated result (5 situations)
     situations JSONB NOT NULL,
 
-    -- 선택 정보
+    -- Selection info
     selected_index INTEGER,
 
-    -- 상태 관리
-    -- pending: 생성됨, selected: 상황 선택됨, approved: 승인, rejected: 폐기
+    -- Status management
+    -- pending: created, selected: situation chosen, approved: approved, rejected: discarded
     status VARCHAR(20) DEFAULT 'pending',
 
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- 인덱스
+-- Indexes
 CREATE INDEX idx_encounter_scripts_status ON encounter_scripts(status);
 CREATE INDEX idx_encounter_scripts_object_creature ON encounter_scripts(object_id, creature_id);

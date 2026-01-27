@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-01-27T02:24:26.433Z",
-  "createdAt": "2026-01-27T02:24:26.433Z",
-  "id": "0meG1rrwxcY7ulqJ",
+  "updatedAt": "2026-01-27T07:16:49.239Z",
+  "createdAt": "2026-01-27T07:02:26.334Z",
+  "id": "903ZCytvfLPWUcrf",
   "name": "create",
   "description": null,
   "active": false,
@@ -105,7 +105,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"version\": \"39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b\",\n  \"input\": {\n    \"prompt\": \"{{ $json.creature_name }} holding {{ $json.object_name }}, cartoon style, funny, colorful, high quality illustration\",\n    \"negative_prompt\": \"ugly, blurry, low quality, text, watermark\",\n    \"width\": 1024,\n    \"height\": 1024\n  }\n}",
+        "jsonBody": "={\n  \"version\": \"39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b\",\n  \"input\": {\n    \"prompt\": \"{{ $json.situations[0] }}\",\n    \"negative_prompt\": \"ugly,text,watermark\",\n    \"width\": 1024,\n    \"height\": 1024\n  }\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -119,8 +119,7 @@
     },
     {
       "parameters": {
-        "amount": 3,
-        "unit": "seconds"
+        "amount": 3
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
@@ -134,7 +133,6 @@
     },
     {
       "parameters": {
-        "method": "GET",
         "url": "={{ $('Replicate 이미지 생성').item.json.urls.get }}",
         "sendHeaders": true,
         "headerParameters": {
@@ -202,10 +200,11 @@
       "typeVersion": 1.2,
       "position": [
         1456,
-        -100
+        -96
       ],
       "id": "e5f6a7b8-c9d0-1234-efab-567890123456",
       "name": "Telegram 이미지 전송",
+      "webhookId": "591f03c3-ff53-418d-babf-9ae05ee1ca3a",
       "credentials": {
         "telegramApi": {
           "id": "hjKKDhzAr95XXqw9",
@@ -307,50 +306,49 @@
   },
   "staticData": null,
   "meta": null,
-  "pinData": null,
-  "versionId": "63705e5d-5c77-4402-98a9-bd4aea8c32db",
+  "pinData": {},
+  "versionId": "6514c440-91cd-42c3-b19e-0f9a687cdf4f",
   "activeVersionId": null,
-  "versionCounter": 4,
+  "versionCounter": 8,
   "triggerCount": 1,
   "shared": [
     {
-      "updatedAt": "2026-01-27T02:24:26.437Z",
-      "createdAt": "2026-01-27T02:24:26.437Z",
+      "updatedAt": "2026-01-27T07:02:26.334Z",
+      "createdAt": "2026-01-27T07:02:26.334Z",
       "role": "workflow:owner",
-      "workflowId": "0meG1rrwxcY7ulqJ",
-      "projectId": "OXeW9s41dXHR20eI",
+      "workflowId": "903ZCytvfLPWUcrf",
+      "projectId": "34kBQ6QDZhMvy6iG",
       "project": {
-        "updatedAt": "2026-01-24T02:28:30.655Z",
-        "createdAt": "2026-01-24T02:27:33.046Z",
-        "id": "OXeW9s41dXHR20eI",
+        "updatedAt": "2026-01-27T07:00:12.533Z",
+        "createdAt": "2026-01-27T06:59:58.319Z",
+        "id": "34kBQ6QDZhMvy6iG",
         "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "e2a50ebe-382d-4360-bacf-362d1e04f653",
+        "creatorId": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
         "projectRelations": [
           {
-            "updatedAt": "2026-01-24T02:27:33.046Z",
-            "createdAt": "2026-01-24T02:27:33.046Z",
-            "userId": "e2a50ebe-382d-4360-bacf-362d1e04f653",
-            "projectId": "OXeW9s41dXHR20eI",
+            "updatedAt": "2026-01-27T06:59:58.320Z",
+            "createdAt": "2026-01-27T06:59:58.320Z",
+            "userId": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
+            "projectId": "34kBQ6QDZhMvy6iG",
             "user": {
-              "updatedAt": "2026-01-27T05:12:24.000Z",
-              "createdAt": "2026-01-24T02:27:32.928Z",
-              "id": "e2a50ebe-382d-4360-bacf-362d1e04f653",
+              "updatedAt": "2026-01-27T07:12:01.648Z",
+              "createdAt": "2026-01-27T06:59:58.200Z",
+              "id": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
               "email": "myungsworld@gmail.com",
               "firstName": "동명",
               "lastName": "myungsworld@gmail.com",
               "personalizationAnswers": {
                 "version": "v4",
-                "personalization_survey_submitted_at": "2026-01-24T02:29:51.710Z",
-                "personalization_survey_n8n_version": "2.4.5",
-                "automationGoalDevops": [],
-                "companyType": "saas",
-                "role": "it"
+                "personalization_survey_submitted_at": "2026-01-27T07:00:15.419Z",
+                "personalization_survey_n8n_version": "2.4.5"
               },
               "settings": {
-                "userActivated": false,
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "zpqJEIKLYifOQSVU",
+                "userActivatedAt": 1769497393598,
                 "easyAIWorkflowOnboarded": true
               },
               "disabled": false,

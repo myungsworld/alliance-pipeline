@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-01-27T05:13:05.655Z",
-  "createdAt": "2026-01-27T02:24:26.540Z",
-  "id": "w9BGe6Tkee8tvJGK",
+  "updatedAt": "2026-01-27T07:11:10.629Z",
+  "createdAt": "2026-01-27T07:02:28.302Z",
+  "id": "zpqJEIKLYifOQSVU",
   "name": "start",
   "description": null,
   "active": false,
@@ -10,7 +10,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT \n    o.id as object_id,\n    o.name as object_name,\n    c.id as creature_id,\n    c.name as creature_name\nFROM objects o\nCROSS JOIN creatures c\nWHERE NOT EXISTS (\n    SELECT 1 FROM combinations_used cu\n    WHERE cu.object_id = o.id AND cu.creature_id = c.id\n)\nORDER BY RANDOM()\nLIMIT 10;",
+        "query": "SELECT \n    o.id as object_id, o.name as object_name, o.name_en as object_name_en,\n    c.id as creature_id, c.name as creature_name, c.name_en as creature_name_en\nFROM objects o\nCROSS JOIN creatures c\nWHERE NOT EXISTS (\n    SELECT 1 FROM combinations_used cu\n    WHERE cu.object_id = o.id AND cu.creature_id = c.id\n)\nORDER BY RANDOM()\nLIMIT 10;",
         "options": {}
       },
       "type": "n8n-nodes-base.postgres",
@@ -262,49 +262,48 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "5d24cd20-ee07-42bb-a925-95b4cca40fe2",
+  "versionId": "06974037-eb0d-4357-96fb-7b7e1f293dc8",
   "activeVersionId": null,
-  "versionCounter": 12,
+  "versionCounter": 11,
   "triggerCount": 1,
   "shared": [
     {
-      "updatedAt": "2026-01-27T02:24:26.541Z",
-      "createdAt": "2026-01-27T02:24:26.541Z",
+      "updatedAt": "2026-01-27T07:02:28.303Z",
+      "createdAt": "2026-01-27T07:02:28.303Z",
       "role": "workflow:owner",
-      "workflowId": "w9BGe6Tkee8tvJGK",
-      "projectId": "OXeW9s41dXHR20eI",
+      "workflowId": "zpqJEIKLYifOQSVU",
+      "projectId": "34kBQ6QDZhMvy6iG",
       "project": {
-        "updatedAt": "2026-01-24T02:28:30.655Z",
-        "createdAt": "2026-01-24T02:27:33.046Z",
-        "id": "OXeW9s41dXHR20eI",
+        "updatedAt": "2026-01-27T07:00:12.533Z",
+        "createdAt": "2026-01-27T06:59:58.319Z",
+        "id": "34kBQ6QDZhMvy6iG",
         "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "e2a50ebe-382d-4360-bacf-362d1e04f653",
+        "creatorId": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
         "projectRelations": [
           {
-            "updatedAt": "2026-01-24T02:27:33.046Z",
-            "createdAt": "2026-01-24T02:27:33.046Z",
-            "userId": "e2a50ebe-382d-4360-bacf-362d1e04f653",
-            "projectId": "OXeW9s41dXHR20eI",
+            "updatedAt": "2026-01-27T06:59:58.320Z",
+            "createdAt": "2026-01-27T06:59:58.320Z",
+            "userId": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
+            "projectId": "34kBQ6QDZhMvy6iG",
             "user": {
-              "updatedAt": "2026-01-27T05:12:24.000Z",
-              "createdAt": "2026-01-24T02:27:32.928Z",
-              "id": "e2a50ebe-382d-4360-bacf-362d1e04f653",
+              "updatedAt": "2026-01-27T07:12:01.648Z",
+              "createdAt": "2026-01-27T06:59:58.200Z",
+              "id": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
               "email": "myungsworld@gmail.com",
               "firstName": "동명",
               "lastName": "myungsworld@gmail.com",
               "personalizationAnswers": {
                 "version": "v4",
-                "personalization_survey_submitted_at": "2026-01-24T02:29:51.710Z",
-                "personalization_survey_n8n_version": "2.4.5",
-                "automationGoalDevops": [],
-                "companyType": "saas",
-                "role": "it"
+                "personalization_survey_submitted_at": "2026-01-27T07:00:15.419Z",
+                "personalization_survey_n8n_version": "2.4.5"
               },
               "settings": {
-                "userActivated": false,
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "zpqJEIKLYifOQSVU",
+                "userActivatedAt": 1769497393598,
                 "easyAIWorkflowOnboarded": true
               },
               "disabled": false,

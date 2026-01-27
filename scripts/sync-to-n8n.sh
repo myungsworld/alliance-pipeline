@@ -125,10 +125,8 @@ else
     NEW_ID=$(echo "$RESULT" | jq -r '.id' 2>/dev/null)
 
     if [ -n "$NEW_ID" ] && [ "$NEW_ID" != "null" ]; then
-      curl -s -X PATCH "$N8N_URL/api/v1/workflows/$NEW_ID" \
-        -H "X-N8N-API-KEY: $N8N_API_KEY" \
-        -H "Content-Type: application/json" \
-        -d '{"active": true}' > /dev/null 2>&1
+      curl -s -X POST "$N8N_URL/api/v1/workflows/$NEW_ID/activate" \
+        -H "X-N8N-API-KEY: $N8N_API_KEY" > /dev/null 2>&1
       echo -e "${GREEN}완료${NC} (ID: $NEW_ID, active)"
     else
       ERROR=$(echo "$RESULT" | jq -r '.message' 2>/dev/null)

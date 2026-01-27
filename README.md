@@ -148,12 +148,16 @@ docker compose up -d
 ### 테이블
 
 ```sql
-objects (id, name, category, created_at)           -- 물건 251개, 20개 카테고리
-creatures (id, name, category, created_at)         -- 생명체 231개, 15개 카테고리
+objects (id, name, name_en, category, category_en, created_at)           -- 물건 251개, 20개 카테고리
+creatures (id, name, name_en, category, category_en, created_at)         -- 생명체 231개, 15개 카테고리
 combinations_used (id, object_id, creature_id, content_type, used_at)
-encounter_scripts (id, object_id, creature_id, object_name, creature_name,
-                   situations JSONB, selected_index, status, created_at, updated_at)
+encounter_scripts (id, object_id, creature_id, object_name, object_name_en,
+                   creature_name, creature_name_en, situations JSONB,
+                   selected_index, status, created_at, updated_at)
 ```
+
+- `name` / `category`: 한국어 (텔레그램 표시용)
+- `name_en` / `category_en`: 영어 (API 프롬프트용)
 
 ### PostgreSQL 접속 정보
 
