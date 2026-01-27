@@ -24,95 +24,6 @@ n8n + Telegram + Google Gemini를 활용한 AI 숏폼 콘텐츠 자동 생성 �
 | 터널링 | ngrok (Webhook용) |
 | 컨테이너 | Docker Compose |
 
-## 워크플로우 구조
-
-### 1. start - 시작 워크플로우
-텔레그램 메시지 트리거로 랜덤 조합 버튼 전송
-
-```
-[Telegram: "조우" or "대결" 메시지]
-    ↓
-[Switch: 명령어 분기]
-    ├─ "조우" → [PostgreSQL: 10개 랜덤 조합] → [버튼 생성] → [Telegram 전송]
-    └─ "대결" → [PostgreSQL: 10개 조합] → [5쌍 vs 버튼 생성] → [Telegram 전송]
-```
-
-### 2. write - 콜백 처리 워크플로우
-버튼 클릭 시 LLM으로 스크립트 생성
-
-```
-[Telegram: Callback Query]
-    ↓
-[Switch: callback_data 분기]
-    │
-    ├─ "select_*" (조우)
-    │   ↓
-    │   [Parse: object_id, creature_id 추출]
-    │   ↓
-    │   [PostgreSQL: 이름 조회]
-    │   ↓
-    │   [Gemini LLM: 5가지 상황 생성]
-    │   ↓
-    │   [PostgreSQL: encounter_scripts INSERT]
-    │   ↓
-    │   [Telegram: 결과 + 버튼 전송]
-    │
-    └─ "vs_*" (대결)
-        ↓
-        [Parse: 4개 ID 추출]
-        ↓
-        [PostgreSQL: 양팀 이름 조회]
-        ↓
-        [Gemini LLM: 대결 시나리오 생성]
-        ↓
-        [Telegram: 결과 전송]
-```
-
-### 3. My workflow - 이미지 생성 처리
-"이미지 생성" 버튼 클릭 시 저장된 스크립트 조회
-
-```
-[Telegram: "encounter_*" Callback]
-    ↓
-[Switch: encounter_ 분기]
-    ↓
-[PostgreSQL: encounter_scripts 조회 by ID]
-    ↓
-[이미지 생성 API 연동 예정]
-```
-
-## 데이터베이스 구조
-
-### 테이블
-
-```sql
--- 물건 (251개, 20개 카테고리)
-objects (id, name, category, created_at)
-
--- 생명체 (231개, 15개 카테고리)
-creatures (id, name, category, created_at)
-
--- 사용된 조합 기록
-combinations_used (id, object_id, creature_id, content_type, used_at)
-
--- LLM 생성 스크립트 저장
-encounter_scripts (
-    id, object_id, creature_id,
-    object_name, creature_name,
-    situations JSONB,  -- 5개 상황 배열
-    selected_index, status,
-    created_at, updated_at
-)
-```
-
-### 카테고리
-
-**물건 (20개)**
-도구, 가전, 탈것, 악기, 무기, 일상용품, 가구, 스포츠, 음식, 건물, 자연물, SF, 판타지, 문구, 장난감, 의료, 주방, 캠핑, 전자기기
-
-**생명체 (15개)**
-포유류, 조류, 수중생물, 파충류, 양서류, 곤충, 상상, 직업, 역사, 신화, 공포, 캐릭터, 공룡, 기계, 기타
-
 ## 빠른 시작
 
 ### 1. 프로젝트 클론
@@ -153,114 +64,124 @@ WEBHOOK_URL=https://your-ngrok-url.ngrok-free.app
 N8N_API_KEY=your_n8n_api_key
 ```
 
-### 3. Docker 실행
+### 3. Pre-commit Hook 설정
+```bash
+ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
+```
+
+### 4. Docker 실행
 ```bash
 docker compose up -d
 ```
 
-### 4. Credentials 가져오기
+### 5. n8n 동기화
 ```bash
-./scripts/import-credentials.sh
+./scripts/sync-to-n8n.sh
 ```
-
-### 5. 워크플로우 가져오기
-```bash
-./scripts/update-workflow.sh
-```
-
-### 6. 워크플로우 활성화
-n8n API로 활성화하거나 UI에서 토글 ON
+기존 credentials/workflows를 모두 삭제하고 로컬 JSON에서 새로 import합니다.
 
 ## 사용 방법
 
-### 텔레그램에서 실행
+텔레그램 봇에게 메시지를 보내면 동작합니다.
 
-1. 봇에게 **"조우"** 메시지 전송 → 10개 랜덤 조합 버튼 표시
-2. 원하는 조합 버튼 클릭 → LLM이 5가지 상황 생성
+**조우 모드:**
+1. **"조우"** 전송 → 10개 랜덤 조합 버튼 표시
+2. 원하는 조합 클릭 → Gemini가 5가지 상황 생성
 3. **"이미지 생성"** 또는 **"다른 시나리오"** 선택
 
-또는
+**대결 모드:**
+1. **"대결"** 전송 → 5개 vs 버튼 표시
+2. 원하는 대결 클릭 → Gemini가 대결 시나리오 생성
 
-1. 봇에게 **"대결"** 메시지 전송 → 5개 vs 버튼 표시
-2. 원하는 대결 버튼 클릭 → LLM이 대결 시나리오 생성
+## 워크플로우 구조
+
+### 1. start - 시작 워크플로우
+```
+[Telegram 메시지] → [Switch: 조우/대결] → [PostgreSQL: 랜덤 조합] → [Telegram: 버튼 전송]
+```
+
+### 2. write - 콜백 처리 워크플로우
+```
+[Telegram Callback] → [Switch: select_*/vs_*]
+  ├─ 조우: [ID 추출] → [DB 조회] → [Gemini: 5가지 상황] → [DB 저장] → [Telegram 전송]
+  └─ 대결: [ID 추출] → [DB 조회] → [Gemini: 대결 시나리오] → [Telegram 전송]
+```
+
+### 3. image - 이미지 생성 워크플로우
+```
+[Telegram Callback: encounter_*] → [DB: 스크립트 조회] → [이미지 생성 API 연동 예정]
+```
+
+## 멀티 PC 동기화
+
+### 작업 흐름
+
+```
+[PC A: n8n에서 작업] → git commit (pre-commit hook이 자동 export) → git push
+                                                                        ↓
+[PC B: git pull] → docker compose up -d → ./scripts/sync-to-n8n.sh → 작업 시작
+```
+
+**pre-commit hook이 자동으로:**
+- n8n에서 credentials export → `credentials/credentials.json`
+- n8n에서 workflows export → `workflows/*.json`
+- 변경된 파일을 staging에 추가
+
+**다른 PC에서 동기화:**
+```bash
+git pull
+docker compose up -d
+./scripts/sync-to-n8n.sh
+```
+
+### 스크립트
+
+| 스크립트 | 설명 |
+|----------|------|
+| `sync-to-n8n.sh` | credentials + workflows를 n8n에 동기화 (삭제 후 import) |
+| `export-credentials.sh` | n8n → `credentials/credentials.json` 내보내기 |
+| `export-workflow.sh` | n8n → `workflows/*.json` 내보내기 |
+| `pre-commit.sh` | git commit 시 자동 export (hook) |
+
+## 데이터베이스
+
+### 테이블
+
+```sql
+objects (id, name, category, created_at)           -- 물건 251개, 20개 카테고리
+creatures (id, name, category, created_at)         -- 생명체 231개, 15개 카테고리
+combinations_used (id, object_id, creature_id, content_type, used_at)
+encounter_scripts (id, object_id, creature_id, object_name, creature_name,
+                   situations JSONB, selected_index, status, created_at, updated_at)
+```
+
+### PostgreSQL 접속 정보
+
+| 필드 | 값 |
+|------|------|
+| Host | `postgres` (Docker 내부 네트워크) |
+| Database | `content_db` |
+| User / Password | `.env` 파일 참조 |
+| Port | `5432` |
 
 ## 파일 구조
 
 ```
 alliance-pipeline/
-├── docker-compose.yaml    # Docker 설정 (n8n, postgres, ngrok)
-├── .env                   # 환경변수 (git 제외)
-├── .env.example           # 환경변수 템플릿
-├── init.sql               # DB 스키마 + 시드 데이터
-├── workflows/             # n8n 워크플로우 백업 (JSON)
-├── credentials/           # n8n credentials (환경변수 참조)
+├── docker-compose.yaml       # Docker 설정 (n8n, postgres, ngrok)
+├── .env                      # 환경변수 (git 제외)
+├── .env.example              # 환경변수 템플릿
+├── init.sql                  # DB 스키마 + 시드 데이터
+├── workflows/                # n8n 워크플로우 백업 (JSON)
+├── credentials/              # n8n credentials (환경변수 참조)
 │   └── credentials.json
 ├── scripts/
-│   ├── export-credentials.sh  # credentials 내보내기
-│   ├── import-credentials.sh  # credentials 가져오기
-│   ├── export-workflow.sh     # 워크플로우 내보내기
-│   ├── update-workflow.sh     # 워크플로우 가져오기
-│   └── pre-commit.sh          # git pre-commit hook
-├── DEVELOPMENT.md         # 개발 일지
+│   ├── sync-to-n8n.sh        # n8n 동기화 (credentials + workflows)
+│   ├── export-credentials.sh # credentials 내보내기
+│   ├── export-workflow.sh    # 워크플로우 내보내기
+│   └── pre-commit.sh         # git pre-commit hook
 └── README.md
 ```
-
-## 멀티 PC 동기화 워크플로우
-
-### Git Pre-commit Hook 설정
-```bash
-ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
-```
-
-### 작업 흐름
-
-**로컬에서 작업 후 커밋:**
-1. n8n UI에서 워크플로우/credentials 수정
-2. `git commit` 실행 → pre-commit hook이 자동으로:
-   - credentials 내보내기
-   - workflows 내보내기
-3. `git push`
-
-**다른 PC에서 동기화:**
-1. `git pull`
-2. `docker compose up -d`
-3. `./scripts/import-credentials.sh`
-4. `./scripts/update-workflow.sh`
-
-### 수동 관리
-
-**Credentials 내보내기:**
-```bash
-./scripts/export-credentials.sh
-```
-
-**Credentials 가져오기:**
-```bash
-./scripts/import-credentials.sh
-```
-
-**워크플로우 내보내기:**
-```bash
-./scripts/export-workflow.sh
-```
-
-**워크플로우 가져오기:**
-```bash
-./scripts/update-workflow.sh
-```
-
-## n8n PostgreSQL 연결 정보
-
-| 필드 | 값 |
-|------|------|
-| Host | `postgres` |
-| Database | `content_db` |
-| User | `n8n` |
-| Password | `.env` 파일 참조 |
-| Port | `5432` |
-| SSL | `Disable` |
-
-> Host는 `localhost`가 아닌 `postgres` (Docker 내부 네트워크)
 
 ## 접속 URL
 
@@ -280,8 +201,7 @@ ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
 - [x] 워크플로우 1: start (조우/대결 버튼 전송)
 - [x] 워크플로우 2: write (LLM 스크립트 생성)
 - [x] encounter_scripts 테이블 (LLM 결과 저장)
-- [x] 워크플로우 백업 시스템
-- [x] 멀티 PC 동기화 (credentials/workflows)
+- [x] 멀티 PC 동기화 (pre-commit hook + sync 스크립트)
 - [x] 환경변수 기반 credentials 관리
 
 ### 진행 중

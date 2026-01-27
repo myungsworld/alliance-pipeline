@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-01-27T02:10:08.620Z",
-  "createdAt": "2026-01-27T02:02:57.673Z",
-  "id": "3VVqdyFHZOyyLbgv",
+  "updatedAt": "2026-01-27T05:45:11.497Z",
+  "createdAt": "2026-01-27T05:45:11.497Z",
+  "id": "aKaEFczZW4LPetk5",
   "name": "start",
   "description": null,
   "active": false,
@@ -261,17 +261,17 @@
   },
   "staticData": null,
   "meta": null,
-  "pinData": {},
-  "versionId": "1a20afbd-fb8c-479c-bf18-f53072db604a",
+  "pinData": null,
+  "versionId": "c3a2c212-4b9c-49a8-8bd3-f16c58cb76aa",
   "activeVersionId": null,
-  "versionCounter": 4,
+  "versionCounter": 1,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-01-27T02:02:57.674Z",
-      "createdAt": "2026-01-27T02:02:57.674Z",
+      "updatedAt": "2026-01-27T05:45:11.499Z",
+      "createdAt": "2026-01-27T05:45:11.499Z",
       "role": "workflow:owner",
-      "workflowId": "3VVqdyFHZOyyLbgv",
+      "workflowId": "aKaEFczZW4LPetk5",
       "projectId": "OXeW9s41dXHR20eI",
       "project": {
         "updatedAt": "2026-01-24T02:28:30.655Z",
@@ -289,7 +289,7 @@
             "userId": "e2a50ebe-382d-4360-bacf-362d1e04f653",
             "projectId": "OXeW9s41dXHR20eI",
             "user": {
-              "updatedAt": "2026-01-27T01:31:33.000Z",
+              "updatedAt": "2026-01-27T05:12:24.000Z",
               "createdAt": "2026-01-24T02:27:32.928Z",
               "id": "e2a50ebe-382d-4360-bacf-362d1e04f653",
               "email": "myungsworld@gmail.com",

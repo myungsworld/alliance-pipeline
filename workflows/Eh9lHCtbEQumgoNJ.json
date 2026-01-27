@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-01-27T02:02:58.153Z",
-  "createdAt": "2026-01-27T02:02:58.153Z",
-  "id": "ivTPHahRsvF8VUC1",
+  "updatedAt": "2026-01-27T05:45:11.459Z",
+  "createdAt": "2026-01-27T05:45:11.459Z",
+  "id": "Eh9lHCtbEQumgoNJ",
   "name": "write",
   "description": null,
   "active": false,
@@ -26,8 +26,8 @@
       "alwaysOutputData": false,
       "credentials": {
         "googlePalmApi": {
-          "id": "ZUae8SXXj0oQvsc7",
-          "name": "Google Gemini(PaLM) Api account 2"
+          "id": "T6hLQOKnt40dUWSA",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
@@ -222,8 +222,8 @@
       "webhookId": "f3106585-addc-41cf-9ce6-3d0131bebdf9",
       "credentials": {
         "telegramApi": {
-          "id": "tbkFQK4UE1q4woVI",
-          "name": "start"
+          "id": "zO8pBT6fKs3aHm6n",
+          "name": "start channel"
         }
       }
     },
@@ -505,16 +505,16 @@
   "staticData": null,
   "meta": null,
   "pinData": null,
-  "versionId": "bb6de4c5-6282-4e66-8cb3-06c316ce38a2",
+  "versionId": "2ac96e63-f66d-4d07-8760-1d24d7a489f0",
   "activeVersionId": null,
   "versionCounter": 1,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-01-27T02:02:58.154Z",
-      "createdAt": "2026-01-27T02:02:58.154Z",
+      "updatedAt": "2026-01-27T05:45:11.460Z",
+      "createdAt": "2026-01-27T05:45:11.460Z",
       "role": "workflow:owner",
-      "workflowId": "ivTPHahRsvF8VUC1",
+      "workflowId": "Eh9lHCtbEQumgoNJ",
       "projectId": "OXeW9s41dXHR20eI",
       "project": {
         "updatedAt": "2026-01-24T02:28:30.655Z",
@@ -532,7 +532,7 @@
             "userId": "e2a50ebe-382d-4360-bacf-362d1e04f653",
             "projectId": "OXeW9s41dXHR20eI",
             "user": {
-              "updatedAt": "2026-01-27T01:31:33.000Z",
+              "updatedAt": "2026-01-27T05:12:24.000Z",
               "createdAt": "2026-01-24T02:27:32.928Z",
               "id": "e2a50ebe-382d-4360-bacf-362d1e04f653",
               "email": "myungsworld@gmail.com",

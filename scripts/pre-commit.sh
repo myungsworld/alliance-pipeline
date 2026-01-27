@@ -4,7 +4,8 @@
 # commit 전에 credentials와 workflows를 자동으로 내보내기
 # 설치: ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
 
-SCRIPT_DIR=$(dirname "$0")
+# 심링크를 따라가서 실제 스크립트 위치를 찾음
+SCRIPT_DIR=$(cd "$(dirname "$(readlink -f "$0" 2>/dev/null || realpath "$0" 2>/dev/null || echo "$0")")" && pwd)
 
 # 색상 정의
 RED='\033[0;31m'
