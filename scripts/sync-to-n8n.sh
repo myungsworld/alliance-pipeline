@@ -103,6 +103,8 @@ fi
 
 JSON_FILES=$(find "$WORKFLOWS_DIR" -name "*.json" -type f 2>/dev/null)
 
+IMPORTED_IDS=""
+
 if [ -z "$JSON_FILES" ]; then
   echo "  import할 JSON 파일 없음"
 else
@@ -125,14 +127,24 @@ else
     NEW_ID=$(echo "$RESULT" | jq -r '.id' 2>/dev/null)
 
     if [ -n "$NEW_ID" ] && [ "$NEW_ID" != "null" ]; then
-      curl -s -X POST "$N8N_URL/api/v1/workflows/$NEW_ID/activate" \
-        -H "X-N8N-API-KEY: $N8N_API_KEY" > /dev/null 2>&1
-      echo -e "${GREEN}완료${NC} (ID: $NEW_ID, active)"
+      IMPORTED_IDS="$IMPORTED_IDS $NEW_ID"
+      echo -e "${GREEN}완료${NC} (ID: $NEW_ID)"
     else
       ERROR=$(echo "$RESULT" | jq -r '.message' 2>/dev/null)
       echo -e "${RED}실패${NC} ($ERROR)"
     fi
   done
+
+  # 모든 워크플로우 activate (deactivate → activate로 webhook 등록 보장)
+  echo ""
+  echo -e "  workflows 활성화 중..."
+  for WF_ID in $IMPORTED_IDS; do
+    curl -s -X POST "$N8N_URL/api/v1/workflows/$WF_ID/deactivate" \
+      -H "X-N8N-API-KEY: $N8N_API_KEY" > /dev/null 2>&1
+    curl -s -X POST "$N8N_URL/api/v1/workflows/$WF_ID/activate" \
+      -H "X-N8N-API-KEY: $N8N_API_KEY" > /dev/null 2>&1
+  done
+  echo -e "  ${GREEN}활성화 완료${NC}"
 fi
 
 echo ""
