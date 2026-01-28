@@ -8,36 +8,39 @@ n8n + Telegram + Google Gemini를 활용한 AI 숏폼 콘텐츠 자동 생성 �
 
 ### 두 가지 컨텐츠 모드
 
-| 모드 | 설명 | 예시 |
-|------|------|------|
+| 모드     | 설명                                      | 예시                          |
+| -------- | ----------------------------------------- | ----------------------------- |
 | **조우** | 생명체가 물건을 마주했을 때 벌어지는 상황 | 펭귄 + 우산 → 5가지 웃긴 상황 |
-| **대결** | 두 조합이 맞붙는 시나리오 | 칼 든 치킨 vs 방패 든 고양이 |
+| **대결** | 두 조합이 맞붙는 시나리오                 | 칼 든 치킨 vs 방패 든 고양이  |
 
 ## 기술 스택
 
-| 구성요소 | 기술 |
-|----------|------|
+| 구성요소          | 기술              |
+| ----------------- | ----------------- |
 | 워크플로우 자동화 | n8n (self-hosted) |
-| 데이터베이스 | PostgreSQL 16 |
-| LLM | Google Gemini |
-| 메신저 봇 | Telegram Bot API |
-| 터널링 | ngrok (Webhook용) |
-| 컨테이너 | Docker Compose |
+| 데이터베이스      | PostgreSQL 16     |
+| LLM               | Google Gemini     |
+| 메신저 봇         | Telegram Bot API  |
+| 터널링            | ngrok (Webhook용) |
+| 컨테이너          | Docker Compose    |
 
 ## 빠른 시작
 
 ### 1. 프로젝트 클론
+
 ```bash
 git clone https://github.com/your-repo/alliance-pipeline.git
 cd alliance-pipeline
 ```
 
 ### 2. 환경변수 설정
+
 ```bash
 cp .env.example .env
 ```
 
 `.env` 파일 수정:
+
 ```bash
 # PostgreSQL
 POSTGRES_USER=n8n
@@ -65,19 +68,23 @@ N8N_API_KEY=your_n8n_api_key
 ```
 
 ### 3. Pre-commit Hook 설정
+
 ```bash
 ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
 ```
 
 ### 4. Docker 실행
+
 ```bash
 docker compose up -d
 ```
 
 ### 5. n8n 동기화
+
 ```bash
 ./scripts/sync-to-n8n.sh
 ```
+
 기존 credentials/workflows를 모두 삭제하고 로컬 JSON에서 새로 import합니다.
 
 ## 사용 방법
@@ -85,31 +92,35 @@ docker compose up -d
 텔레그램 봇에게 메시지를 보내면 동작합니다.
 
 **조우 모드:**
+
 1. **"조우"** 전송 → 10개 랜덤 조합 버튼 표시
 2. 원하는 조합 클릭 → Gemini가 5가지 상황 생성
 3. **"이미지 생성"** 또는 **"다른 시나리오"** 선택
 
 **대결 모드:**
+
 1. **"대결"** 전송 → 5개 vs 버튼 표시
 2. 원하는 대결 클릭 → Gemini가 대결 시나리오 생성
 
 ## 워크플로우 구조
 
-### 1. start - 시작 워크플로우
+단일 워크플로우 (`alliance-pipeline`) - 2개 트리거, 27개 노드
+
+### Trigger 1: start channel (message + callback_query)
+
 ```
-[Telegram 메시지] → [Switch: 조우/대결] → [PostgreSQL: 랜덤 조합] → [Telegram: 버튼 전송]
+[Telegram] → [메인 라우터]
+  ├─ "조우"   → [랜덤조합 쿼리] → [조우 버튼 생성] → [텔레그램 전송]
+  ├─ "대결"   → [대결 쿼리] → [대결 버튼 생성] → [텔레그램 전송]
+  ├─ select_  → [조우 파싱] → [DB 조회] → [Gemini LLM] → [DB 저장] → [시나리오 포맷] → [script-bot 전송]
+  └─ vs_      → [대결 파싱] → [DB 조회] → [Gemini LLM] → [script-bot 전송]
 ```
 
-### 2. write - 콜백 처리 워크플로우
-```
-[Telegram Callback] → [Switch: select_*/vs_*]
-  ├─ 조우: [ID 추출] → [DB 조회] → [Gemini: 5가지 상황] → [DB 저장] → [Telegram 전송]
-  └─ 대결: [ID 추출] → [DB 조회] → [Gemini: 대결 시나리오] → [Telegram 전송]
-```
+### Trigger 2: script button handler (callback_query)
 
-### 3. image - 이미지 생성 워크플로우
 ```
-[Telegram Callback: encounter_*] → [DB: 스크립트 조회] → [이미지 생성 API 연동 예정]
+[script-bot Callback] → [이미지 라우터]
+  └─ encounter_ → [DB 조회] → [Replicate 이미지 생성] → [Wait] → [결과 확인] → [이미지 전송/재시도]
 ```
 
 ## 멀티 PC 동기화
@@ -123,11 +134,13 @@ docker compose up -d
 ```
 
 **pre-commit hook이 자동으로:**
+
 - n8n에서 credentials export → `credentials/credentials.json`
 - n8n에서 workflows export → `workflows/*.json`
 - 변경된 파일을 staging에 추가
 
 **다른 PC에서 동기화:**
+
 ```bash
 git pull
 docker compose up -d
@@ -136,12 +149,12 @@ docker compose up -d
 
 ### 스크립트
 
-| 스크립트 | 설명 |
-|----------|------|
-| `sync-to-n8n.sh` | credentials + workflows를 n8n에 동기화 (삭제 후 import) |
-| `export-credentials.sh` | n8n → `credentials/credentials.json` 내보내기 |
-| `export-workflow.sh` | n8n → `workflows/*.json` 내보내기 |
-| `pre-commit.sh` | git commit 시 자동 export (hook) |
+| 스크립트                | 설명                                                    |
+| ----------------------- | ------------------------------------------------------- |
+| `sync-to-n8n.sh`        | credentials + workflows를 n8n에 동기화 (삭제 후 import) |
+| `export-credentials.sh` | n8n → `credentials/credentials.json` 내보내기           |
+| `export-workflow.sh`    | n8n → `workflows/*.json` 내보내기                       |
+| `pre-commit.sh`         | git commit 시 자동 export (hook)                        |
 
 ## 데이터베이스
 
@@ -161,12 +174,12 @@ encounter_scripts (id, object_id, creature_id, object_name, object_name_en,
 
 ### PostgreSQL 접속 정보
 
-| 필드 | 값 |
-|------|------|
-| Host | `postgres` (Docker 내부 네트워크) |
-| Database | `content_db` |
-| User / Password | `.env` 파일 참조 |
-| Port | `5432` |
+| 필드            | 값                                |
+| --------------- | --------------------------------- |
+| Host            | `postgres` (Docker 내부 네트워크) |
+| Database        | `content_db`                      |
+| User / Password | `.env` 파일 참조                  |
+| Port            | `5432`                            |
 
 ## 파일 구조
 
@@ -189,40 +202,40 @@ alliance-pipeline/
 
 ## 접속 URL
 
-| 서비스 | URL |
-|--------|-----|
-| n8n | http://localhost:5678 |
+| 서비스         | URL                   |
+| -------------- | --------------------- |
+| n8n            | http://localhost:5678 |
 | ngrok 대시보드 | http://localhost:4040 |
-| PostgreSQL | localhost:5432 |
+| PostgreSQL     | localhost:5432        |
 
 ## 진행 상황
 
 ### 완료
+
 - [x] Docker 환경 구성 (n8n + PostgreSQL + ngrok)
 - [x] DB 스키마 및 시드 데이터 (물건 251개, 생명체 231개)
 - [x] Telegram Bot 연동
 - [x] ngrok HTTPS 터널 설정
-- [x] 워크플로우 1: start (조우/대결 버튼 전송)
-- [x] 워크플로우 2: write (LLM 스크립트 생성)
+- [x] 통합 워크플로우: alliance-pipeline (조우/대결/이미지 생성)
 - [x] encounter_scripts 테이블 (LLM 결과 저장)
 - [x] 멀티 PC 동기화 (pre-commit hook + sync 스크립트)
 - [x] 환경변수 기반 credentials 관리
-
-### 진행 중
-- [ ] 이미지 생성 API 연동 (Replicate SDXL)
+- [x] 3개 워크플로우 → 1개 통합 (webhook 충돌 해결)
+- [x] 이미지 생성 API 연동 (Replicate SDXL)
 
 ### 예정
+
 - [ ] 영상 생성 API 연동 (Runway / Kling)
 - [ ] 자동 업로드 (TikTok / YouTube Shorts)
 - [ ] 서버 배포 (Oracle Cloud)
 
 ## 예상 비용 (콘텐츠 1개당)
 
-| 항목 | 비용 |
-|------|------|
-| Gemini (스토리) | ~$0.01 |
-| Replicate SDXL (이미지) | ~$0.003 |
-| Runway (영상 10초) | ~$0.50 |
-| **합계** | **~$0.59** |
+| 항목                    | 비용       |
+| ----------------------- | ---------- |
+| Gemini (스토리)         | ~$0.01     |
+| Replicate SDXL (이미지) | ~$0.001    |
+| Runway (영상 10초)      | ~$0.50     |
+| **합계**                | **~$0.59** |
 
 월 30개 = 약 $18 (~2.4만원)
