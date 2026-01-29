@@ -330,11 +330,16 @@ CREATE TABLE encounter_scripts (
     creature_name VARCHAR(100),
     creature_name_en VARCHAR(100),
 
-    -- LLM generated result (5 situations)
+    -- LLM generated result
+    character_description TEXT,  -- consistent character visual description for image generation
     situations JSONB NOT NULL,
 
     -- Selection info
     selected_index INTEGER,
+
+    -- Generated media URLs
+    image_url TEXT,  -- generated image URL from Replicate
+    video_url TEXT,  -- generated video URL from Replicate
 
     -- Status management
     -- pending: created, selected: situation chosen, approved: approved, rejected: discarded

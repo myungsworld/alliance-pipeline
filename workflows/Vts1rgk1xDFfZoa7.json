@@ -1,0 +1,1319 @@
+{
+  "updatedAt": "2026-01-29T07:37:01.974Z",
+  "createdAt": "2026-01-29T05:54:40.815Z",
+  "id": "Vts1rgk1xDFfZoa7",
+  "name": "alliance-pipeline",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message",
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -800,
+        244
+      ],
+      "id": "e0039219-3bab-40ba-91e8-7f6e8772fa64",
+      "name": "start channel",
+      "webhookId": "ecc2bbaa-3376-4eb1-992d-5f480e1df106",
+      "credentials": {
+        "telegramApi": {
+          "id": "zO8pBT6fKs3aHm6n",
+          "name": "start channel"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "조우",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "884eb7aa-ef71-4d22-9a84-11895c5b79b4"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f08b5471-61ba-4000-b360-4cd0e2b9e9b5",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "대결",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data }}",
+                    "rightValue": "select_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "9b6bbae0-5878-4030-99bd-0d5abd938d10"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "704cc383-b12d-47da-b44f-f7b42dfef6e8",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "vs_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -576,
+        212
+      ],
+      "id": "9bfe1d11-01fa-4d5b-9894-1efcc429b90c",
+      "name": "메인 라우터"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    o.id as object_id, o.name as object_name, o.name_en as object_name_en,\n    c.id as creature_id, c.name as creature_name, c.name_en as creature_name_en\nFROM objects o\nCROSS JOIN creatures c\nWHERE NOT EXISTS (\n    SELECT 1 FROM combinations_used cu\n    WHERE cu.object_id = o.id AND cu.creature_id = c.id\n)\nORDER BY RANDOM()\nLIMIT 10;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -352,
+        -96
+      ],
+      "id": "c563714b-79ca-49d3-a042-d14f964ca875",
+      "name": "랜덤조합 쿼리",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nconst buttons = items.map(item => [{\n  text: `${item.json.object_name} + ${item.json.creature_name}`,\n  callback_data: `select_${item.json.object_id}_${item.json.creature_id}`\n}]);\n\nreturn [{\n  json: {\n    chat_id: \"8201163317\",\n    text: \"🎲 랜덤조합 명이의 선택은?:\",\n    reply_markup: {\n      inline_keyboard: buttons\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        -96
+      ],
+      "id": "f6471842-e9c6-4e80-98ac-c59ad2041cdd",
+      "name": "조우 버튼 생성"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_START_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        160,
+        0
+      ],
+      "id": "e01e5366-0a95-41a5-b69b-00655200dfe1",
+      "name": "텔레그램 전송"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    o.id as object_id,\n    o.name as object_name,\n    c.id as creature_id,\n    c.name as creature_name\nFROM objects o\nCROSS JOIN creatures c\nWHERE NOT EXISTS (\n    SELECT 1 FROM combinations_used cu\n    WHERE cu.object_id = o.id AND cu.creature_id = c.id\n)\nORDER BY RANDOM()\nLIMIT 10;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -352,
+        96
+      ],
+      "id": "74c1d2ef-6aa7-4da1-8fbb-a798dce2241c",
+      "name": "대결 쿼리",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// 2개씩 묶어서 vs 버튼 생성\nconst buttons = [];\nfor (let i = 0; i < items.length - 1; i += 2) {\n  const item1 = items[i].json;\n  const item2 = items[i + 1].json;\n  \n  buttons.push([{\n    text: `${item1.creature_name} + ${item1.object_name} vs ${item2.creature_name} + ${item2.object_name}`,\n    callback_data: `vs_${item1.object_id}_${item1.creature_id}_${item2.object_id}_${item2.creature_id}`\n  }]);\n}\n\n// ✅ 반드시 배열 안에 json 객체로 반환해야 함\nreturn [{\n  json: {\n    chat_id: \"8201163317\",\n    text: \"⚔️ 대결! 어떤 조합이 이길까?\",\n    reply_markup: {\n      inline_keyboard: buttons\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        96
+      ],
+      "id": "872071e1-af02-430e-bb15-feda4639c04e",
+      "name": "대결 버튼 생성"
+    },
+    {
+      "parameters": {
+        "jsCode": "// callback_data에서 object_id, creature_id 추출\nconst callbackData = $input.first().json.callback_query.data;\n// \"select_204_141\" → [\"select\", \"204\", \"141\"]\nconst parts = callbackData.split('_');\n\nreturn {\n  object_id: parseInt(parts[1]),\n  creature_id: parseInt(parts[2])\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        340
+      ],
+      "id": "7ba8787b-bc03-4b59-911a-26b9d7a0b973",
+      "name": "조우"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    o.id as object_id, o.name as object_name, o.name_en as object_name_en,\n    c.id as creature_id, c.name as creature_name, c.name_en as creature_name_en\nFROM objects o, creatures c\nWHERE o.id = {{ $json.object_id }} AND c.id = {{ $json.creature_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -128,
+        340
+      ],
+      "id": "6473ea98-161a-4cf9-8d03-28f8ac89b4c5",
+      "name": "queryEncounter",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.creature_name_en }} encountering {{ $json.object_name_en }}.\n\n**Each situation should describe a single clear visual action.**\nGenerate several funny situations that form a short, connected sequence.\nEach situation must logically follow the previous one,\nlike consecutive scenes in a short animation.\n\n**IMPORTANT: Also provide a character_description.**\nThis is a simple, consistent visual description of the creature.\nInclude: body shape, color, size, notable features.\nThis description will be used for ALL images to keep the character consistent.\nExample: \"a small round blue penguin with big curious eyes and tiny flippers\"\n\nRespond ONLY in valid JSON using this schema:\n\n{\n  \"object_name\": string,\n  \"creature_name\": string,\n  \"character_description\": string,\n  \"situations\": [\n    {\n      \"situation_eng\": string,\n      \"situation_kor\": string\n    }\n  ]\n}\n\nDo not add explanations or extra text.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        96,
+        236
+      ],
+      "id": "e94d3455-bdbe-4cf3-8ad7-08b7e57b8535",
+      "name": "script1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO encounter_scripts \n(object_id, creature_id, object_name, object_name_en, creature_name, creature_name_en, character_description, situations)\nVALUES \n(\n  {{ $('queryEncounter').item.json.object_id }}, \n  {{ $('queryEncounter').item.json.creature_id }}, \n  '{{ $('queryEncounter').item.json.object_name.replace(/'/g, \"''\") }}',\n  '{{ $json.output.object_name.replace(/'/g, \"''\") }}',\n  '{{ $('queryEncounter').item.json.creature_name.replace(/'/g, \"''\") }}',\n  '{{ $json.output.creature_name.replace(/'/g, \"''\") }}',\n  '{{ $json.output.character_description.replace(/'/g, \"''\") }}',\n  '{{ JSON.stringify($json.output.situations).replace(/'/g, \"''\") }}'::jsonb\n)\nRETURNING id;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        448,
+        340
+      ],
+      "id": "ee8cc350-883d-40ba-a59a-48e9d02da1fb",
+      "name": "insertEncounterScript",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $('script1').first().json.output;\nconst creature = $('queryEncounter').first().json.creature_name;\nconst object = $('queryEncounter').first().json.object_name;\nconst situations = input.situations;\nconst encounterId = $input.first().json.id;\n\nconst situationList = situations\n  .map((s, i) => `${i + 1}. ${s.situation_kor}`)\n  .join('\\n');\n\nconst message = `조우 시나리오\\n\\n조합: ${creature} + ${object}\\n\\n상황:\\n${situationList}\\n\\n▼ 이미지 생성할 상황 선택:`;\n\n// 동적 버튼 생성 (3개씩 한 줄)\nconst buttons = [];\nfor (let i = 0; i < situations.length; i += 3) {\n  const row = situations.slice(i, i + 3).map((s, idx) => ({\n    text: `${i + idx + 1}번`,\n    callback_data: `img_enc_${encounterId}_${i + idx}`\n  }));\n  buttons.push(row);\n}\n\nreturn {\n  json: {\n    chat_id: \"8201163317\",\n    text: message,\n    reply_markup: {\n      inline_keyboard: buttons\n    }\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        340
+      ],
+      "id": "d20e098e-d6e6-4576-a753-da4a1fa85711",
+      "name": "시나리오 포맷"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_SCRIPT_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        896,
+        340
+      ],
+      "id": "e5399fd6-2257-43d9-b303-ed0534ecd56d",
+      "name": "write script"
+    },
+    {
+      "parameters": {
+        "jsCode": "const callbackData = $input.first().json.callback_query.data;\n// \"vs_204_141_55_78\" → [\"vs\", \"204\", \"141\", \"55\", \"78\"]\nconst parts = callbackData.split('_');\n\nreturn {\n  team1_object_id: parseInt(parts[1]),\n  team1_creature_id: parseInt(parts[2]),\n  team2_object_id: parseInt(parts[3]),\n  team2_creature_id: parseInt(parts[4])\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        636
+      ],
+      "id": "57074280-071e-4892-8ad3-4110bf8971f6",
+      "name": "대결"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n  o1.name as team1_object, c1.name as team1_creature,\n  o2.name as team2_object, c2.name as team2_creature\nFROM objects o1, creatures c1, objects o2, creatures c2\nWHERE o1.id = {{ $json.team1_object_id }}\n  AND c1.id = {{ $json.team1_creature_id }}\n  AND o2.id = {{ $json.team2_object_id }}\n  AND c2.id = {{ $json.team2_creature_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -128,
+        636
+      ],
+      "id": "a77c92a9-4b38-4ad3-8480-9d93b116ce29",
+      "name": "대결 팀 쿼리",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\"{{ $json.team1_object }} 을(를) 가진 {{ $json.team1_creature }}\" vs \"{{ $json.team2_object }} 을(를) 가진 {{ $json.team2_creature }}\"\n\n위의 소재로 숏폼 컨텐츠를 생성하고 싶어\n현실적인건 상관없어 그냥 재밌으면 돼 \n만약 두 소재가 터무니없이 밸런스가 맞지 않으면 환경이나 상황을 마음대로 웃기게 추가해서 밸런스를 맞춰주면 돼\n\n이걸 기반으로 시나리오를 써줘\n\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        96,
+        636
+      ],
+      "id": "e47d2a60-62ee-4e5b-acc5-a3fa826cd3ab",
+      "name": "script2"
+    },
+    {
+      "parameters": {
+        "chatId": "8201163317",
+        "text": "={{ $json.text }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "이미지생성",
+                    "additionalFields": {
+                      "callback_data": "create_image"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        448,
+        636
+      ],
+      "id": "48f4cdc3-2182-4286-83dc-b7b1476a97a7",
+      "name": "대결 결과 전송",
+      "webhookId": "7b27604d-fc4d-46b7-805e-763a29d7c51c",
+      "credentials": {
+        "telegramApi": {
+          "id": "hjKKDhzAr95XXqw9",
+          "name": "script-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 1,
+          "topK": 32,
+          "topP": 1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        104,
+        460
+      ],
+      "id": "89033ab7-e1c4-4fd5-aae3-a9c2beeba776",
+      "name": "Google Gemini Chat Model",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "T6hLQOKnt40dUWSA",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"object_name\": \"pencil\",\n  \"creature_name\": \"robot\",\n  \"character_description\": \"a small boxy silver robot with glowing blue eyes, antenna on head, and clunky metal arms\",\n  \"situations\": [\n    {\n      \"situation_eng\": \"The robot notices the pencil and scans it cautiously.\",\n      \"situation_kor\": \"로봇이 연필을 발견하고 조심스럽게 스캔한다.\"\n    },\n    {\n      \"situation_eng\": \"After scanning, the robot decides the pencil is a control device.\",\n      \"situation_kor\": \"스캔 후 로봇은 연필이 조종 장치라고 판단한다.\"\n    },\n    {\n      \"situation_eng\": \"The robot presses the pencil, trying to activate it.\",\n      \"situation_kor\": \"로봇이 연필을 눌러 작동시키려 한다.\"\n    },\n    {\n      \"situation_eng\": \"The pencil snaps in half, making the robot freeze.\",\n      \"situation_kor\": \"연필이 부러지자 로봇이 얼어붙는다.\"\n    },\n    {\n      \"situation_eng\": \"The robot quietly stores the broken pencil as a dangerous artifact.\",\n      \"situation_kor\": \"로봇은 부러진 연필을 위험한 유물처럼 보관한다.\"\n    }\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        232,
+        460
+      ],
+      "id": "72528a0e-a5da-4a76-a70b-b506ba1fb0f2",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -800,
+        1076
+      ],
+      "id": "c44ca9ff-ecd2-4593-b3fb-c526359d44cf",
+      "name": "script button handler",
+      "webhookId": "e208720f-2758-4c30-afd2-f889a2b5d099",
+      "credentials": {
+        "telegramApi": {
+          "id": "hjKKDhzAr95XXqw9",
+          "name": "script-bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "img_enc_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "75020585-3f98-47bc-93dd-7be0926e0c42"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "vid_enc_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "vid-enc-condition-id"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "03b3fe85-9ab4-415b-b63e-b6692a5cfe4e",
+                    "leftValue": "={{ $json.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data }}",
+                    "rightValue": "retry_encounter",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -576,
+        1060
+      ],
+      "id": "92fd8234-ec16-40f2-a0af-846d5e372c93",
+      "name": "미디어 라우터"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *, \n  CAST(SPLIT_PART('{{ $json.callback_query.data }}', '_', 4) AS INTEGER) as situation_index\nFROM encounter_scripts \nWHERE id = CAST(SPLIT_PART('{{ $json.callback_query.data }}', '_', 3) AS INTEGER);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -352,
+        932
+      ],
+      "id": "f7ecd388-3cc6-4372-9658-cb7e5fcad654",
+      "name": "encounter 쿼리",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"version\": \"black-forest-labs/flux-dev\",\n  \"input\": {\n    \"prompt\": \"{{ $json.character_description }}, {{ $json.situations[$json.situation_index].situation_eng }}, funny cartoon comic panel style, simple flat colors, exaggerated expressions, thick bold outlines, humorous meme illustration\",\n    \"aspect_ratio\": \"1:1\",\n    \"num_outputs\": 1,\n    \"output_format\": \"png\",\n    \"guidance\": 3.5\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        928
+      ],
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "Replicate 이미지 생성"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        932
+      ],
+      "id": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "name": "Wait",
+      "webhookId": "wait-webhook-id-1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Replicate 이미지 생성').item.json.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        864
+      ],
+      "id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+      "name": "Replicate 결과 확인"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "condition-succeeded"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        932
+      ],
+      "id": "d4e5f6a7-b8c9-0123-defa-456789012345",
+      "name": "이미지 완료?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_SCRIPT_BOT_TOKEN }}/sendPhoto",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\",\n  \"photo\": \"{{ $json.output[0] }}\",\n  \"caption\": \"🎨 {{ $('encounter 쿼리').item.json.creature_name }} + {{ $('encounter 쿼리').item.json.object_name }}\",\n  \"reply_markup\": {\n    \"inline_keyboard\": [\n      [\n        {\n          \"text\": \"🎬 영상 생성\",\n          \"callback_data\": \"vid_enc_{{ $('encounter 쿼리').item.json.id }}_{{ $('encounter 쿼리').item.json.situation_index }}\"\n        }\n      ]\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        932
+      ],
+      "id": "e5f6a7b8-c9d0-1234-efab-567890123456",
+      "name": "Telegram 이미지 전송"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE encounter_scripts \nSET image_url = '{{ $('Replicate 결과 확인').item.json.output[0] }}',\n    selected_index = {{ $('encounter 쿼리').item.json.situation_index }},\n    updated_at = NOW()\nWHERE id = {{ $('encounter 쿼리').item.json.id }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        992,
+        932
+      ],
+      "id": "img-url-save-node-id",
+      "name": "이미지 URL 저장",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *, \n  CAST(SPLIT_PART('{{ $json.callback_query.data }}', '_', 4) AS INTEGER) as situation_index\nFROM encounter_scripts \nWHERE id = CAST(SPLIT_PART('{{ $json.callback_query.data }}', '_', 3) AS INTEGER);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -352,
+        1220
+      ],
+      "id": "vid-encounter-query-id",
+      "name": "영상용 encounter 쿼리",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"version\": \"minimax/video-01\",\n  \"input\": {\n    \"prompt\": \"{{ $json.situations[$json.situation_index].situation_eng }}, smooth animation, cartoon style\",\n    \"first_frame_image\": \"{{ $json.image_url }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        1216
+      ],
+      "id": "vid-gen-node-id",
+      "name": "Replicate 영상 생성"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        1216
+      ],
+      "id": "vid-wait-node-id",
+      "name": "Wait 영상",
+      "webhookId": "vid-wait-webhook-id"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Replicate 영상 생성').item.json.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        1152
+      ],
+      "id": "vid-check-node-id",
+      "name": "Replicate 영상 확인"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "vid-condition-succeeded"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        1220
+      ],
+      "id": "vid-complete-node-id",
+      "name": "영상 완료?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_SCRIPT_BOT_TOKEN }}/sendVideo",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\",\n  \"video\": \"{{ $json.output }}\",\n  \"caption\": \"🎬 {{ $('영상용 encounter 쿼리').item.json.creature_name }} + {{ $('영상용 encounter 쿼리').item.json.object_name }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        1216
+      ],
+      "id": "vid-send-node-id",
+      "name": "Telegram 영상 전송"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE encounter_scripts \nSET video_url = '{{ $('Replicate 영상 확인').item.json.output }}',\n    updated_at = NOW()\nWHERE id = {{ $('영상용 encounter 쿼리').item.json.id }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        992,
+        1220
+      ],
+      "id": "vid-url-save-node-id",
+      "name": "영상 URL 저장",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "start channel": {
+      "main": [
+        [
+          {
+            "node": "메인 라우터",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "메인 라우터": {
+      "main": [
+        [
+          {
+            "node": "랜덤조합 쿼리",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "대결 쿼리",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "조우",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "대결",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "랜덤조합 쿼리": {
+      "main": [
+        [
+          {
+            "node": "조우 버튼 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "조우 버튼 생성": {
+      "main": [
+        [
+          {
+            "node": "텔레그램 전송",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "대결 쿼리": {
+      "main": [
+        [
+          {
+            "node": "대결 버튼 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "대결 버튼 생성": {
+      "main": [
+        [
+          {
+            "node": "텔레그램 전송",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "조우": {
+      "main": [
+        [
+          {
+            "node": "queryEncounter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "queryEncounter": {
+      "main": [
+        [
+          {
+            "node": "script1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "script1": {
+      "main": [
+        [
+          {
+            "node": "insertEncounterScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insertEncounterScript": {
+      "main": [
+        [
+          {
+            "node": "시나리오 포맷",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "시나리오 포맷": {
+      "main": [
+        [
+          {
+            "node": "write script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "대결": {
+      "main": [
+        [
+          {
+            "node": "대결 팀 쿼리",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "대결 팀 쿼리": {
+      "main": [
+        [
+          {
+            "node": "script2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "script2": {
+      "main": [
+        [
+          {
+            "node": "대결 결과 전송",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "script1",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "script2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "script1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "script button handler": {
+      "main": [
+        [
+          {
+            "node": "미디어 라우터",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "미디어 라우터": {
+      "main": [
+        [
+          {
+            "node": "encounter 쿼리",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "영상용 encounter 쿼리",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "영상용 encounter 쿼리": {
+      "main": [
+        [
+          {
+            "node": "Replicate 영상 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 영상 생성": {
+      "main": [
+        [
+          {
+            "node": "Wait 영상",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 영상": {
+      "main": [
+        [
+          {
+            "node": "Replicate 영상 확인",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 영상 확인": {
+      "main": [
+        [
+          {
+            "node": "영상 완료?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "영상 완료?": {
+      "main": [
+        [
+          {
+            "node": "Telegram 영상 전송",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 영상",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram 영상 전송": {
+      "main": [
+        [
+          {
+            "node": "영상 URL 저장",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "encounter 쿼리": {
+      "main": [
+        [
+          {
+            "node": "Replicate 이미지 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 이미지 생성": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Replicate 결과 확인",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 결과 확인": {
+      "main": [
+        [
+          {
+            "node": "이미지 완료?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 완료?": {
+      "main": [
+        [
+          {
+            "node": "Telegram 이미지 전송",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram 이미지 전송": {
+      "main": [
+        [
+          {
+            "node": "이미지 URL 저장",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "54c727b5-0ad6-4621-8074-fdddacec44aa",
+  "activeVersionId": null,
+  "versionCounter": 17,
+  "triggerCount": 2,
+  "shared": [
+    {
+      "updatedAt": "2026-01-29T05:54:40.817Z",
+      "createdAt": "2026-01-29T05:54:40.817Z",
+      "role": "workflow:owner",
+      "workflowId": "Vts1rgk1xDFfZoa7",
+      "projectId": "34kBQ6QDZhMvy6iG",
+      "project": {
+        "updatedAt": "2026-01-27T07:00:12.533Z",
+        "createdAt": "2026-01-27T06:59:58.319Z",
+        "id": "34kBQ6QDZhMvy6iG",
+        "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
+        "projectRelations": [
+          {
+            "updatedAt": "2026-01-27T06:59:58.320Z",
+            "createdAt": "2026-01-27T06:59:58.320Z",
+            "userId": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
+            "projectId": "34kBQ6QDZhMvy6iG",
+            "user": {
+              "updatedAt": "2026-01-29T05:16:01.000Z",
+              "createdAt": "2026-01-27T06:59:58.200Z",
+              "id": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
+              "email": "myungsworld@gmail.com",
+              "firstName": "동명",
+              "lastName": "myungsworld@gmail.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2026-01-27T07:00:15.419Z",
+                "personalization_survey_n8n_version": "2.4.5"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "ZXNIuIOC0IblNQsF",
+                "userActivatedAt": 1769500184357,
+                "easyAIWorkflowOnboarded": true
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2026-01-29",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
