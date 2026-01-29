@@ -332,7 +332,7 @@ CREATE TABLE encounter_scripts (
 
     -- LLM generated result
     character_description TEXT,  -- consistent character visual description for image generation
-    situations JSONB NOT NULL,
+    scenes JSONB NOT NULL,  -- [{event_eng, event_kor, reaction_type, caption_kor}, ...]
 
     -- Selection info
     selected_index INTEGER,

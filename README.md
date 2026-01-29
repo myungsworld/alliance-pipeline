@@ -165,9 +165,36 @@ objects (id, name, name_en, category, category_en, created_at)           -- 물�
 creatures (id, name, name_en, category, category_en, created_at)         -- 생명체 231개, 15개 카테고리
 combinations_used (id, object_id, creature_id, content_type, used_at)
 encounter_scripts (id, object_id, creature_id, object_name, object_name_en,
-                   creature_name, creature_name_en, situations JSONB,
-                   selected_index, status, created_at, updated_at)
+                   creature_name, creature_name_en, character_description,
+                   scenes JSONB, selected_index, image_url, video_url,
+                   status, created_at, updated_at)
 ```
+
+### scenes JSONB 구조
+
+```json
+{
+  "scenes": [
+    {
+      "event_eng": "The robot pokes the pencil",
+      "event_kor": "로봇이 연필을 찌른다",
+      "reaction_type": "curiosity",
+      "caption_kor": "이게 뭐지...?"
+    }
+  ]
+}
+```
+
+### Reaction Type 매핑
+
+| reaction_type | 이미지 프롬프트 | 영상 프롬프트 |
+|---------------|-----------------|---------------|
+| curiosity | head tilted with wide curious eyes | curious slow movement |
+| surprise | jumping back with eyes wide open | sudden startled jump |
+| confusion | scratching head bewildered | hesitant confused motion |
+| frustration | angry stance narrowed eyes | angry agitated movement |
+| fear | cowering trembling | trembling cowering |
+| delight | happy bounce sparkling eyes | happy bouncing |
 
 - `name` / `category`: 한국어 (텔레그램 표시용)
 - `name_en` / `category_en`: 영어 (API 프롬프트용)
@@ -221,11 +248,14 @@ alliance-pipeline/
 - [x] 멀티 PC 동기화 (pre-commit hook + sync 스크립트)
 - [x] 환경변수 기반 credentials 관리
 - [x] 3개 워크플로우 → 1개 통합 (webhook 충돌 해결)
-- [x] 이미지 생성 API 연동 (Replicate SDXL)
+- [x] 이미지 생성 API 연동 (Replicate Flux Dev)
+- [x] 영상 생성 API 연동 (Replicate minimax/video-01)
+- [x] 캐릭터 일관성 유지 (character_description)
+- [x] 연출 시스템 (event + reaction_type 분리)
 
 ### 예정
 
-- [ ] 영상 생성 API 연동 (Runway / Kling)
+- [ ] reaction 시스템 테스트 및 조정
 - [ ] 자동 업로드 (TikTok / YouTube Shorts)
 - [ ] 서버 배포 (Oracle Cloud)
 
