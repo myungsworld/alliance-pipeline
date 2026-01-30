@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-01-29T01:07:16.011Z",
-  "createdAt": "2026-01-29T00:39:27.895Z",
-  "id": "mt4neDq06EYlCemY",
+  "updatedAt": "2026-01-30T07:53:51.086Z",
+  "createdAt": "2026-01-30T06:06:34.614Z",
+  "id": "Pt2WHzt31kw0nIxM",
   "name": "alliance-pipeline",
   "description": null,
   "active": false,
@@ -174,7 +174,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://api.telegram.org/bot8550742589:AAFNn4FR-0cEPPOqEkAZsXTo-lL-85CtkUo/sendMessage",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_START_BOT_TOKEN }}/sendMessage",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={{ $json }}",
@@ -260,7 +260,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.creature_name_en }} encountering {{ $json.object_name_en }}.\n\n**Each situation should describe a single clear visual action.**\nGenerate several funny situations that form a short, connected sequence.\nEach situation must logically follow the previous one,\nlike consecutive scenes in a short animation.\n\n\nRespond ONLY in valid JSON using this schema:\n\n{\n  \"object_name\": string,\n  \"creature_name\": string,\n  \"situations\": [\n    {\n      \"situation_eng\": string,\n      \"situation_kor\": string\n    }\n  ]\n}\n\nDo not add explanations or extra text.",
+        "text": "={{ $json.creature_name_en }} encountering {{ $json.object_name_en }}.\n\nGenerate a short, connected sequence of events.\nEach situation describes WHAT happened, not how it looks.\n\nRules:\n- reaction_type must match the event naturally.\n- reaction_type ∈ {curiosity, surprise, confusion, frustration, fear, delight}\n- captions are very short reactions.\n\nAlso provide:\n1) character_description: identity and role only (no appearance).\n2) visual_hint: it describe {{ $json.creature_name_en }} a simple, generic description of the creature’s rough shape,\n   suitable for a badly drawn doodle.\n- Write a SHORT, SIMPLE PHRASE (not a full sentence)\n- 6–10 words is OK\n- Simple adjectives are allowed (dog-like, round, bulky, long)\n- Descriptive structure words are allowed (multiple heads, short legs)\n- Avoid artistic or dramatic adjectives (powerful, ancient, fierce)\n- Avoid detailed anatomy or textures\n- Avoid long explanations\n\nRespond ONLY in valid JSON:\n\n{\n  \"object_name\": string,\n  \"creature_name\": string,\n  \"character_description\": string,\n  \"visual_hint\": string,\n  \"situations\": [\n    {\n      \"event_eng\": string,\n      \"event_kor\": string,\n      \"reaction_type\": string,\n      \"caption_eng\": string,\n      \"caption_kor\": string\n    }\n  ]\n}\n",
         "hasOutputParser": true,
         "batching": {}
       },
@@ -276,7 +276,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "INSERT INTO encounter_scripts \n(object_id, creature_id, object_name, object_name_en, creature_name, creature_name_en, situations)\nVALUES \n(\n  {{ $('queryEncounter').item.json.object_id }}, \n  {{ $('queryEncounter').item.json.creature_id }}, \n  '{{ $('queryEncounter').item.json.object_name.replace(/'/g, \"''\") }}',\n  '{{ $json.output.object_name.replace(/'/g, \"''\") }}',\n  '{{ $('queryEncounter').item.json.creature_name.replace(/'/g, \"''\") }}',\n  '{{ $json.output.creature_name.replace(/'/g, \"''\") }}',\n  '{{ JSON.stringify($json.output.situations).replace(/'/g, \"''\") }}'::jsonb\n)\nRETURNING id;",
+        "query": "INSERT INTO encounter_scripts \n(object_id, creature_id, object_name, object_name_en, creature_name, creature_name_en, character_description, situations)\nVALUES \n(\n  {{ $('queryEncounter').item.json.object_id }}, \n  {{ $('queryEncounter').item.json.creature_id }}, \n  '{{ $('queryEncounter').item.json.object_name.replace(/'/g, \"''\") }}',\n  '{{ $json.output.object_name.replace(/'/g, \"''\") }}',\n  '{{ $('queryEncounter').item.json.creature_name.replace(/'/g, \"''\") }}',\n  '{{ $json.output.creature_name.replace(/'/g, \"''\") }}',\n  '{{ $json.output.character_description.replace(/'/g, \"''\") }}',\n  '{{ JSON.stringify($json.output.situations).replace(/'/g, \"''\") }}'::jsonb\n)\nRETURNING id;",
         "options": {}
       },
       "type": "n8n-nodes-base.postgres",
@@ -296,7 +296,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const input = $('script1').first().json.output;\nconst creature = $('queryEncounter').first().json.creature_name;\nconst object = $('queryEncounter').first().json.object_name;\nconst situations = input.situations;\n\nconst situationList = situations\n  .map((s, i) => `${i + 1}. ${s.situation_kor}`)\n  .join('\\n');\n\nconst message = `조우 시나리오\n\n조합: ${creature} + ${object}\n\n상황:\n${situationList}`;\n\nreturn {\n  text: message,\n  encounter_scripts: $input.first().json.id\n};"
+        "jsCode": "const input = $('script1').first().json.output;\nconst creature = $('queryEncounter').first().json.creature_name;\nconst object = $('queryEncounter').first().json.object_name;\nconst situations = input.situations;\nconst encounterId = $input.first().json.id;\n\nconst situationList = situations\n  .map((s, i) => `${i + 1}. ${s.event_kor} (${s.caption_kor})`)\n  .join('\\n');\n\nconst message = `조우 시나리오\\n\\n조합: ${creature} + ${object}\\n\\n상황:\\n${situationList}\\n`;\n\n// 동적 버튼 생성 (3개씩 한 줄)\nconst button = [[{ text: \"이미지생성\", callback_data: `img_enc_${encounterId}` }]];\n\nreturn {\n  json: {\n    chat_id: \"8201163317\",\n    text: message,\n    reply_markup: {\n      inline_keyboard: button\n    }\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -309,48 +309,21 @@
     },
     {
       "parameters": {
-        "chatId": "8201163317",
-        "text": "={{ $json.text }}",
-        "replyMarkup": "inlineKeyboard",
-        "inlineKeyboard": {
-          "rows": [
-            {
-              "row": {
-                "buttons": [
-                  {
-                    "text": "이미지 생성",
-                    "additionalFields": {
-                      "callback_data": "=encounter_{{ $json.encounter_scripts }}"
-                    }
-                  },
-                  {
-                    "text": "다른 시나리오",
-                    "additionalFields": {
-                      "callback_data": "retry_encounter"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        "additionalFields": {}
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_SCRIPT_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json }}",
+        "options": {}
       },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
       "position": [
         896,
         352
       ],
       "id": "e5399fd6-2257-43d9-b303-ed0534ecd56d",
-      "name": "write script",
-      "webhookId": "576ba25b-54fa-44e4-8cd8-390593daa8ab",
-      "credentials": {
-        "telegramApi": {
-          "id": "hjKKDhzAr95XXqw9",
-          "name": "script-bot"
-        }
-      }
+      "name": "write script"
     },
     {
       "parameters": {
@@ -466,7 +439,7 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"object_name\": \"pencil\",\n  \"creature_name\": \"robot\",\n  \"situations\": [\n    {\n      \"situation_eng\": \"The robot notices the pencil and scans it cautiously.\",\n      \"situation_kor\": \"로봇이 연필을 발견하고 조심스럽게 스캔한다.\"\n    },\n    {\n      \"situation_eng\": \"After scanning, the robot decides the pencil is a control device.\",\n      \"situation_kor\": \"스캔 후 로봇은 연필이 조종 장치라고 판단한다.\"\n    },\n    {\n      \"situation_eng\": \"The robot presses the pencil, trying to activate it.\",\n      \"situation_kor\": \"로봇이 연필을 눌러 작동시키려 한다.\"\n    },\n    {\n      \"situation_eng\": \"The pencil snaps in half, making the robot freeze.\",\n      \"situation_kor\": \"연필이 부러지자 로봇이 얼어붙는다.\"\n    },\n    {\n      \"situation_eng\": \"The robot quietly stores the broken pencil as a dangerous artifact.\",\n      \"situation_kor\": \"로봇은 부러진 연필을 위험한 유물처럼 보관한다.\"\n    }\n  ]\n}"
+        "jsonSchemaExample": "{\n  \"object_name\": \"pencil\",\n  \"creature_name\": \"robot\",\n  \"character_description\": \"a clumsy utility robot that overanalyzes unfamiliar objects\",\n  \"visual_hint\": \"\",\n  \"situations\": [\n    {\n      \"event_eng\": \"The robot detects an unknown object\",\n      \"event_kor\": \"로봇이 정체를 알 수 없는 물체를 감지한다\",\n      \"reaction_type\": \"curiosity\",\n      \"caption_eng\": \"what is this?\",\n      \"caption_kor\": \"이게 뭐지?\"\n    },\n    {\n      \"event_eng\": \"The object suddenly breaks\",\n      \"event_kor\": \"물체가 갑자기 부러진다\",\n      \"reaction_type\": \"surprise\",\n      \"caption_eng\": \"gasp!\",\n      \"caption_kor\": \"헉!\"\n    },\n    {\n      \"event_eng\": \"The robot fails to fix the broken object\",\n      \"event_kor\": \"로봇이 부러진 물체를 고치지 못한다\",\n      \"reaction_type\": \"confusion\",\n      \"caption_eng\": \"uh…?\",\n      \"caption_kor\": \"어...?\"\n    },\n    {\n      \"event_eng\": \"The robot gives up on the object\",\n      \"event_kor\": \"로봇이 물체를 포기한다\",\n      \"reaction_type\": \"frustration\",\n      \"caption_eng\": \"forget it…\",\n      \"caption_kor\": \"아 몰라...\"\n    }\n  ]\n}\n"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
@@ -488,7 +461,7 @@
       "typeVersion": 1.2,
       "position": [
         -800,
-        944
+        1088
       ],
       "id": "c44ca9ff-ecd2-4593-b3fb-c526359d44cf",
       "name": "script button handler",
@@ -514,13 +487,35 @@
                 },
                 "conditions": [
                   {
-                    "leftValue": "={{ $json.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data }}",
-                    "rightValue": "encounter_",
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "img_enc_",
                     "operator": {
                       "type": "string",
                       "operation": "startsWith"
                     },
                     "id": "75020585-3f98-47bc-93dd-7be0926e0c42"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.callback_query.data }}",
+                    "rightValue": "vid_enc_",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    },
+                    "id": "vid-enc-condition-id"
                   }
                 ],
                 "combinator": "and"
@@ -557,15 +552,15 @@
       "typeVersion": 3.4,
       "position": [
         -576,
-        944
+        1072
       ],
       "id": "92fd8234-ec16-40f2-a0af-846d5e372c93",
-      "name": "이미지 라우터"
+      "name": "미디어 라우터"
     },
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT * FROM encounter_scripts \nWHERE id = CAST(SPLIT_PART('{{ $json.callback_query.message.reply_markup.inline_keyboard[0][0].callback_data }}', '_', 2) AS INTEGER);",
+        "query": "SELECT *\nFROM encounter_scripts \nWHERE id = CAST(SPLIT_PART('{{ $json.callback_query.data }}', '_', 3) AS INTEGER);",
         "options": {}
       },
       "type": "n8n-nodes-base.postgres",
@@ -598,14 +593,14 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"version\": \"39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b\",\n  \"input\": {\n    \"prompt\": \"{{ $json.situations[0] }}, very low effort doodle drawing, intentionally badly drawn, childlike mouse drawing, uneven thick lines, poor proportions, simple face with dot eyes and round mouth, minimal colors, black background, looks silly and pointless\",\n    \"negative_prompt\": \"realistic, detailed, professional, masterpiece, anime, smooth lines, shading, 3d, render, high quality, text, watermark, logo\",\n    \n    \"width\": 1024,\n    \"height\": 1024\n  }\n}",
+        "jsonBody": "={\n  \"version\": \"39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b\",\n  \"input\": {\n    \"prompt\": \"low effort doodle drawing, intentionally badly drawn, childlike scribble, uneven shaky lines, poor proportions, simple face with dot eyes and big open mouth, flat white background, badly drawn stick figure {{ $json.visual_hint }}\",\n    \"negative_prompt\": \"realistic, detailed, professional, masterpiece, illustration, anime, smooth lines, shading, texture, lighting\",\n    \"aspect_ratio\": \"1:1\",\n    \"num_outputs\": 1,\n    \"output_format\": \"png\",\n    \"guidance\": 2.0\n  }\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
         -128,
-        944
+        928
       ],
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "name": "Replicate 이미지 생성"
@@ -682,26 +677,197 @@
     },
     {
       "parameters": {
-        "operation": "sendPhoto",
-        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
-        "file": "={{ $json.output[0] }}",
-        "additionalFields": {
-          "caption": "=🎨 {{ $('encounter 쿼리').item.json.creature_name }} + {{ $('encounter 쿼리').item.json.object_name }}"
-        }
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_SCRIPT_BOT_TOKEN }}/sendPhoto",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\",\n  \"photo\": \"{{ $json.output[0] }}\",\n  \"caption\": \"🎨 {{ $('encounter 쿼리').item.json.creature_name }} + {{ $('encounter 쿼리').item.json.object_name }}\",\n  \"reply_markup\": {\n    \"inline_keyboard\": [\n      [\n        {\n          \"text\": \"🎬 영상 생성\",\n          \"callback_data\": \"vid_enc_{{ $('encounter 쿼리').item.json.id }}_{{ $('encounter 쿼리').item.json.situation_index }}\"\n        }\n      ]\n    ]\n  }\n}",
+        "options": {}
       },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         768,
         944
       ],
       "id": "e5f6a7b8-c9d0-1234-efab-567890123456",
-      "name": "Telegram 이미지 전송",
-      "webhookId": "591f03c3-ff53-418d-babf-9ae05ee1ca3a",
+      "name": "Telegram 이미지 전송"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE encounter_scripts \nSET image_url = '{{ $('Replicate 결과 확인').item.json.output[0] }}',\n    updated_at = NOW()\nWHERE id = {{ $('encounter 쿼리').item.json.id }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        992,
+        944
+      ],
+      "id": "img-url-save-node-id",
+      "name": "이미지 URL 저장",
       "credentials": {
-        "telegramApi": {
-          "id": "hjKKDhzAr95XXqw9",
-          "name": "script-bot"
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *, \n  CAST(SPLIT_PART('{{ $json.callback_query.data }}', '_', 4) AS INTEGER) as situation_index\nFROM encounter_scripts \nWHERE id = CAST(SPLIT_PART('{{ $json.callback_query.data }}', '_', 3) AS INTEGER);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -352,
+        1232
+      ],
+      "id": "vid-encounter-query-id",
+      "name": "영상용 encounter 쿼리",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"version\": \"minimax/video-01\",\n  \"input\": {\n    \"prompt\": \"{{ $json.situations[$json.situation_index].situation_eng }}, {{ {curiosity: 'slow cautious step forward, head tilt, leaning forward curiously', surprise: 'sudden jump backward, arms flailing up, eyes wide open in shock', confusion: 'pause and scratch head, hesitant movement, bewildered expression', frustration: 'angry arm shake, stomp foot, turning away in annoyance', fear: 'cowering backward, trembling body, looking around nervously', delight: 'happy bounce, excited arm wave, bright cheerful smile'}[$json.situations[$json.situation_index].reaction_type] }}, smooth animation, cartoon style\",\n    \"first_frame_image\": \"{{ $json.image_url }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        1216
+      ],
+      "id": "vid-gen-node-id",
+      "name": "Replicate 영상 생성"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        1216
+      ],
+      "id": "vid-wait-node-id",
+      "name": "Wait 영상",
+      "webhookId": "vid-wait-webhook-id"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Replicate 영상 생성').item.json.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        1152
+      ],
+      "id": "vid-check-node-id",
+      "name": "Replicate 영상 확인"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "vid-condition-succeeded"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        1232
+      ],
+      "id": "vid-complete-node-id",
+      "name": "영상 완료?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_SCRIPT_BOT_TOKEN }}/sendVideo",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\",\n  \"video\": \"{{ $json.output }}\",\n  \"caption\": \"🎬 {{ $('영상용 encounter 쿼리').item.json.creature_name }} + {{ $('영상용 encounter 쿼리').item.json.object_name }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        1216
+      ],
+      "id": "vid-send-node-id",
+      "name": "Telegram 영상 전송"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE encounter_scripts \nSET video_url = '{{ $('Replicate 영상 확인').item.json.output }}',\n    updated_at = NOW()\nWHERE id = {{ $('영상용 encounter 쿼리').item.json.id }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        992,
+        1232
+      ],
+      "id": "vid-url-save-node-id",
+      "name": "영상 URL 저장",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
         }
       }
     }
@@ -913,14 +1079,14 @@
       "main": [
         [
           {
-            "node": "이미지 라우터",
+            "node": "미디어 라우터",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "이미지 라우터": {
+    "미디어 라우터": {
       "main": [
         [
           {
@@ -929,7 +1095,87 @@
             "index": 0
           }
         ],
+        [
+          {
+            "node": "영상용 encounter 쿼리",
+            "type": "main",
+            "index": 0
+          }
+        ],
         []
+      ]
+    },
+    "영상용 encounter 쿼리": {
+      "main": [
+        [
+          {
+            "node": "Replicate 영상 생성",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 영상 생성": {
+      "main": [
+        [
+          {
+            "node": "Wait 영상",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 영상": {
+      "main": [
+        [
+          {
+            "node": "Replicate 영상 확인",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 영상 확인": {
+      "main": [
+        [
+          {
+            "node": "영상 완료?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "영상 완료?": {
+      "main": [
+        [
+          {
+            "node": "Telegram 영상 전송",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 영상",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram 영상 전송": {
+      "main": [
+        [
+          {
+            "node": "영상 URL 저장",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "encounter 쿼리": {
@@ -993,6 +1239,17 @@
           }
         ]
       ]
+    },
+    "Telegram 이미지 전송": {
+      "main": [
+        [
+          {
+            "node": "이미지 URL 저장",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -1003,16 +1260,16 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "7f67364d-4fcc-4c73-88bd-3f7c8be2cc8c",
+  "versionId": "338cebfc-cfd9-461b-90c3-1a18e323fe6c",
   "activeVersionId": null,
-  "versionCounter": 49,
+  "versionCounter": 83,
   "triggerCount": 2,
   "shared": [
     {
-      "updatedAt": "2026-01-29T00:39:27.896Z",
-      "createdAt": "2026-01-29T00:39:27.896Z",
+      "updatedAt": "2026-01-30T06:06:34.615Z",
+      "createdAt": "2026-01-30T06:06:34.615Z",
       "role": "workflow:owner",
-      "workflowId": "mt4neDq06EYlCemY",
+      "workflowId": "Pt2WHzt31kw0nIxM",
       "projectId": "34kBQ6QDZhMvy6iG",
       "project": {
         "updatedAt": "2026-01-27T07:00:12.533Z",
@@ -1030,7 +1287,7 @@
             "userId": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
             "projectId": "34kBQ6QDZhMvy6iG",
             "user": {
-              "updatedAt": "2026-01-29T00:39:11.000Z",
+              "updatedAt": "2026-01-30T05:10:41.000Z",
               "createdAt": "2026-01-27T06:59:58.200Z",
               "id": "61a3bb2e-4515-4cb1-a0cb-ef554a1ed6c9",
               "email": "myungsworld@gmail.com",
@@ -1049,7 +1306,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2026-01-29",
+              "lastActiveAt": "2026-01-30",
               "isPending": false
             }
           }

@@ -166,24 +166,28 @@ creatures (id, name, name_en, category, category_en, created_at)         -- 생�
 combinations_used (id, object_id, creature_id, content_type, used_at)
 encounter_scripts (id, object_id, creature_id, object_name, object_name_en,
                    creature_name, creature_name_en, character_description,
-                   scenes JSONB, selected_index, image_url, video_url,
+                   situations JSONB, selected_index, image_url, video_url,
                    status, created_at, updated_at)
 ```
 
-### scenes JSONB 구조
+### situations JSONB 구조
 
 ```json
 {
-  "scenes": [
+  "situations": [
     {
-      "event_eng": "The robot pokes the pencil",
-      "event_kor": "로봇이 연필을 찌른다",
+      "situation_eng": "The robot pokes the pencil with its metal finger",
+      "situation_kor": "로봇이 금속 손가락으로 연필을 찌른다",
       "reaction_type": "curiosity",
       "caption_kor": "이게 뭐지...?"
     }
   ]
 }
 ```
+
+- `situation_eng/kor`: 상황 설명 (내레이션, 음성용)
+- `reaction_type`: 감정 반응 (이미지/영상 표정 자동 매핑)
+- `caption_kor`: 짧은 반응 (자막용)
 
 ### Reaction Type 매핑
 
