@@ -14,6 +14,8 @@ services:
       - WEBHOOK_URL=${WEBHOOK_URL}
       # n8n 환경변수 접근 허용 (expressions에서 $env 사용 가능)
       - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      # 멀티 PC 동기화용 공유 암호화 키
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
       # Telegram
       - TELEGRAM_START_BOT_TOKEN=${TELEGRAM_START_BOT_TOKEN}
       - TELEGRAM_SCRIPT_BOT_TOKEN=${TELEGRAM_SCRIPT_BOT_TOKEN}
@@ -34,7 +36,7 @@ services:
     image: ngrok/ngrok:latest
     container_name: ngrok
     restart: unless-stopped
-    command: http n8n:5678
+    command: http n8n:5678 --url=${NGROK_DOMAIN}
     environment:
       - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
     ports:

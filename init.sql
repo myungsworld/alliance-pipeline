@@ -331,7 +331,8 @@ CREATE TABLE encounter_scripts (
     creature_name_en VARCHAR(100),
 
     -- LLM generated result
-    character_description TEXT,  -- consistent character visual description for image generation
+    character_description TEXT,  -- consistent character identity/role description
+    visual_hint TEXT,  -- simple creature shape for doodle-style image (e.g., "round body, short legs, big eyes")
     situations JSONB NOT NULL,  -- [{situation_eng, situation_kor, reaction_type, caption_kor}, ...]
 
     -- Selection info

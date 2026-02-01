@@ -64,7 +64,10 @@ fi
 jq -r '.[] | "  - \(.name) (\(.type))"' "$CREDENTIALS_FILE" 2>/dev/null
 
 docker cp "$CREDENTIALS_FILE" n8n:/home/node/credentials.json
-docker exec -u node n8n n8n import:credentials --input=/home/node/credentials.json
+docker exec -i -u node n8n n8n import:credentials --input=/home/node/credentials.json 2>&1 || {
+  echo -e "${RED}credentials import 실패 - 수동 확인 필요${NC}"
+  echo "수동 실행: docker exec -it -u node n8n n8n import:credentials --input=/home/node/credentials.json"
+}
 docker exec -u node n8n rm -f /home/node/credentials.json 2>/dev/null
 
 echo -e "${GREEN}credentials import 완료${NC}"
