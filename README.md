@@ -55,16 +55,20 @@ GEMINI_API_KEY=your_gemini_key
 REPLICATE_API_TOKEN=your_replicate_token
 
 # Telegram
-TELEGRAM_START_BOT_TOKEN=your_start_bot_token
+TELEGRAM_BOT_TOKEN=your_start_bot_token
 TELEGRAM_SCRIPT_BOT_TOKEN=your_script_bot_token
 TELEGRAM_CHAT_ID=your_chat_id
 
 # ngrok
 NGROK_AUTHTOKEN=your_ngrok_token
-WEBHOOK_URL=https://your-ngrok-url.ngrok-free.app
+NGROK_DOMAIN=your-subdomain.ngrok-free.dev
+WEBHOOK_URL=https://your-subdomain.ngrok-free.dev
 
 # n8n API
 N8N_API_KEY=your_n8n_api_key
+
+# n8n 암호화 키 (멀티 PC 동기화용 - 모든 PC에서 동일하게 유지)
+N8N_ENCRYPTION_KEY=your_encryption_key_here
 ```
 
 ### 3. Pre-commit Hook 설정
@@ -161,33 +165,52 @@ docker compose up -d
 ### 테이블
 
 ```sql
+-- 기본 데이터
 objects (id, name, name_en, category, category_en, created_at)           -- 물건 251개, 20개 카테고리
 creatures (id, name, name_en, category, category_en, created_at)         -- 생명체 231개, 15개 카테고리
 combinations_used (id, object_id, creature_id, content_type, used_at)
+
+-- 조우 모드 스크립트
 encounter_scripts (id, object_id, creature_id, object_name, object_name_en,
                    creature_name, creature_name_en, character_description,
-                   situations JSONB, selected_index, image_url, video_url,
-                   status, created_at, updated_at)
+                   visual_hint, situations JSONB, selected_index,
+                   image_url, video_url, status, created_at, updated_at)
+
+-- 대결 모드 스크립트
+vs_scripts (id, team1_object_id, team1_creature_id, team1_object_name,
+            team1_object_name_en, team1_creature_name, team1_creature_name_en,
+            team2_object_id, team2_creature_id, team2_object_name,
+            team2_object_name_en, team2_creature_name, team2_creature_name_en,
+            situations JSONB, image_url, video_url, status, created_at, updated_at)
 ```
 
 ### situations JSONB 구조
 
 ```json
-{
-  "situations": [
-    {
-      "situation_eng": "The robot pokes the pencil with its metal finger",
-      "situation_kor": "로봇이 금속 손가락으로 연필을 찌른다",
-      "reaction_type": "curiosity",
-      "caption_kor": "이게 뭐지...?"
-    }
-  ]
-}
+[
+  {
+    "situation_eng": "The robot pokes the pencil with its metal finger",
+    "situation_kor": "로봇이 금속 손가락으로 연필을 찌른다",
+    "reaction_type": "curiosity",
+    "caption_kor": "이게 뭐지...?"
+  },
+  ...
+]
 ```
 
-- `situation_eng/kor`: 상황 설명 (내레이션, 음성용)
-- `reaction_type`: 감정 반응 (이미지/영상 표정 자동 매핑)
-- `caption_kor`: 짧은 반응 (자막용)
+| 필드 | 설명 | 용도 |
+|------|------|------|
+| `situation_eng` | 영어 상황 설명 | 이미지/영상 프롬프트 |
+| `situation_kor` | 한국어 상황 설명 | 내레이션, TTS |
+| `reaction_type` | 감정 반응 타입 | 표정/동작 매핑 |
+| `caption_kor` | 짧은 반응 | 자막용 |
+
+### 캐릭터 일관성 필드
+
+| 필드 | 설명 | 예시 |
+|------|------|------|
+| `character_description` | 캐릭터 역할/정체성 | "A curious penguin scientist" |
+| `visual_hint` | 단순한 외형 힌트 | "round body, short legs, big eyes" |
 
 ### Reaction Type 매핑
 
@@ -249,16 +272,18 @@ alliance-pipeline/
 - [x] ngrok HTTPS 터널 설정
 - [x] 통합 워크플로우: alliance-pipeline (조우/대결/이미지 생성)
 - [x] encounter_scripts 테이블 (LLM 결과 저장)
-- [x] 멀티 PC 동기화 (pre-commit hook + sync 스크립트)
+- [x] vs_scripts 테이블 (대결 모드용)
+- [x] 멀티 PC 동기화 (pre-commit hook + sync 스크립트 + N8N_ENCRYPTION_KEY)
 - [x] 환경변수 기반 credentials 관리
 - [x] 3개 워크플로우 → 1개 통합 (webhook 충돌 해결)
 - [x] 이미지 생성 API 연동 (Replicate Flux Dev)
 - [x] 영상 생성 API 연동 (Replicate minimax/video-01)
-- [x] 캐릭터 일관성 유지 (character_description)
-- [x] 연출 시스템 (event + reaction_type 분리)
+- [x] 캐릭터 일관성 유지 (character_description + visual_hint)
+- [x] 연출 시스템 (situation + reaction_type 분리)
 
 ### 예정
 
+- [ ] 대결 모드 워크플로우 완성
 - [ ] reaction 시스템 테스트 및 조정
 - [ ] 자동 업로드 (TikTok / YouTube Shorts)
 - [ ] 서버 배포 (Oracle Cloud)

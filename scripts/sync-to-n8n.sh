@@ -80,7 +80,16 @@ echo -e "${YELLOW}[2/3] 기존 workflows 삭제 중...${NC}"
 
 WORKFLOWS=$(curl -s "$N8N_URL/api/v1/workflows" \
   -H "X-N8N-API-KEY: $N8N_API_KEY")
-WORKFLOW_IDS=$(echo "$WORKFLOWS" | jq -r '.data[].id' 2>/dev/null)
+
+# API 응답 확인
+if echo "$WORKFLOWS" | jq -e '.data' > /dev/null 2>&1; then
+  WORKFLOW_IDS=$(echo "$WORKFLOWS" | jq -r '.data[].id')
+else
+  ERROR_MSG=$(echo "$WORKFLOWS" | jq -r '.message // "알 수 없는 에러"' 2>/dev/null)
+  echo -e "${RED}API 에러: $ERROR_MSG${NC}"
+  echo "응답: $WORKFLOWS"
+  exit 1
+fi
 
 if [ -n "$WORKFLOW_IDS" ]; then
   for ID in $WORKFLOW_IDS; do
