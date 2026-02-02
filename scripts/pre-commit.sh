@@ -38,6 +38,7 @@ fi
 
 # 변경된 파일 staging
 git add credentials/credentials.json 2>/dev/null
+git add workflows/**/*.json 2>/dev/null
 git add workflows/*.json 2>/dev/null
 
 echo -e "${GREEN}[pre-commit] 동기화 완료${NC}"

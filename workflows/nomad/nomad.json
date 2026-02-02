@@ -1,0 +1,441 @@
+{
+  "updatedAt": "2026-02-02T10:59:48.281Z",
+  "createdAt": "2026-02-02T10:41:35.128Z",
+  "id": "I8aMvX3PG3BNW3QV",
+  "name": "nomad",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ccdfec5b-c953-43ff-893c-3bccf684efaa",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "504fb21c-d839-4635-9d20-ef73aaaaadd7",
+              "name": "countries",
+              "value": "[\"Japan\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "154240b7-a50b-4927-aefa-5d7a14b1cb60",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "countries",
+        "options": {
+          "destinationFieldName": "country"
+        }
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "01d60efc-1757-4880-bc66-001f1a5375e2",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please tell me what is national animal of {{ $json.country }} and describe to me the national traiditional outfit of {{ $json.country }} for both men and women.\n\nGo to the point , do not verbose .",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "f44bbefc-4646-4caa-84c5-2041e47a85d5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        480,
+        208
+      ],
+      "id": "84437c8f-dba8-44f9-afc5-567ef0016baa",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "T6hLQOKnt40dUWSA",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n   \"country\" : \"korea\",\n\t\"animal\": \"Tiger\",\n\t\"outfit\": \"white robo with green and yellow colors in the neck...\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        208
+      ],
+      "id": "1366d8a5-70d9-4935-9661-714c844c18a4",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/bytedance/seedance-1-pro-fast/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\t\"input\": {\n      \"fps\": 24,\n      \"image\": \"{{ $json.output[0] }}\",\n      \"prompt\": \"The couple stand in a grand palace hallare walking forward at a very slow, confident, ceremonial pace, almost like slow motion. They walk straight toward the camera in a steady, graceful manner, with elegant posture. They do NOT look at the camera; instead, their gaze moves slightly around the environment, as if entering an important royal event or ballroom filled with people. The noblewoman's face remains perfectly composed and steady, with no sudden movements or exaggerated expressions. The animal maintains a dignified, controlled walk, matching the rhythm of the noblewoman while keeping a formal and respectful distance. Their clothing moves subtly with each step, showing realistic weight and fabric motion. The lighting is dramatic and warm, with reflections from chandeliers and polished marble floors, matching the palace environment in the image. Ultra-smooth camera motion, cinematic depth of field.\"\n\t}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1760,
+        -16
+      ],
+      "id": "266d90a2-bde7-4336-b8c5-b8f768b7694a",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "00c06366-116b-4466-95bb-c54451348091",
+      "name": "Wait",
+      "webhookId": "7b364253-8119-45e8-92e7-89d92441b76c"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Token {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        0
+      ],
+      "id": "3b6c34ea-d6a2-4d51-965a-68cfefc51546",
+      "name": "Replicate 결과 확인1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "succeeded",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "id": "condition-succeeded"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1552,
+        0
+      ],
+      "id": "63563fb6-98bc-4bcb-9c52-ab8e5e63dd18",
+      "name": "이미지 완료?1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\t\"version\": \"stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc\",\n\t\"input\": {\n      \"width\": 1024,\n      \"height\": 1024,\n      \"prompt\": \"Cinematic photographic image, lifelike and natural lighting. A towering anthropomorphic {{ $json.output.animal }} with a massively powerful physique, broad shoulders, thick defined musculature and heroic proportions, walking upright like a royal guardian with confident human-like posture. It is dressed in ornate traditional male {{ $json.output.country }} ceremonial attire {{ $json.output.outfit }} tailored to its large, imposing build, using a color palette that clearly reflects {{ $json.output.country }} culture, conveying regal strength and presence.Beside it walks a stunning human noblewoman from {{ $json.output.country }} with a beautifully defined face and refined features, confident expression, realistic skin texture, expressive eyes, and natural flowing hair. She wears a luxurious, form-fitting traditional {{ $json.output.country }} gown designed to emphasize her feminine curves while remaining elegant and dignified, combining elegance and allure - rich fabrics, tasteful neckline, coordinated jewelry, glamorous but refined appearance. Both characters are fully visible: full-body shot, centered, walking forward together in synchronised stride, the {{ $json.output.animal }} protective beside her, its size and strength subtly shielding her. Location: a grand palace interior or ceremonial hall, with ornate architectural details, carved walls, impressive columns, chandeliers or culturally appropriate lighting fixtures, polished marble or ceremonial flooring, warm golden light, refined atmosphere. Photography style: realistic editorial fashion shot, premium beauty focus on the noblewomans face and presence, crisp detail, natural reflections, clean composition.\",\n      \"apply_watermark\": false\n\t}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        992,
+        192
+      ],
+      "id": "17e84e00-0a69-41e7-9ac9-73d548c5f103",
+      "name": "stablity-ai/sdxl"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/bytedance/seedream-4/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, lifelike and natural lighting. A towering anthropomorphic {{ $json.output.animal }} with a massively powerful physique, broad shoulders, thick defined musculature and heroic proportions, walking upright like a royal guardian with confident human-like posture. It is dressed in ornate traditional male {{ $json.output.country }} ceremonial attire {{ $json.output.outfit }} tailored to its large, imposing build, using a color palette that clearly reflects {{ $json.output.country }} culture, conveying regal strength and presence.Beside it walks a stunning human noblewoman from {{ $json.output.country }} with a beautifully defined face and refined features, confident expression, realistic skin texture, expressive eyes, and natural flowing hair. She wears a luxurious, form-fitting traditional {{ $json.output.country }} gown designed to emphasize her feminine curves while remaining elegant and dignified, combining elegance and allure - rich fabrics, tasteful neckline, coordinated jewelry, glamorous but refined appearance. Both characters are fully visible: full-body shot, centered, walking forward together in synchronised stride, the {{ $json.output.animal }} protective beside her, its size and strength subtly shielding her. Location: a grand palace interior or ceremonial hall, with ornate architectural details, carved walls, impressive columns, chandeliers or culturally appropriate lighting fixtures, polished marble or ceremonial flooring, warm golden light, refined atmosphere. Photography style: realistic editorial fashion shot, premium beauty focus on the noblewomans face and presence, crisp detail, natural reflections, clean composition.\"\n\n\t}\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        976,
+        0
+      ],
+      "id": "dca4e0d0-71e3-4168-a6c6-28b9e5ced9e8",
+      "name": "seedream-4"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "seedream-4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Replicate 결과 확인1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 결과 확인1": {
+      "main": [
+        [
+          {
+            "node": "이미지 완료?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 완료?1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "seedream-4": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "3dc172c4-2bb9-47f8-922a-afd40f8a906a",
+  "activeVersionId": null,
+  "versionCounter": 8,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-02-02T10:41:35.130Z",
+      "createdAt": "2026-02-02T10:41:35.130Z",
+      "role": "workflow:owner",
+      "workflowId": "I8aMvX3PG3BNW3QV",
+      "projectId": "WEoDqinwhX4kz45J",
+      "project": {
+        "updatedAt": "2026-02-02T10:41:05.278Z",
+        "createdAt": "2026-02-02T10:40:54.083Z",
+        "id": "WEoDqinwhX4kz45J",
+        "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "bd22235a-5917-47bd-ad06-90208f3f7e81",
+        "projectRelations": [
+          {
+            "updatedAt": "2026-02-02T10:40:54.083Z",
+            "createdAt": "2026-02-02T10:40:54.083Z",
+            "userId": "bd22235a-5917-47bd-ad06-90208f3f7e81",
+            "projectId": "WEoDqinwhX4kz45J",
+            "user": {
+              "updatedAt": "2026-02-02T10:50:39.170Z",
+              "createdAt": "2026-02-02T10:40:53.629Z",
+              "id": "bd22235a-5917-47bd-ad06-90208f3f7e81",
+              "email": "myungsworld@gmail.com",
+              "firstName": "동명",
+              "lastName": "myungsworld@gmail.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2026-02-02T10:41:07.859Z",
+                "personalization_survey_n8n_version": "2.4.6"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "GArLBxJC8Q0lutu3",
+                "userActivatedAt": 1770029149265,
+                "easyAIWorkflowOnboarded": true
+              },
+              "disabled": false,
+              "mfaEnabled": false,
+              "lastActiveAt": "2026-02-02",
+              "isPending": false
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [],
+  "activeVersion": null
+}
