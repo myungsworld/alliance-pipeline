@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-03T05:34:36.204Z",
-  "createdAt": "2026-02-03T05:34:36.204Z",
-  "id": "E9hItRSBfQpwHu8W",
+  "updatedAt": "2026-02-03T10:12:42.141Z",
+  "createdAt": "2026-02-03T10:12:42.141Z",
+  "id": "GnBEjfAT8y5OAbma",
   "name": "nomad",
   "description": null,
   "active": true,
@@ -382,43 +382,43 @@
   "staticData": null,
   "meta": null,
   "pinData": null,
-  "versionId": "1c00e84d-c26f-4b19-8b3d-8e8e08e2f0b5",
-  "activeVersionId": "1c00e84d-c26f-4b19-8b3d-8e8e08e2f0b5",
+  "versionId": "a9c387d9-db8b-42fa-bdd7-e73e230bc0de",
+  "activeVersionId": "a9c387d9-db8b-42fa-bdd7-e73e230bc0de",
   "versionCounter": 3,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-03T05:34:36.205Z",
-      "createdAt": "2026-02-03T05:34:36.205Z",
+      "updatedAt": "2026-02-03T10:12:42.144Z",
+      "createdAt": "2026-02-03T10:12:42.144Z",
       "role": "workflow:owner",
-      "workflowId": "E9hItRSBfQpwHu8W",
-      "projectId": "CUsJxmbNBDF2Ir0B",
+      "workflowId": "GnBEjfAT8y5OAbma",
+      "projectId": "Y9hTNbB4ECWBI5qC",
       "project": {
-        "updatedAt": "2026-02-03T05:33:44.427Z",
-        "createdAt": "2026-02-03T05:33:20.951Z",
-        "id": "CUsJxmbNBDF2Ir0B",
+        "updatedAt": "2026-02-03T10:11:25.965Z",
+        "createdAt": "2026-02-03T10:11:07.556Z",
+        "id": "Y9hTNbB4ECWBI5qC",
         "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "81b5fb0a-9af4-498b-af5b-05b1c91120f4",
+        "creatorId": "039b17a7-d075-44d6-8898-92b1ecea08ae",
         "projectRelations": [
           {
-            "updatedAt": "2026-02-03T05:33:20.951Z",
-            "createdAt": "2026-02-03T05:33:20.951Z",
-            "userId": "81b5fb0a-9af4-498b-af5b-05b1c91120f4",
-            "projectId": "CUsJxmbNBDF2Ir0B",
+            "updatedAt": "2026-02-03T10:11:07.557Z",
+            "createdAt": "2026-02-03T10:11:07.557Z",
+            "userId": "039b17a7-d075-44d6-8898-92b1ecea08ae",
+            "projectId": "Y9hTNbB4ECWBI5qC",
             "user": {
-              "updatedAt": "2026-02-03T05:36:13.538Z",
-              "createdAt": "2026-02-03T05:33:20.834Z",
-              "id": "81b5fb0a-9af4-498b-af5b-05b1c91120f4",
+              "updatedAt": "2026-02-03T10:14:21.886Z",
+              "createdAt": "2026-02-03T10:11:07.094Z",
+              "id": "039b17a7-d075-44d6-8898-92b1ecea08ae",
               "email": "myungsworld@gmail.com",
               "firstName": "동명",
               "lastName": "myungsworld@gmail.com",
               "personalizationAnswers": {
                 "version": "v4",
-                "personalization_survey_submitted_at": "2026-02-03T05:33:47.257Z",
-                "personalization_survey_n8n_version": "2.4.5"
+                "personalization_survey_submitted_at": "2026-02-03T10:11:29.002Z",
+                "personalization_survey_n8n_version": "2.4.6"
               },
               "settings": {
                 "userActivated": false,
@@ -436,10 +436,10 @@
   ],
   "tags": [],
   "activeVersion": {
-    "updatedAt": "2026-02-03T05:34:36.207Z",
-    "createdAt": "2026-02-03T05:34:36.207Z",
-    "versionId": "1c00e84d-c26f-4b19-8b3d-8e8e08e2f0b5",
-    "workflowId": "E9hItRSBfQpwHu8W",
+    "updatedAt": "2026-02-03T10:12:42.149Z",
+    "createdAt": "2026-02-03T10:12:42.149Z",
+    "versionId": "a9c387d9-db8b-42fa-bdd7-e73e230bc0de",
+    "workflowId": "GnBEjfAT8y5OAbma",
     "nodes": [
       {
         "parameters": {},
@@ -814,12 +814,12 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-02-03T05:34:36.472Z",
-        "id": 2,
-        "workflowId": "E9hItRSBfQpwHu8W",
-        "versionId": "1c00e84d-c26f-4b19-8b3d-8e8e08e2f0b5",
+        "createdAt": "2026-02-03T10:12:43.921Z",
+        "id": 1,
+        "workflowId": "GnBEjfAT8y5OAbma",
+        "versionId": "a9c387d9-db8b-42fa-bdd7-e73e230bc0de",
         "event": "activated",
-        "userId": "81b5fb0a-9af4-498b-af5b-05b1c91120f4"
+        "userId": "039b17a7-d075-44d6-8898-92b1ecea08ae"
       }
     ]
   }
