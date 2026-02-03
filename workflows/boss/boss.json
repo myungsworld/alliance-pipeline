@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-02-03T05:34:36.204Z",
-  "createdAt": "2026-02-03T05:34:36.204Z",
-  "id": "E9hItRSBfQpwHu8W",
-  "name": "nomad",
+  "updatedAt": "2026-02-03T08:14:35.649Z",
+  "createdAt": "2026-02-03T05:34:35.638Z",
+  "id": "mJZsBZ5jq968ElAh",
+  "name": "boss",
   "description": null,
   "active": true,
   "isArchived": false,
@@ -12,65 +12,28 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        -2352,
+        -144
       ],
-      "id": "ccdfec5b-c953-43ff-893c-3bccf684efaa",
+      "id": "b088ae30-9f35-406d-8af4-6c526b2df9c1",
       "name": "When clicking ‘Execute workflow’"
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "504fb21c-d839-4635-9d20-ef73aaaaadd7",
-              "name": "countries",
-              "value": "[\"Japan\"]",
-              "type": "array"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        208,
-        0
-      ],
-      "id": "154240b7-a50b-4927-aefa-5d7a14b1cb60",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "fieldToSplitOut": "countries",
-        "options": {
-          "destinationFieldName": "country"
-        }
-      },
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
-      "position": [
-        416,
-        0
-      ],
-      "id": "01d60efc-1757-4880-bc66-001f1a5375e2",
-      "name": "Split Out"
-    },
-    {
-      "parameters": {
         "promptType": "define",
-        "text": "=Please tell me what is national animal of {{ $json.country }} and describe to me the national traiditional outfit of {{ $json.country }} for both men and women.\n\nGo to the point , do not verbose .",
+        "text": "=Use the following master cinematic template:\n\n\"Cinematic photographic image, dramatic lighting with volumetric rays and particle effects.\n[boss_description]\nIn the foreground, [hero_back_view_desciption], seen from behind, back facing the camera,\nstanding firmly on the battlefield.\nHis full silhouette visible, shoulders squared,\ngaze locked directly onto the colossal boss.\n\nDirectly ahead of him, towering in the distance,\n[boss], facing the hero head-on,\nits eyes fixed upon its challenger with absolute intent.\nLocation: [location].\nBoth figures fully visible in a wide cinematic shot, the boss towering 3 times over the hero.\nTension frozen at the moment both unleash their ultimate abilities — spells colliding in a cataclysmic shockwave.\nCamera angle: dramatic low angle with slight dutch tilt.\nLighting: boss backlit by sickly green deathglow, hero emanating pure white arcane radiance with extreme contrast between the two forces.\nPhotography style: AAA game cinematic, 4K ultra-detailed, ray-traced reflections, epic fantasy realism, dramatic depth of field, particle effects, motion blur hints on energy effects.\"\n\nboss description example :\n`A colossal Ancient Lich King standing as the ultimate adversary, radiating necrotic darkness energy that distorts the air around it. Its form is towering 12 feet of skeletal majesty draped in tattered imperial robes, with a crown of cursed obsidian and hollow eye sockets burning with green hellfire that speak of ancient power and countless victories. It wears corroded emperor's armor fused with its bones over millennia, adorned with soul gems containing the screaming essences of legendary heroes. Its eyes glow with ethereal green intensity, fixed upon its challenger. In its grasp, a massive runed staff topped with a skull that whispers forbidden knowledge, pulsing with death magic that withers all life nearby. The boss exudes the weight of ten thousand years of undeath - an overwhelming presence that warps reality itself.`\n\nhero back view decription exmaple :\n`A battle-hardened Supreme Archmage, bearing the marks of a thousand battles and ultimate mastery, seen entirely from behind, back facing the camera. His tall, commanding physique forms a powerful silhouette, arcane energy crackling beneath his skin and tracing along the contours of his broad shoulders and spine. Long white hair flows freely down his back, defying gravity as it is lifted by unseen magical currents, glowing faintly at the edges with residual starlight.\nRunic tattoos cover every visible surface of his back and arms, their ancient symbols pulsing softly as they channel immense arcane forces. He wears the Robes of the Reality Weaver — legendary-tier vestments forged from crystallized time and woven starlight — cascading behind him in layered folds, each thread shimmering with complex enchantments. The fabric appears to bend and refract light, creating subtle distortions in the air around his form.\nIn his grasp, held firmly at his side, the Staff of Infinite Theorems radiates power, emitting overlapping, translucent magic circles that expand outward from its haft and fracture the surrounding space. The archmage floats slightly above the ground, his boots suspended just above the surface as seven elemental orbs orbit slowly behind and around him, casting shifting reflections across his back and cloak.\nBehind him, a manifested arcane familiar — a phoenix formed of pure mathematics and glowing geometric light — hovers protectively, its vast, abstract wings unfurled in silent symmetry. No facial features are visible; the archmage’s intent and authority are conveyed solely through posture, silhouette, and the overwhelming arcane presence emanating from his form.\n`\n\nlocation example : \nThe Necropolis Throne - the heart of an undead empire buried beneath a dead world. The environment features towering pillars of fused bones, rivers of ghostly green energy, floating sarcophagi of fallen kings, and a throne made of a million skulls, with suffocating dread and eternal silence broken only by distant screams. Soul flames and necrotic mist swirl around the battlefield. The ground shows ancient tiles cracked by centuries, bones emerging from every crevice.`\n\nVARIABLE INPUTS:\n\nboss: Dimension Devourer\n\nhero: Doctor\n\nTASK:\n- Insert the boss and hero descriptions verbatim into the template.\n- Generate a highly detailed cinematic location that matches the boss’s theme,\n  power source, and mythic scale.\n- The location must feel ancient, monumental, and narratively appropriate\n  for a final confrontation.\n- Ensure the location visually supports the lighting, energy, and mood\n  implied by both boss and hero.\n\nReturn ONLY the completed cinematic prompt.",
         "hasOutputParser": true,
-        "options": {}
+        "options": {
+          "systemMessage": "=You are a cinematic prompt composer for high-end fantasy image generation.\n\nYour task is to generate a complete, cohesive cinematic image prompt\nusing a fixed master template.\n\nYou do NOT invent random styles.\nYou do NOT change the cinematic framing, camera, or photography style.\nYou ONLY expand and refine the variable sections when instructed.\n\nCORE RESPONSIBILITIES:\n- Integrate the provided {boss} and {hero} descriptions into the master template.\n- Generate a fully detailed {location} that matches the scale, tone, and theme\n  implied by the boss and hero.\n- Ensure all descriptions feel consistent in tone, scale, and genre.\n- Maintain AAA game cinematic quality at all times.\n\nABSOLUTE RULES:\n- Boss must always feel overwhelmingly dominant and colossal.\n- Hero must feel powerful, elite, and visually distinct, but clearly outscaled.\n- Location must feel epic, ancient, and worthy of the confrontation.\n- Do NOT include humor, irony, or parody.\n- Do NOT include dialogue or narration.\n- Do NOT describe the image generation process.\n- Do NOT change camera angle, lighting style, or photography style unless explicitly instructed.\n\nSTYLE CONSTRAINTS:\n- Language: English only.\n- Tone: epic, cinematic, mythic, AAA fantasy.\n- Perspective: external visual description only.\n- Focus on visual clarity and dramatic presence.\n\nOUTPUT RULES:\n- Output ONLY the final composed cinematic prompt.\n- Do NOT explain your choices.\n- Do NOT include headings, bullet points, or commentary."
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        624,
-        0
+        -1760,
+        -144
       ],
-      "id": "f44bbefc-4646-4caa-84c5-2041e47a85d5",
+      "id": "361fb536-ce9c-4061-aae4-6008199f79be",
       "name": "AI Agent"
     },
     {
@@ -80,10 +43,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        480,
-        208
+        -1872,
+        64
       ],
-      "id": "84437c8f-dba8-44f9-afc5-567ef0016baa",
+      "id": "87ec1528-585c-4131-a6fe-9fab7847b1c3",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
@@ -94,15 +57,15 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n   \"country\" : \"korea\",\n\t\"animal\": \"Tiger\",\n\t\"outfit\": \"white robo with green and yellow colors in the neck...\"\n}"
+        "jsonSchemaExample": "{\n   \"boss_description\" : \"string\",\n   \"hero_description\" : \"string\",\n   \"location\" : \"string\"\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        800,
-        208
+        -1552,
+        64
       ],
-      "id": "1366d8a5-70d9-4935-9661-714c844c18a4",
+      "id": "5a6037f3-58b4-471d-a05f-df161a1775ed",
       "name": "Structured Output Parser"
     },
     {
@@ -126,10 +89,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        1760,
-        -16
+        -592,
+        -160
       ],
-      "id": "266d90a2-bde7-4336-b8c5-b8f768b7694a",
+      "id": "dc54cb6c-4bde-4680-9a33-94f1e1dbe6f5",
       "name": "HTTP Request1"
     },
     {
@@ -137,10 +100,10 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        1184,
-        0
+        -1168,
+        -144
       ],
-      "id": "00c06366-116b-4466-95bb-c54451348091",
+      "id": "be6d478c-6479-4b63-a084-d7e58288c762",
       "name": "Wait",
       "webhookId": "7b364253-8119-45e8-92e7-89d92441b76c"
     },
@@ -161,10 +124,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1360,
-        0
+        -992,
+        -144
       ],
-      "id": "3b6c34ea-d6a2-4d51-965a-68cfefc51546",
+      "id": "ac9d8700-e1e1-418c-b014-831e3924d84c",
       "name": "Replicate 결과 확인1"
     },
     {
@@ -194,38 +157,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1552,
-        0
+        -800,
+        -144
       ],
-      "id": "63563fb6-98bc-4bcb-9c52-ab8e5e63dd18",
+      "id": "4396c7e9-7ea8-41a8-896b-77179ae0ef1f",
       "name": "이미지 완료?1"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.replicate.com/v1/predictions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.REPLICATE_API_TOKEN }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n\t\"version\": \"stability-ai/sdxl:7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc\",\n\t\"input\": {\n      \"width\": 1024,\n      \"height\": 1024,\n      \"prompt\": \"Cinematic photographic image, lifelike and natural lighting. A towering anthropomorphic {{ $json.output.animal }} with a massively powerful physique, broad shoulders, thick defined musculature and heroic proportions, walking upright like a royal guardian with confident human-like posture. It is dressed in ornate traditional male {{ $json.output.country }} ceremonial attire {{ $json.output.outfit }} tailored to its large, imposing build, using a color palette that clearly reflects {{ $json.output.country }} culture, conveying regal strength and presence.Beside it walks a stunning human noblewoman from {{ $json.output.country }} with a beautifully defined face and refined features, confident expression, realistic skin texture, expressive eyes, and natural flowing hair. She wears a luxurious, form-fitting traditional {{ $json.output.country }} gown designed to emphasize her feminine curves while remaining elegant and dignified, combining elegance and allure - rich fabrics, tasteful neckline, coordinated jewelry, glamorous but refined appearance. Both characters are fully visible: full-body shot, centered, walking forward together in synchronised stride, the {{ $json.output.animal }} protective beside her, its size and strength subtly shielding her. Location: a grand palace interior or ceremonial hall, with ornate architectural details, carved walls, impressive columns, chandeliers or culturally appropriate lighting fixtures, polished marble or ceremonial flooring, warm golden light, refined atmosphere. Photography style: realistic editorial fashion shot, premium beauty focus on the noblewomans face and presence, crisp detail, natural reflections, clean composition.\",\n      \"apply_watermark\": false\n\t}\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        992,
-        192
-      ],
-      "id": "17e84e00-0a69-41e7-9ac9-73d548c5f103",
-      "name": "stablity-ai/sdxl"
     },
     {
       "parameters": {
@@ -242,17 +178,44 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, lifelike and natural lighting. A towering anthropomorphic {{ $json.output.animal }} with a massively powerful physique, broad shoulders, thick defined musculature and heroic proportions, walking upright like a royal guardian with confident human-like posture. It is dressed in ornate traditional male {{ $json.output.country }} ceremonial attire {{ $json.output.outfit }} tailored to its large, imposing build, using a color palette that clearly reflects {{ $json.output.country }} culture, conveying regal strength and presence.Beside it walks a stunning human noblewoman from {{ $json.output.country }} with a beautifully defined face and refined features, confident expression, realistic skin texture, expressive eyes, and natural flowing hair. She wears a luxurious, form-fitting traditional {{ $json.output.country }} gown designed to emphasize her feminine curves while remaining elegant and dignified, combining elegance and allure - rich fabrics, tasteful neckline, coordinated jewelry, glamorous but refined appearance. Both characters are fully visible: full-body shot, centered, walking forward together in synchronised stride, the {{ $json.output.animal }} protective beside her, its size and strength subtly shielding her. Location: a grand palace interior or ceremonial hall, with ornate architectural details, carved walls, impressive columns, chandeliers or culturally appropriate lighting fixtures, polished marble or ceremonial flooring, warm golden light, refined atmosphere. Photography style: realistic editorial fashion shot, premium beauty focus on the noblewomans face and presence, crisp detail, natural reflections, clean composition.\"\n\n\t}\n} ",
+        "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, dramatic lighting with volumetric rays and particle effects. {{ $json.output.boss_description }} Facing the titan stands {{ $json.output.hero_description }} Location: {{ $json.output.location }} Both figures fully visible in a wide cinematic shot, the boss towering 3 times over the hero. Tension frozen at the moment both unleash their ultimate abilities - spells colliding in a cataclysmic shockwave. Camera angle: dramatic low angle with slight dutch tilt. Lighting: boss backlit by sickly green deathglow, archmage emanating pure white arcane radiance with extreme contrast between the two forces. Photography style: AAA game cinematic, 4K ultra-detailed, ray-traced reflections, epic fantasy realism, dramatic depth of field, particle effects, motion blur hints on energy effects.\"\n\n\t}\n} ",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        976,
-        0
+        -1376,
+        -144
       ],
-      "id": "dca4e0d0-71e3-4168-a6c6-28b9e5ced9e8",
+      "id": "1df6465b-a32c-4282-bcf3-54d7fc63764c",
       "name": "seedream-4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/bytedance/seedream-4/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.REPLICATE_API_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, dramatic lighting with volumetric rays and particle effects. {{ $json.output.boss_description.replace(/\"/g, '\\\\\"') }} In the foreground, {{ $json.output.hero_description.replace(/\"/g, '\\\\\"') }}, seen from behind, back facing the camera,standing firmly on the battlefield. His full silhouette visible, shoulders squared, gaze locked directly onto the colossal boss. Directly ahead of him, towering in the distance, boss, facing the hero head-on,its eyes fixed upon its challenger with absolute intent. Location: {{ $json.output.location.replace(/\"/g, '\\\\\"') }} Both figures fully visible in a wide cinematic shot, the boss towering 3 times over the hero. Tension frozen at the moment both unleash their ultimate abilities - spells colliding in a cataclysmic shockwave. Camera angle: dramatic low angle with slight dutch tilt. Lighting: boss backlit by sickly green deathglow, archmage emanating pure white arcane radiance with extreme contrast between the two forces. Photography style: AAA game cinematic, 4K ultra-detailed, ray-traced reflections, epic fantasy realism, dramatic depth of field, particle effects, motion blur hints on energy effects.\"\n\n\t}\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1376,
+        48
+      ],
+      "id": "20af4b1b-1ee2-4eb0-83c0-570183b16e94",
+      "name": "seedream-5"
     }
   ],
   "connections": {
@@ -260,29 +223,18 @@
       "main": [
         [
           {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Split Out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Out": {
-      "main": [
-        [
-          {
             "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "seedream-5",
             "type": "main",
             "index": 0
           }
@@ -306,17 +258,6 @@
           {
             "node": "AI Agent",
             "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent": {
-      "main": [
-        [
-          {
-            "node": "seedream-4",
-            "type": "main",
             "index": 0
           }
         ]
@@ -381,17 +322,17 @@
   },
   "staticData": null,
   "meta": null,
-  "pinData": null,
-  "versionId": "1c00e84d-c26f-4b19-8b3d-8e8e08e2f0b5",
-  "activeVersionId": "1c00e84d-c26f-4b19-8b3d-8e8e08e2f0b5",
-  "versionCounter": 3,
+  "pinData": {},
+  "versionId": "49672ed6-83b7-4082-b744-7f9c088d3a4b",
+  "activeVersionId": "fa348b6c-2fb3-49aa-8471-88e542a4204c",
+  "versionCounter": 156,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-03T05:34:36.205Z",
-      "createdAt": "2026-02-03T05:34:36.205Z",
+      "updatedAt": "2026-02-03T05:34:35.639Z",
+      "createdAt": "2026-02-03T05:34:35.639Z",
       "role": "workflow:owner",
-      "workflowId": "E9hItRSBfQpwHu8W",
+      "workflowId": "mJZsBZ5jq968ElAh",
       "projectId": "CUsJxmbNBDF2Ir0B",
       "project": {
         "updatedAt": "2026-02-03T05:33:44.427Z",
@@ -436,20 +377,20 @@
   ],
   "tags": [],
   "activeVersion": {
-    "updatedAt": "2026-02-03T05:34:36.207Z",
-    "createdAt": "2026-02-03T05:34:36.207Z",
-    "versionId": "1c00e84d-c26f-4b19-8b3d-8e8e08e2f0b5",
-    "workflowId": "E9hItRSBfQpwHu8W",
+    "updatedAt": "2026-02-03T05:34:35.641Z",
+    "createdAt": "2026-02-03T05:34:35.641Z",
+    "versionId": "fa348b6c-2fb3-49aa-8471-88e542a4204c",
+    "workflowId": "mJZsBZ5jq968ElAh",
     "nodes": [
       {
         "parameters": {},
         "type": "n8n-nodes-base.manualTrigger",
         "typeVersion": 1,
         "position": [
-          0,
-          0
+          -2352,
+          -144
         ],
-        "id": "ccdfec5b-c953-43ff-893c-3bccf684efaa",
+        "id": "b088ae30-9f35-406d-8af4-6c526b2df9c1",
         "name": "When clicking ‘Execute workflow’"
       },
       {
@@ -469,10 +410,10 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          208,
-          0
+          -2144,
+          -144
         ],
-        "id": "154240b7-a50b-4927-aefa-5d7a14b1cb60",
+        "id": "f1f03727-e31d-4071-a98d-6f5ba5556689",
         "name": "Edit Fields"
       },
       {
@@ -485,10 +426,10 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          416,
-          0
+          -1936,
+          -144
         ],
-        "id": "01d60efc-1757-4880-bc66-001f1a5375e2",
+        "id": "07d09436-f96e-477c-a673-6b3f2b73c29e",
         "name": "Split Out"
       },
       {
@@ -501,10 +442,10 @@
         "type": "@n8n/n8n-nodes-langchain.agent",
         "typeVersion": 3.1,
         "position": [
-          624,
-          0
+          -1728,
+          -144
         ],
-        "id": "f44bbefc-4646-4caa-84c5-2041e47a85d5",
+        "id": "361fb536-ce9c-4061-aae4-6008199f79be",
         "name": "AI Agent"
       },
       {
@@ -514,10 +455,10 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1,
         "position": [
-          480,
-          208
+          -1872,
+          64
         ],
-        "id": "84437c8f-dba8-44f9-afc5-567ef0016baa",
+        "id": "87ec1528-585c-4131-a6fe-9fab7847b1c3",
         "name": "Google Gemini Chat Model",
         "credentials": {
           "googlePalmApi": {
@@ -533,10 +474,10 @@
         "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
         "typeVersion": 1.3,
         "position": [
-          800,
-          208
+          -1552,
+          64
         ],
-        "id": "1366d8a5-70d9-4935-9661-714c844c18a4",
+        "id": "5a6037f3-58b4-471d-a05f-df161a1775ed",
         "name": "Structured Output Parser"
       },
       {
@@ -560,10 +501,10 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          1760,
-          -16
+          -592,
+          -160
         ],
-        "id": "266d90a2-bde7-4336-b8c5-b8f768b7694a",
+        "id": "dc54cb6c-4bde-4680-9a33-94f1e1dbe6f5",
         "name": "HTTP Request1"
       },
       {
@@ -571,10 +512,10 @@
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          1184,
-          0
+          -1168,
+          -144
         ],
-        "id": "00c06366-116b-4466-95bb-c54451348091",
+        "id": "be6d478c-6479-4b63-a084-d7e58288c762",
         "name": "Wait",
         "webhookId": "7b364253-8119-45e8-92e7-89d92441b76c"
       },
@@ -595,10 +536,10 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          1360,
-          0
+          -992,
+          -144
         ],
-        "id": "3b6c34ea-d6a2-4d51-965a-68cfefc51546",
+        "id": "ac9d8700-e1e1-418c-b014-831e3924d84c",
         "name": "Replicate 결과 확인1"
       },
       {
@@ -628,10 +569,10 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.2,
         "position": [
-          1552,
-          0
+          -800,
+          -144
         ],
-        "id": "63563fb6-98bc-4bcb-9c52-ab8e5e63dd18",
+        "id": "4396c7e9-7ea8-41a8-896b-77179ae0ef1f",
         "name": "이미지 완료?1"
       },
       {
@@ -655,10 +596,10 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          992,
-          192
+          -1360,
+          48
         ],
-        "id": "17e84e00-0a69-41e7-9ac9-73d548c5f103",
+        "id": "0113cff0-fc95-4bad-989d-0d602299103a",
         "name": "stablity-ai/sdxl"
       },
       {
@@ -676,16 +617,16 @@
           },
           "sendBody": true,
           "specifyBody": "json",
-          "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, lifelike and natural lighting. A towering anthropomorphic {{ $json.output.animal }} with a massively powerful physique, broad shoulders, thick defined musculature and heroic proportions, walking upright like a royal guardian with confident human-like posture. It is dressed in ornate traditional male {{ $json.output.country }} ceremonial attire {{ $json.output.outfit }} tailored to its large, imposing build, using a color palette that clearly reflects {{ $json.output.country }} culture, conveying regal strength and presence.Beside it walks a stunning human noblewoman from {{ $json.output.country }} with a beautifully defined face and refined features, confident expression, realistic skin texture, expressive eyes, and natural flowing hair. She wears a luxurious, form-fitting traditional {{ $json.output.country }} gown designed to emphasize her feminine curves while remaining elegant and dignified, combining elegance and allure - rich fabrics, tasteful neckline, coordinated jewelry, glamorous but refined appearance. Both characters are fully visible: full-body shot, centered, walking forward together in synchronised stride, the {{ $json.output.animal }} protective beside her, its size and strength subtly shielding her. Location: a grand palace interior or ceremonial hall, with ornate architectural details, carved walls, impressive columns, chandeliers or culturally appropriate lighting fixtures, polished marble or ceremonial flooring, warm golden light, refined atmosphere. Photography style: realistic editorial fashion shot, premium beauty focus on the noblewomans face and presence, crisp detail, natural reflections, clean composition.\"\n\n\t}\n} ",
+          "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, dramatic lighting with volumetric rays and particle effects. A colossal Ancient Lich Emperor standing as the ultimate adversary, radiating necrotic darkness energy that distorts the air around it. Its form is towering 12 feet of skeletal majesty draped in tattered imperial robes, with a crown of cursed obsidian and hollow eye sockets burning with green hellfire that speak of ancient power and countless victories. It wears corroded emperor's armor fused with its bones over millennia, adorned with soul gems containing the screaming essences of legendary heroes. Its eyes glow with ethereal green intensity, fixed upon its challenger. In its grasp, a massive runed staff topped with a skull that whispers forbidden knowledge, pulsing with death magic that withers all life nearby. The boss exudes the weight of ten thousand years of undeath - an overwhelming presence that warps reality itself. Facing the titan stands a battle-hardened Supreme Archmage, bearing the marks of a thousand battles and ultimate mastery. His physique is tall and commanding, arcane energy crackling beneath his skin, with long white hair defying gravity, eyes replaced by swirling galaxies, and runic tattoos covering every visible surface. He wears the Robes of the Reality Weaver - legendary-tier equipment forged from crystallized time and woven starlight, glowing with enchantments. He wields the Staff of Infinite Theorems, emanating multiple overlapping magic circles and reality fractures. Battle stance is floating slightly above ground, seven elemental orbs orbiting, hands conducting an orchestra of destruction, showing no fear despite the overwhelming odds. A manifested arcane familiar - a phoenix made of pure mathematics - the signature mark of a max-level Supreme Archmage. Location: The Necropolis Throne - the heart of an undead empire buried beneath a dead world. The environment features towering pillars of fused bones, rivers of ghostly green energy, floating sarcophagi of fallen kings, and a throne made of a million skulls, with suffocating dread and eternal silence broken only by distant screams. Soul flames and necrotic mist swirl around the battlefield. The ground shows ancient tiles cracked by centuries, bones emerging from every crevice. Both figures fully visible in a wide cinematic shot, the boss towering 2.5 times over the adventurer. Tension frozen at the moment both unleash their ultimate abilities - spells colliding in a cataclysmic shockwave. Camera angle: dramatic low angle with slight dutch tilt. Lighting: boss backlit by sickly green deathglow, archmage emanating pure white arcane radiance with extreme contrast between the two forces. Photography style: AAA game cinematic, 4K ultra-detailed, ray-traced reflections, epic fantasy realism, dramatic depth of field, particle effects, motion blur hints on energy effects.\"\n\n\t}\n} ",
           "options": {}
         },
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          976,
-          0
+          -1376,
+          -144
         ],
-        "id": "dca4e0d0-71e3-4168-a6c6-28b9e5ced9e8",
+        "id": "1df6465b-a32c-4282-bcf3-54d7fc63764c",
         "name": "seedream-4"
       }
     ],
@@ -723,6 +664,17 @@
           ]
         ]
       },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "seedream-4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
       "Google Gemini Chat Model": {
         "ai_languageModel": [
           [
@@ -740,17 +692,6 @@
             {
               "node": "AI Agent",
               "type": "ai_outputParser",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "AI Agent": {
-        "main": [
-          [
-            {
-              "node": "seedream-4",
-              "type": "main",
               "index": 0
             }
           ]
@@ -814,10 +755,10 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-02-03T05:34:36.472Z",
-        "id": 2,
-        "workflowId": "E9hItRSBfQpwHu8W",
-        "versionId": "1c00e84d-c26f-4b19-8b3d-8e8e08e2f0b5",
+        "createdAt": "2026-02-03T05:34:36.411Z",
+        "id": 1,
+        "workflowId": "mJZsBZ5jq968ElAh",
+        "versionId": "fa348b6c-2fb3-49aa-8471-88e542a4204c",
         "event": "activated",
         "userId": "81b5fb0a-9af4-498b-af5b-05b1c91120f4"
       }
