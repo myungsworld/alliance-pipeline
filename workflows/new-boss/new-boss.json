@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-04T07:56:04.303Z",
+  "updatedAt": "2026-02-04T08:00:27.480Z",
   "createdAt": "2026-02-04T07:54:55.143Z",
   "id": "VmloV78CeAWVYHrJ",
   "name": "new-boss",
@@ -192,7 +192,7 @@
     },
     {
       "parameters": {
-        "command": "=wget -O /data/media/boss_$(date +%Y%m%d_%H%M%S).jpg \"{{ $json.output[0] }}\""
+        "command": "=wget -O /data/media/boss_{{ $('Code in JavaScript').item.json.boss }}_hero_{{ $('Code in JavaScript').item.json.hero }}.jpg \"{{ $json.output[0] }}\""
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
@@ -700,9 +700,9 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "f8b09863-d5ca-406c-9940-46e7ed141d1b",
+  "versionId": "2d6b3646-030f-4438-a3de-8ea18743e369",
   "activeVersionId": null,
-  "versionCounter": 7,
+  "versionCounter": 12,
   "triggerCount": 0,
   "shared": [
     {
