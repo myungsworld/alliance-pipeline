@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-03T10:12:42.141Z",
-  "createdAt": "2026-02-03T10:12:42.141Z",
-  "id": "GnBEjfAT8y5OAbma",
+  "updatedAt": "2026-02-04T07:34:46.862Z",
+  "createdAt": "2026-02-04T07:34:46.862Z",
+  "id": "lSAObga5uuDTAnay",
   "name": "nomad",
   "description": null,
   "active": true,
@@ -382,43 +382,43 @@
   "staticData": null,
   "meta": null,
   "pinData": null,
-  "versionId": "a9c387d9-db8b-42fa-bdd7-e73e230bc0de",
-  "activeVersionId": "a9c387d9-db8b-42fa-bdd7-e73e230bc0de",
+  "versionId": "d165baa4-ccf0-4733-ae26-c19c6c4a0285",
+  "activeVersionId": "d165baa4-ccf0-4733-ae26-c19c6c4a0285",
   "versionCounter": 3,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-03T10:12:42.144Z",
-      "createdAt": "2026-02-03T10:12:42.144Z",
+      "updatedAt": "2026-02-04T07:34:46.863Z",
+      "createdAt": "2026-02-04T07:34:46.863Z",
       "role": "workflow:owner",
-      "workflowId": "GnBEjfAT8y5OAbma",
-      "projectId": "Y9hTNbB4ECWBI5qC",
+      "workflowId": "lSAObga5uuDTAnay",
+      "projectId": "4DMuQD4mGf90EGQi",
       "project": {
-        "updatedAt": "2026-02-03T10:11:25.965Z",
-        "createdAt": "2026-02-03T10:11:07.556Z",
-        "id": "Y9hTNbB4ECWBI5qC",
+        "updatedAt": "2026-02-04T04:46:43.839Z",
+        "createdAt": "2026-02-04T04:46:23.298Z",
+        "id": "4DMuQD4mGf90EGQi",
         "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "039b17a7-d075-44d6-8898-92b1ecea08ae",
+        "creatorId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
         "projectRelations": [
           {
-            "updatedAt": "2026-02-03T10:11:07.557Z",
-            "createdAt": "2026-02-03T10:11:07.557Z",
-            "userId": "039b17a7-d075-44d6-8898-92b1ecea08ae",
-            "projectId": "Y9hTNbB4ECWBI5qC",
+            "updatedAt": "2026-02-04T04:46:23.298Z",
+            "createdAt": "2026-02-04T04:46:23.298Z",
+            "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
+            "projectId": "4DMuQD4mGf90EGQi",
             "user": {
-              "updatedAt": "2026-02-03T10:14:21.886Z",
-              "createdAt": "2026-02-03T10:11:07.094Z",
-              "id": "039b17a7-d075-44d6-8898-92b1ecea08ae",
+              "updatedAt": "2026-02-04T07:34:00.000Z",
+              "createdAt": "2026-02-04T04:46:23.180Z",
+              "id": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
               "email": "myungsworld@gmail.com",
               "firstName": "동명",
               "lastName": "myungsworld@gmail.com",
               "personalizationAnswers": {
                 "version": "v4",
-                "personalization_survey_submitted_at": "2026-02-03T10:11:29.002Z",
-                "personalization_survey_n8n_version": "2.4.6"
+                "personalization_survey_submitted_at": "2026-02-04T04:46:45.730Z",
+                "personalization_survey_n8n_version": "2.4.5"
               },
               "settings": {
                 "userActivated": false,
@@ -426,7 +426,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2026-02-03",
+              "lastActiveAt": "2026-02-04",
               "isPending": false
             }
           }
@@ -436,10 +436,10 @@
   ],
   "tags": [],
   "activeVersion": {
-    "updatedAt": "2026-02-03T10:12:42.149Z",
-    "createdAt": "2026-02-03T10:12:42.149Z",
-    "versionId": "a9c387d9-db8b-42fa-bdd7-e73e230bc0de",
-    "workflowId": "GnBEjfAT8y5OAbma",
+    "updatedAt": "2026-02-04T07:34:46.866Z",
+    "createdAt": "2026-02-04T07:34:46.866Z",
+    "versionId": "d165baa4-ccf0-4733-ae26-c19c6c4a0285",
+    "workflowId": "lSAObga5uuDTAnay",
     "nodes": [
       {
         "parameters": {},
@@ -814,12 +814,12 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-02-03T10:12:43.921Z",
-        "id": 1,
-        "workflowId": "GnBEjfAT8y5OAbma",
-        "versionId": "a9c387d9-db8b-42fa-bdd7-e73e230bc0de",
+        "createdAt": "2026-02-04T07:34:47.081Z",
+        "id": 2,
+        "workflowId": "lSAObga5uuDTAnay",
+        "versionId": "d165baa4-ccf0-4733-ae26-c19c6c4a0285",
         "event": "activated",
-        "userId": "039b17a7-d075-44d6-8898-92b1ecea08ae"
+        "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6"
       }
     ]
   }

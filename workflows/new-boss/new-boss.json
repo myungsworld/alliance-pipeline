@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-03T12:23:32.544Z",
-  "createdAt": "2026-02-03T10:20:34.757Z",
-  "id": "TQTckAxt9vBgtOgyEHgGT",
+  "updatedAt": "2026-02-04T07:45:28.512Z",
+  "createdAt": "2026-02-04T07:34:46.942Z",
+  "id": "ufqRpt7aZyF7Q6QN",
   "name": "new-boss",
   "description": null,
   "active": false,
@@ -21,7 +21,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=INPUTS:\nboss: Eraser\nhero: Pencil\n\nTASK:\n1. Analyze each input — determine if it's a creature, object, or concept\n2. Transform accordingly:\n   - Living beings → Epic fantasy enhancement\n   - Objects → Anthropomorphized titan/warrior\n   - Concepts → Elemental manifestation\n\n3. Generate boss_description:\n   - If object: humanoid titan form integrating the object's visual essence\n   - If creature: enhanced mythic version with armor and magical presence\n   - Always: 12+ feet tall, overwhelming, eyes fixed on challenger\n\n4. Generate hero_description:\n   - Same transformation logic as boss\n   - Always: seen from behind, battle stance, back to camera\n   - Smaller scale but radiating power and determination\n\n5. Generate location:\n   - Environment that narratively connects both entities\n   - If both are kitchen items → cursed culinary arena\n   - If dragon vs knight → volcanic fortress\n   - If vacuum vs pizza → surreal domestic battlefield turned epic\n\nReturn ONLY the JSON output.",
+        "text": "=INPUTS:\nboss: {{ $json.boss }}\nhero: {{ $json.hero }}\n\nTASK:\n1. Analyze each input — determine if it's a creature, object, or concept\n2. Transform accordingly:\n   - Living beings → Epic fantasy enhancement\n   - Objects → Anthropomorphized titan/warrior\n   - Concepts → Elemental manifestation\n\n3. Generate boss_description:\n   - If object: humanoid titan form integrating the object's visual essence\n   - If creature: enhanced mythic version with armor and magical presence\n   - Always: 12+ feet tall, overwhelming, eyes fixed on challenger\n\n4. Generate hero_description:\n   - Same transformation logic as boss\n   - Always: seen from behind, battle stance, back to camera\n   - Smaller scale but radiating power and determination\n\n5. Generate location:\n   - Environment that narratively connects both entities\n   - If both are kitchen items → cursed culinary arena\n   - If dragon vs knight → volcanic fortress\n   - If vacuum vs pizza → surreal domestic battlefield turned epic\n\nReturn ONLY the JSON output.",
         "hasOutputParser": true,
         "options": {
           "systemMessage": "=You are a cinematic prompt composer for epic fantasy battle images.\n\nYour task is to transform ANY input (object, creature, profession, concept)\ninto an epic boss or hero character suitable for AAA game cinematics.\n\nTRANSFORMATION RULES:\n\n1. IF input is already a living being (dragon, wolf, wizard, knight, alien):\n   → Enhance into epic fantasy version with armor, magical effects, battle scars\n   → Maintain original form, amplify presence and power\n\n2. IF input is an inanimate object:\n   → Transform into an EPIC ENTITY form that best fits the object's nature\n   → Core visual identity (shape, color, texture) becomes armor/body design\n   → Object's function becomes weapon/ability\n   → Add face/eyes, limbs, imposing presence \n   → Consider these approaches ANTHROPOMORPHIZE into (choose creatively):\n   - Titan/Warrior (humanoid with object as armor/weapon)\n   - Beast/Dragon (creature shaped by object's silhouette)\n   - Elemental (pure energy manifestation of object's essence)\n   - Construct/Golem (massive mechanical version)\n   - Swarm (thousands forming one entity)\n   - Chimera (object fused with creature parts)\n\n3. IF input is abstract (love, time, chaos):\n   → Manifest as elemental entity or cosmic being\n   → Visual representation of the concept as a physical warrior\n\nUNIVERSAL RULES:\n- Boss: Always COLOSSAL (12+ feet), overwhelming, dominant\n- Hero: Always battle-ready, determined, powerful but smaller scale\n- Both must feel like they belong in the same epic universe\n- Maintain dramatic, mythic, AAA cinematic tone\n- NO humor, NO parody — treat every subject with epic gravitas\n\nOUTPUT:\n{\n  \"boss_description\": \"detailed visual description...\",\n  \"hero_description\": \"detailed visual description, seen from behind...\",\n  \"location\": \"epic battlefield matching the confrontation's theme...\"\n}"
@@ -30,7 +30,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -1680,
+        -1824,
         -64
       ],
       "id": "e0e12113-3697-4223-83d3-c93a95bab98f",
@@ -43,7 +43,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -1776,
+        -1888,
         144
       ],
       "id": "09183359-45fc-40e0-a828-6092fba33cda",
@@ -62,7 +62,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        -1456,
+        -1632,
         144
       ],
       "id": "63ff266f-71b2-4c91-bcdb-7795476cfa5a",
@@ -100,8 +100,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -992,
-        -80
+        -1040,
+        -64
       ],
       "id": "9e92bef8-1f7b-4e5c-8ba1-5ccd30674275",
       "name": "Wait",
@@ -178,17 +178,201 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, dramatic lighting with volumetric rays and particle effects. {{ $json.output.boss_description.replace(/\"/g, '\\\\\"') }} In the foreground, {{ $json.output.hero_description.replace(/\"/g, '\\\\\"') }}, seen from behind, back facing the camera,standing firmly on the battlefield. His full silhouette visible, shoulders squared, gaze locked directly onto the colossal boss. Directly ahead of him, towering in the distance, boss, facing the hero head-on,its eyes fixed upon its challenger with absolute intent. Location: {{ $json.output.location.replace(/\"/g, '\\\\\"') }} Both figures fully visible in a wide cinematic shot, the boss towering 3 times over the hero. Tension frozen at the moment both unleash their ultimate abilities - spells colliding in a cataclysmic shockwave. Camera angle: dramatic low angle with slight dutch tilt. Lighting: boss backlit by sickly green deathglow, archmage emanating pure white arcane radiance with extreme contrast between the two forces. Photography style: AAA game cinematic, 4K ultra-detailed, ray-traced reflections, epic fantasy realism, dramatic depth of field, particle effects, motion blur hints on energy effects.\"\n\n\t}\n} ",
+        "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, dramatic lighting with volumetric rays and particle effects. {{ $json.boss_description.replace(/\"/g, '\\\\\"') }} In the foreground, {{ $json.hero_description.replace(/\"/g, '\\\\\"') }}, seen from behind, back facing the camera,standing firmly on the battlefield. His full silhouette visible, shoulders squared, gaze locked directly onto the colossal boss. Directly ahead of him, towering in the distance, boss, facing the hero head-on,its eyes fixed upon its challenger with absolute intent. Location: {{ $json.location.replace(/\"/g, '\\\\\"') }} Both figures fully visible in a wide cinematic shot, the boss towering 3 times over the hero. Tension frozen at the moment both unleash their ultimate abilities - spells colliding in a cataclysmic shockwave. Camera angle: dramatic low angle with slight dutch tilt. Lighting: boss backlit by sickly green deathglow, archmage emanating pure white arcane radiance with extreme contrast between the two forces. Photography style: AAA game cinematic, 4K ultra-detailed, ray-traced reflections, epic fantasy realism, dramatic depth of field, particle effects, motion blur hints on energy effects.\"\n\n\t}\n} ",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -1328,
+        -1248,
         -64
       ],
       "id": "1184c40d-0cd4-4a4f-b1d2-ffa90f813e8c",
       "name": "seedream-5"
+    },
+    {
+      "parameters": {
+        "command": "=wget -O /data/media/boss_$(date +%Y%m%d_%H%M%S).jpg \"{{ $json.output[0] }}\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        32
+      ],
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "이미지 저장 (wget)"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"doctor\";\n  item.json.hero = \"pencil\"\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2048,
+        -64
+      ],
+      "id": "e74bac02-99a9-4c28-9044-a6083cde030f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "bosses",
+          "mode": "list",
+          "cachedResultName": "bosses"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "input_boss": "={{ $('Code in JavaScript').item.json.boss }}",
+            "input_hero": "={{ $('Code in JavaScript').item.json.hero }}",
+            "boss_description": "={{ $json.output.boss_description }}",
+            "hero_description": "={{ $json.output.hero_description }}",
+            "location": "={{ $json.output.location }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "input_boss",
+              "displayName": "input_boss",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "input_hero",
+              "displayName": "input_hero",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "boss_name",
+              "displayName": "boss_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "hero_name",
+              "displayName": "hero_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "boss_description",
+              "displayName": "boss_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "hero_description",
+              "displayName": "hero_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "img_url",
+              "displayName": "img_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1472,
+        -64
+      ],
+      "id": "b426d26b-d5ac-47d6-b237-d0bb5e819bac",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
     }
   ],
   "connections": {
@@ -196,7 +380,7 @@
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "Code in JavaScript",
             "type": "main",
             "index": 0
           }
@@ -207,7 +391,7 @@
       "main": [
         [
           {
-            "node": "seedream-5",
+            "node": "Insert rows in a table",
             "type": "main",
             "index": 0
           }
@@ -260,7 +444,13 @@
     },
     "이미지 완료?1": {
       "main": [
-        [],
+        [
+          {
+            "node": "이미지 저장 (wget)",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Wait",
@@ -280,52 +470,77 @@
           }
         ]
       ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert rows in a table": {
+      "main": [
+        [
+          {
+            "node": "seedream-5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
     "executionOrder": "v1",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
-  "versionId": "7958dfc8-7975-4893-b324-109d9084bd2f",
+  "versionId": "7af3f3d7-530f-4b57-ba30-dba801acb50d",
   "activeVersionId": null,
-  "versionCounter": 54,
+  "versionCounter": 53,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-03T10:20:34.760Z",
-      "createdAt": "2026-02-03T10:20:34.760Z",
+      "updatedAt": "2026-02-04T07:34:46.943Z",
+      "createdAt": "2026-02-04T07:34:46.943Z",
       "role": "workflow:owner",
-      "workflowId": "TQTckAxt9vBgtOgyEHgGT",
-      "projectId": "Y9hTNbB4ECWBI5qC",
+      "workflowId": "ufqRpt7aZyF7Q6QN",
+      "projectId": "4DMuQD4mGf90EGQi",
       "project": {
-        "updatedAt": "2026-02-03T10:11:25.965Z",
-        "createdAt": "2026-02-03T10:11:07.556Z",
-        "id": "Y9hTNbB4ECWBI5qC",
+        "updatedAt": "2026-02-04T04:46:43.839Z",
+        "createdAt": "2026-02-04T04:46:23.298Z",
+        "id": "4DMuQD4mGf90EGQi",
         "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "039b17a7-d075-44d6-8898-92b1ecea08ae",
+        "creatorId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
         "projectRelations": [
           {
-            "updatedAt": "2026-02-03T10:11:07.557Z",
-            "createdAt": "2026-02-03T10:11:07.557Z",
-            "userId": "039b17a7-d075-44d6-8898-92b1ecea08ae",
-            "projectId": "Y9hTNbB4ECWBI5qC",
+            "updatedAt": "2026-02-04T04:46:23.298Z",
+            "createdAt": "2026-02-04T04:46:23.298Z",
+            "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
+            "projectId": "4DMuQD4mGf90EGQi",
             "user": {
-              "updatedAt": "2026-02-03T10:14:21.886Z",
-              "createdAt": "2026-02-03T10:11:07.094Z",
-              "id": "039b17a7-d075-44d6-8898-92b1ecea08ae",
+              "updatedAt": "2026-02-04T07:34:00.000Z",
+              "createdAt": "2026-02-04T04:46:23.180Z",
+              "id": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
               "email": "myungsworld@gmail.com",
               "firstName": "동명",
               "lastName": "myungsworld@gmail.com",
               "personalizationAnswers": {
                 "version": "v4",
-                "personalization_survey_submitted_at": "2026-02-03T10:11:29.002Z",
-                "personalization_survey_n8n_version": "2.4.6"
+                "personalization_survey_submitted_at": "2026-02-04T04:46:45.730Z",
+                "personalization_survey_n8n_version": "2.4.5"
               },
               "settings": {
                 "userActivated": false,
@@ -333,7 +548,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2026-02-03",
+              "lastActiveAt": "2026-02-04",
               "isPending": false
             }
           }
