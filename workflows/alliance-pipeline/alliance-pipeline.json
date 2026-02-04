@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-04T07:54:55.052Z",
-  "createdAt": "2026-02-04T07:54:55.052Z",
-  "id": "C6AZydZFxhaM0npC",
+  "updatedAt": "2026-02-04T08:13:17.039Z",
+  "createdAt": "2026-02-04T08:13:17.039Z",
+  "id": "sa1yjiFrR8mIguBl",
   "name": "alliance-pipeline",
   "description": null,
   "active": true,
@@ -1346,16 +1346,16 @@
   "staticData": null,
   "meta": null,
   "pinData": null,
-  "versionId": "87f29e05-a71a-4fd1-ad73-8f1a7024ac2d",
-  "activeVersionId": "87f29e05-a71a-4fd1-ad73-8f1a7024ac2d",
+  "versionId": "88d1f73c-d0df-4436-a9f5-86ec1b3e98b6",
+  "activeVersionId": "88d1f73c-d0df-4436-a9f5-86ec1b3e98b6",
   "versionCounter": 3,
   "triggerCount": 2,
   "shared": [
     {
-      "updatedAt": "2026-02-04T07:54:55.058Z",
-      "createdAt": "2026-02-04T07:54:55.058Z",
+      "updatedAt": "2026-02-04T08:13:17.040Z",
+      "createdAt": "2026-02-04T08:13:17.040Z",
       "role": "workflow:owner",
-      "workflowId": "C6AZydZFxhaM0npC",
+      "workflowId": "sa1yjiFrR8mIguBl",
       "projectId": "4DMuQD4mGf90EGQi",
       "project": {
         "updatedAt": "2026-02-04T04:46:43.839Z",
@@ -1400,10 +1400,10 @@
   ],
   "tags": [],
   "activeVersion": {
-    "updatedAt": "2026-02-04T07:54:55.068Z",
-    "createdAt": "2026-02-04T07:54:55.068Z",
-    "versionId": "87f29e05-a71a-4fd1-ad73-8f1a7024ac2d",
-    "workflowId": "C6AZydZFxhaM0npC",
+    "updatedAt": "2026-02-04T08:13:17.042Z",
+    "createdAt": "2026-02-04T08:13:17.042Z",
+    "versionId": "88d1f73c-d0df-4436-a9f5-86ec1b3e98b6",
+    "workflowId": "sa1yjiFrR8mIguBl",
     "nodes": [
       {
         "parameters": {
@@ -2742,10 +2742,10 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-02-04T07:54:59.590Z",
+        "createdAt": "2026-02-04T08:13:20.901Z",
         "id": 3,
-        "workflowId": "C6AZydZFxhaM0npC",
-        "versionId": "87f29e05-a71a-4fd1-ad73-8f1a7024ac2d",
+        "workflowId": "sa1yjiFrR8mIguBl",
+        "versionId": "88d1f73c-d0df-4436-a9f5-86ec1b3e98b6",
         "event": "activated",
         "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6"
       }
