@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-04T07:45:28.512Z",
-  "createdAt": "2026-02-04T07:34:46.942Z",
-  "id": "ufqRpt7aZyF7Q6QN",
+  "updatedAt": "2026-02-04T07:56:04.303Z",
+  "createdAt": "2026-02-04T07:54:55.143Z",
+  "id": "VmloV78CeAWVYHrJ",
   "name": "new-boss",
   "description": null,
   "active": false,
@@ -198,14 +198,190 @@
       "typeVersion": 1,
       "position": [
         -400,
-        32
+        -80
       ],
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "name": "이미지 저장 (wget)"
     },
     {
       "parameters": {
-        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"doctor\";\n  item.json.hero = \"pencil\"\n}\n\nreturn $input.all();"
+        "jsCode": "// stderr에서 저장된 파일 경로 추출\nconst stderr = $input.first().json.stderr || '';\nconst match = stderr.match(/\\/data\\/media\\/(boss_\\d{8}_\\d{6}\\.jpg)/);\nconst filename = match ? match[1] : 'unknown.jpg';\nconst filepath = match ? match[0] : '/data/media/unknown.jpg';\n\n// Insert 노드에서 생성된 row의 id 가져오기\nconst insertedId = $('Insert rows in a table').item.json.id;\n\nreturn [{ json: { id: insertedId, filename, filepath, exitCode: $input.first().json.exitCode } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        -80
+      ],
+      "id": "c1d2e3f4-a5b6-7890-cdef-123456789abc",
+      "name": "파일명 추출"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "bosses",
+          "mode": "list",
+          "cachedResultName": "bosses"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "img_url": "={{ $json.filepath }}",
+            "status": "completed"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "input_boss",
+              "displayName": "input_boss",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "input_hero",
+              "displayName": "input_hero",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "boss_name",
+              "displayName": "boss_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "hero_name",
+              "displayName": "hero_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "boss_description",
+              "displayName": "boss_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "hero_description",
+              "displayName": "hero_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "img_url",
+              "displayName": "img_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        48,
+        -80
+      ],
+      "id": "d2e3f4a5-b6c7-8901-efab-234567890def",
+      "name": "Update img_url",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"snake\";\n  item.json.hero = \"pencil\"\n}\n\nreturn $input.all();"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -492,6 +668,28 @@
           }
         ]
       ]
+    },
+    "이미지 저장 (wget)": {
+      "main": [
+        [
+          {
+            "node": "파일명 추출",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "파일명 추출": {
+      "main": [
+        [
+          {
+            "node": "Update img_url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -500,20 +698,18 @@
     "callerPolicy": "workflowsFromSameOwner"
   },
   "staticData": null,
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
+  "meta": null,
   "pinData": {},
-  "versionId": "7af3f3d7-530f-4b57-ba30-dba801acb50d",
+  "versionId": "f8b09863-d5ca-406c-9940-46e7ed141d1b",
   "activeVersionId": null,
-  "versionCounter": 53,
+  "versionCounter": 7,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-04T07:34:46.943Z",
-      "createdAt": "2026-02-04T07:34:46.943Z",
+      "updatedAt": "2026-02-04T07:54:55.143Z",
+      "createdAt": "2026-02-04T07:54:55.143Z",
       "role": "workflow:owner",
-      "workflowId": "ufqRpt7aZyF7Q6QN",
+      "workflowId": "VmloV78CeAWVYHrJ",
       "projectId": "4DMuQD4mGf90EGQi",
       "project": {
         "updatedAt": "2026-02-04T04:46:43.839Z",
