@@ -7,3 +7,7 @@
 # IDE
 .idea/
 .vscode/
+
+# 생성된 미디어 파일
+media/
+screenshot/

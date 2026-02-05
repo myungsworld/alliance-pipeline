@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-05T04:39:43.775Z",
+  "updatedAt": "2026-02-05T05:03:36.298Z",
   "createdAt": "2026-02-05T04:19:59.368Z",
   "id": "rs1lfJmdbu59jBDI",
   "name": "new-boss",
@@ -24,7 +24,7 @@
         "text": "=INPUTS:\nboss: {{ $json.input_boss }}\nhero: {{ $json.input_hero }}\n\nTASK:\n1. Analyze each input — determine if it's a creature, object, or concept\n2. Transform accordingly:\n   - Living beings → Epic fantasy enhancement\n   - Objects → Anthropomorphized titan/warrior\n   - Concepts → Elemental manifestation\n\n3. Generate boss_description:\n   - If object: humanoid titan form integrating the object's visual essence\n   - If creature: enhanced mythic version with armor and magical presence\n   - Always: 12+ feet tall, overwhelming, eyes fixed on challenger\n\n4. Generate hero_description:\n   - Same transformation logic as boss\n   - Always: seen from behind, battle stance, back to camera\n   - Smaller scale but radiating power and determination\n\n5. Generate location:\n   - Environment that narratively connects both entities\n   - If both are kitchen items → cursed culinary arena\n   - If dragon vs knight → volcanic fortress\n   - If vacuum vs pizza → surreal domestic battlefield turned epic\n\nReturn ONLY the JSON output.",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "=You are a cinematic prompt composer for epic fantasy battle images.\n\nYour task is to transform ANY input (object, creature, profession, concept)\ninto an epic boss or hero character suitable for AAA game cinematics.\n\nTRANSFORMATION RULES:\n\n1. IF input is already a living being (dragon, wolf, wizard, knight, alien):\n   → Enhance into epic fantasy version with armor, magical effects, battle scars\n   → Maintain original form, amplify presence and power\n\n2. IF input is an inanimate object:\n   → Transform into an EPIC ENTITY form that best fits the object's nature\n   → Core visual identity (shape, color, texture) becomes armor/body design\n   → **Object's function becomes weapon/ability**\n   → Add face/eyes, limbs, imposing presence \n   → Consider these approaches ANTHROPOMORPHIZE into (choose creatively):\n   - Titan/Warrior (humanoid with object as armor/weapon)\n   - Beast/Dragon (creature shaped by object's silhouette)\n   - Elemental (pure energy manifestation of object's essence)\n   - Construct/Golem (massive mechanical version)\n   - Swarm (thousands forming one entity)\n   - Chimera (object fused with creature parts)\n\n3. IF input is abstract (love, time, chaos):\n   → Manifest as elemental entity or cosmic being\n   → Visual representation of the concept as a physical warrior\n\nUNIVERSAL RULES:\n- Boss: Always COLOSSAL (12+ feet), overwhelming, dominant\n- Hero: Always battle-ready, determined, powerful but smaller scale\n- Both must feel like they belong in the same epic universe\n- Maintain dramatic, mythic, AAA cinematic tone\n- NO humor, NO parody — treat every subject with epic gravitas\n\nOUTPUT:\n{\n  \"boss_description\": \"detailed visual description...\",\n  \"hero_description\": \"detailed visual description, seen from behind...\",\n  \"location\": \"epic battlefield matching the confrontation's theme...\"\n}"
+          "systemMessage": "=You are a cinematic prompt composer for epic fantasy battle images.\n\nYour task is to transform ANY input (object, creature, profession, concept)\ninto an epic boss or hero character suitable for AAA game cinematics.\n\nTRANSFORMATION RULES:\n\n1. IF input is already a living being (dragon, wolf, wizard, knight, alien):\n   → Enhance into epic fantasy version with armor, magical effects, battle scars\n   → Maintain original form, amplify presence and power\n\n2. IF input is an inanimate object:\n   → Transform into an EPIC ENTITY form that EXPLICITLY retains its original object silhouette.\n   → **Visual Identity:** The character's body must be built FROM the object itself (e.g., a Pencil Hero has a hexagonal wood-textured torso and a graphite-tipped head/weapon).\n   → **Object's function becomes weapon/ability:** Weapons must be literal extensions of the object (e.g., a Pizza Hero uses a pizza cutter axe).\n   → DO NOT turn them into generic humans in armor; they must be \"Object-Humanoids.\"\n\n3. IF input is abstract (love, time, chaos):\n   → Manifest as elemental entity or cosmic being\n   → Visual representation of the concept as a physical warrior\n\n4. Generate hero_description:\n   - Same transformation logic as boss, but MUST visually resemble the input object's literal form.\n   - Example: If 'Pencil', the hero must have a long, slender, wooden-textured body with a graphite spear-hand.\n   - Always: seen from behind, battle stance, back to camera.\n\nUNIVERSAL RULES:\n- Boss: Always COLOSSAL (12+ feet), overwhelming, dominant\n- Hero: Always battle-ready, determined, powerful but smaller scale\n- Both must feel like they belong in the same epic universe\n- Maintain dramatic, mythic, AAA cinematic tone\n- NO humor, NO parody — treat every subject with epic gravitas\n\nOUTPUT:\n{\n  \"boss_description\": \"detailed visual description...\",\n  \"hero_description\": \"detailed visual description, seen from behind...\",\n  \"location\": \"epic battlefield matching the confrontation's theme...\"\n}"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -165,7 +165,7 @@
     },
     {
       "parameters": {
-        "command": "=wget -O \"/data/media/boss_{{ $('Code in JavaScript').item.json.boss.replace(/ /g, '_') }}_hero_{{ $('Code in JavaScript').item.json.hero.replace(/ /g, '_') }}.jpg\" \"{{ $json.output[0] }}\""
+        "command": "=wget -O \"/data/media/boss_{{ $('Update rows in a table1').item.json.id }}_{{ $('Code in JavaScript').item.json.boss.replace(/ /g, '_') }}_vs_{{ $('Code in JavaScript').item.json.hero.replace(/ /g, '_') }}.jpg\" \"{{ $json.output[0] }}\""
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
@@ -183,8 +183,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        560,
-        -8
+        -896,
+        672
       ],
       "id": "c1d2e3f4-a5b6-7890-cdef-123456789abc",
       "name": "파일명 추출"
@@ -340,8 +340,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        784,
-        -8
+        -672,
+        672
       ],
       "id": "d2e3f4a5-b6c7-8901-efab-234567890def",
       "name": "Update img_url",
@@ -354,7 +354,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"snake\";\n  item.json.hero = \"pencil\"\n}\n\nreturn $input.all();"
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"eraser\";\n  item.json.hero = \"pencil\"\n}\n\nreturn $input.all();"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1052,9 +1052,9 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "f30a24f5-6915-4849-8fec-ee30c0ed03a2",
+  "versionId": "ae8feac4-681f-4c70-a94a-f6adac5e5265",
   "activeVersionId": "7cb0d8ec-1265-4fd7-be29-aee89c3fc13e",
-  "versionCounter": 66,
+  "versionCounter": 84,
   "triggerCount": 0,
   "shared": [
     {
