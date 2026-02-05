@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-05T05:16:55.114Z",
+  "updatedAt": "2026-02-05T06:03:46.918Z",
   "createdAt": "2026-02-05T04:19:59.368Z",
   "id": "rs1lfJmdbu59jBDI",
   "name": "new-boss",
@@ -184,7 +184,7 @@
       "typeVersion": 2,
       "position": [
         -1216,
-        224
+        240
       ],
       "id": "c1d2e3f4-a5b6-7890-cdef-123456789abc",
       "name": "파일명 추출"
@@ -341,7 +341,7 @@
       "typeVersion": 2.6,
       "position": [
         -1024,
-        224
+        240
       ],
       "id": "d2e3f4a5-b6c7-8901-efab-234567890def",
       "name": "Update img_url",
@@ -881,11 +881,29 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -800,
-        224
+        -832,
+        304
       ],
       "id": "0fda802c-9c9d-4d38-aaee-7c78ad37aff1",
       "name": "Telegram 이미지 전송"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://remotion:3001/render",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"compositionId\": \"StitchMedia\",\n  \"props\": {\n    \"media\": [\n      { \"type\": \"video\", \"src\": \"{{ $('Update img_url').item.json.template }}\", \"durationInFrames\": 195 },\n      { \"type\": \"image\", \"src\": \"{{ $('Update img_url').item.json.img_url }}\", \"durationInFrames\": 150 }\n    ],\n    \"transition\": \"none\",\n    \"transitionDuration\": 15\n  },\n  \"outputPath\": \"/data/media/final_{{ $('Update img_url').item.json.id }}.mp4\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2256,
+        592
+      ],
+      "id": "cbc960ad-c887-44fb-991d-eae314fdb686",
+      "name": "HTTP Request1"
     }
   ],
   "connections": {
@@ -1074,7 +1092,13 @@
     },
     "Telegram 이미지 전송": {
       "main": [
-        []
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -1086,9 +1110,9 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "07c3b353-414e-4707-a53e-524651c9975e",
+  "versionId": "0d296cb0-2db4-4735-a0fb-3f4238131103",
   "activeVersionId": "7cb0d8ec-1265-4fd7-be29-aee89c3fc13e",
-  "versionCounter": 113,
+  "versionCounter": 136,
   "triggerCount": 0,
   "shared": [
     {
@@ -1113,7 +1137,7 @@
             "userId": "34366922-2686-4aa9-bba2-faca0c87b2b2",
             "projectId": "Pd2AgWCvEle7xN80",
             "user": {
-              "updatedAt": "2026-02-05T05:15:00.000Z",
+              "updatedAt": "2026-02-05T05:39:30.000Z",
               "createdAt": "2026-02-05T04:18:59.653Z",
               "id": "34366922-2686-4aa9-bba2-faca0c87b2b2",
               "email": "myungsworld@gmail.com",

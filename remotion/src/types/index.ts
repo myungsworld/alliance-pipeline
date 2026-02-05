@@ -26,6 +26,23 @@ export interface SlotMachineProps {
 }
 
 // ============================================
+// StitchMedia Composition 타입
+// ============================================
+export type TransitionType = 'crossfade' | 'zoom' | 'slide-left' | 'slide-right' | 'none';
+
+export interface MediaItem {
+  type: 'video' | 'image';
+  src: string;              // 파일 경로 (/data/media/xxx)
+  durationInFrames: number; // 표시 시간 (프레임)
+}
+
+export interface StitchMediaProps {
+  media: MediaItem[];
+  transition?: TransitionType;       // 기본: crossfade
+  transitionDuration?: number;       // 트랜지션 프레임 (기본: 15)
+}
+
+// ============================================
 // 렌더링 요청 타입 (API용)
 // ============================================
 export interface RenderRequest {

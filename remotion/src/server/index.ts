@@ -11,6 +11,17 @@ import { RenderRequest, RenderResponse } from '../types';
 const app = express();
 app.use(express.json());
 
+// CORS 허용 (Remotion 렌더링용)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Range');
+  res.header('Access-Control-Expose-Headers', 'Content-Length, Content-Range');
+  next();
+});
+
+// 미디어 파일 정적 제공 (/data/media/ -> http://localhost:3001/media/)
+app.use('/media', express.static('/data/media'));
+
 const PORT = process.env.PORT || 3001;
 
 // 렌더링 엔드포인트
