@@ -15,14 +15,15 @@ n8n + Telegram + Google Gemini를 활용한 AI 숏폼 콘텐츠 자동 생성 �
 
 ## 기술 스택
 
-| 구성요소          | 기술              |
-| ----------------- | ----------------- |
-| 워크플로우 자동화 | n8n (self-hosted) |
-| 데이터베이스      | PostgreSQL 16     |
-| LLM               | Google Gemini     |
-| 메신저 봇         | Telegram Bot API  |
-| 터널링            | ngrok (Webhook용) |
-| 컨테이너          | Docker Compose    |
+| 구성요소          | 기술                       |
+| ----------------- | -------------------------- |
+| 워크플로우 자동화 | n8n (self-hosted)          |
+| 데이터베이스      | PostgreSQL 16              |
+| LLM               | Google Gemini              |
+| 메신저 봇         | Telegram Bot API           |
+| 터널링            | ngrok (Webhook용)          |
+| 컨테이너          | Docker Compose             |
+| 영상 렌더링       | Remotion (React 기반)      |
 
 ## 빠른 시작
 
@@ -251,6 +252,8 @@ alliance-pipeline/
 │   ├── export-credentials.sh # credentials 내보내기
 │   ├── export-workflow.sh    # 워크플로우 내보내기
 │   └── pre-commit.sh         # git pre-commit hook
+├── remotion/                 # 영상 렌더링 (docs/remotion.md 참조)
+├── docs/                     # 상세 문서
 └── README.md
 ```
 
@@ -261,6 +264,7 @@ alliance-pipeline/
 | n8n            | http://localhost:5678 |
 | ngrok 대시보드 | http://localhost:4040 |
 | PostgreSQL     | localhost:5432        |
+| Remotion 서버  | http://localhost:3001 |
 
 ## 진행 상황
 
@@ -280,6 +284,7 @@ alliance-pipeline/
 - [x] 영상 생성 API 연동 (Replicate minimax/video-01)
 - [x] 캐릭터 일관성 유지 (character_description + visual_hint)
 - [x] 연출 시스템 (situation + reaction_type 분리)
+- [x] Remotion 영상 렌더링 파이프라인 (슬롯머신 인트로)
 
 ### 예정
 

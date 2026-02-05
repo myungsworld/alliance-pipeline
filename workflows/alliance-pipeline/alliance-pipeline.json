@@ -1348,7 +1348,7 @@
   "pinData": null,
   "versionId": "88d1f73c-d0df-4436-a9f5-86ec1b3e98b6",
   "activeVersionId": "88d1f73c-d0df-4436-a9f5-86ec1b3e98b6",
-  "versionCounter": 3,
+  "versionCounter": 4,
   "triggerCount": 2,
   "shared": [
     {
@@ -1373,7 +1373,7 @@
             "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
             "projectId": "4DMuQD4mGf90EGQi",
             "user": {
-              "updatedAt": "2026-02-04T07:34:00.000Z",
+              "updatedAt": "2026-02-05T00:58:08.000Z",
               "createdAt": "2026-02-04T04:46:23.180Z",
               "id": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
               "email": "myungsworld@gmail.com",
@@ -1390,7 +1390,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2026-02-04",
+              "lastActiveAt": "2026-02-05",
               "isPending": false
             }
           }
