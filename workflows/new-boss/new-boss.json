@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-05T05:03:36.298Z",
+  "updatedAt": "2026-02-05T05:16:55.114Z",
   "createdAt": "2026-02-05T04:19:59.368Z",
   "id": "rs1lfJmdbu59jBDI",
   "name": "new-boss",
@@ -13,7 +13,7 @@
       "typeVersion": 1,
       "position": [
         -2256,
-        -8
+        -16
       ],
       "id": "159f34f6-0875-48d9-8e95-990485bd917e",
       "name": "When clicking ‘Execute workflow’"
@@ -73,8 +73,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -1888,
-        688
+        -2064,
+        224
       ],
       "id": "9e92bef8-1f7b-4e5c-8ba1-5ccd30674275",
       "name": "Wait",
@@ -97,8 +97,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1664,
-        688
+        -1872,
+        224
       ],
       "id": "7d224d75-fefa-43b1-944b-af9b703d9913",
       "name": "Replicate 결과 확인1"
@@ -130,8 +130,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1424,
-        688
+        -1648,
+        224
       ],
       "id": "d99301a6-bd80-4275-8b05-262dff732770",
       "name": "이미지 완료?1"
@@ -157,8 +157,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -2064,
-        704
+        -2256,
+        224
       ],
       "id": "1184c40d-0cd4-4a4f-b1d2-ffa90f813e8c",
       "name": "seedream-5"
@@ -170,8 +170,8 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -1184,
-        672
+        -1424,
+        224
       ],
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "name": "이미지 저장 (wget)"
@@ -183,8 +183,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -896,
-        672
+        -1216,
+        224
       ],
       "id": "c1d2e3f4-a5b6-7890-cdef-123456789abc",
       "name": "파일명 추출"
@@ -340,8 +340,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -672,
-        672
+        -1024,
+        224
       ],
       "id": "d2e3f4a5-b6c7-8901-efab-234567890def",
       "name": "Update img_url",
@@ -360,7 +360,7 @@
       "typeVersion": 2,
       "position": [
         -2032,
-        -8
+        -16
       ],
       "id": "e74bac02-99a9-4c28-9044-a6083cde030f",
       "name": "Code in JavaScript"
@@ -516,7 +516,7 @@
       "typeVersion": 2.6,
       "position": [
         -1808,
-        -8
+        -16
       ],
       "id": "4e6dbcf8-6b80-4a77-a8cb-8682d4070b13",
       "name": "Insert rows in a table2",
@@ -540,7 +540,7 @@
       "typeVersion": 4.3,
       "position": [
         -1584,
-        -8
+        -16
       ],
       "id": "bedac695-7572-4645-a991-1162d3bc3950",
       "name": "HTTP Request"
@@ -698,7 +698,7 @@
       "typeVersion": 2.6,
       "position": [
         -1360,
-        -8
+        -16
       ],
       "id": "69050f84-e81a-4cf8-bbbf-a08abcb43467",
       "name": "Update rows in a table",
@@ -857,8 +857,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1904,
-        352
+        -848,
+        -16
       ],
       "id": "b426d26b-d5ac-47d6-b237-d0bb5e819bac",
       "name": "Update rows in a table1",
@@ -868,6 +868,24 @@
           "name": "Postgres account"
         }
       }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOSS_BOT_TOKEN }}/sendPhoto",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\",\n  \"photo\": \"{{ $('Replicate 결과 확인1').item.json.output }}\",\n  \"caption\": \"🎨 {{ $json.input_boss }} vs {{ $json.input_hero }}\",\n  \"reply_markup\": {\n    \"inline_keyboard\": [\n      [\n        {\n          \"text\": \"🎬 영상 생성\",\n          \"callback_data\": \"boss_{{ $json.id }}\"\n        }\n      ]\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -800,
+        224
+      ],
+      "id": "0fda802c-9c9d-4d38-aaee-7c78ad37aff1",
+      "name": "Telegram 이미지 전송"
     }
   ],
   "connections": {
@@ -1042,6 +1060,22 @@
           }
         ]
       ]
+    },
+    "Update img_url": {
+      "main": [
+        [
+          {
+            "node": "Telegram 이미지 전송",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram 이미지 전송": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -1052,9 +1086,9 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "ae8feac4-681f-4c70-a94a-f6adac5e5265",
+  "versionId": "07c3b353-414e-4707-a53e-524651c9975e",
   "activeVersionId": "7cb0d8ec-1265-4fd7-be29-aee89c3fc13e",
-  "versionCounter": 84,
+  "versionCounter": 113,
   "triggerCount": 0,
   "shared": [
     {
@@ -1079,7 +1113,7 @@
             "userId": "34366922-2686-4aa9-bba2-faca0c87b2b2",
             "projectId": "Pd2AgWCvEle7xN80",
             "user": {
-              "updatedAt": "2026-02-05T04:20:55.401Z",
+              "updatedAt": "2026-02-05T05:15:00.000Z",
               "createdAt": "2026-02-05T04:18:59.653Z",
               "id": "34366922-2686-4aa9-bba2-faca0c87b2b2",
               "email": "myungsworld@gmail.com",
