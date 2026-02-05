@@ -14,6 +14,7 @@ AI 기반 숏폼 콘텐츠 자동 생성 파이프라인. n8n 워크플로우로
 1. `remotion/src/compositions/` 아래 폴더 생성
 2. `remotion/src/types/index.ts`에 Props 타입 정의
 3. `remotion/src/Root.tsx`에 Composition 등록
+4. **`docs/remotion.md`에 컴포지션 문서 추가** ← 필수!
 
 ```typescript
 // 새 컴포지션 추가 예시
@@ -27,6 +28,12 @@ AI 기반 숏폼 콘텐츠 자동 생성 파이프라인. n8n 워크플로우로
   defaultProps={{ ... }}
 />
 ```
+
+**현재 구현된 컴포지션:** → 상세 문서: [docs/remotion.md](../docs/remotion.md)
+| ID | 설명 | 주요 Props |
+|----|------|-----------|
+| SlotMachine | 슬롯머신 대결 인트로 | boss, hero, seed |
+| StitchMedia | 미디어 연결 + 트랜지션 | media[], transition, transitionDuration |
 
 ### 미디어 파일 경로 규칙
 
@@ -163,3 +170,12 @@ export interface StitchMediaProps {
 - [ ] 보스전 완성 영상 → Telegram 전송
 - [ ] 트랜지션 스무스함 검증
 - [ ] 서버 배포 (Oracle Cloud)
+
+---
+
+## 문서 업데이트 규칙
+
+새로운 기능 추가 시 업데이트할 문서:
+- **Remotion 컴포지션 추가** → `docs/remotion.md` 컴포지션 목록에 추가
+- **DB 테이블 추가** → 이 문서 작업 히스토리에 기록
+- **워크플로우 추가** → 이 문서 워크플로우 구조에 기록
