@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-05T06:03:46.918Z",
+  "updatedAt": "2026-02-05T07:38:20.718Z",
   "createdAt": "2026-02-05T04:19:59.368Z",
   "id": "rs1lfJmdbu59jBDI",
   "name": "new-boss",
@@ -533,7 +533,7 @@
         "url": "http://remotion:3001/render",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"compositionId\": \"SlotMachine\",\n  \"props\": {\n    \"boss\": \"{{ $json.input_boss }}\",\n    \"hero\": \"{{ $json.input_hero }}\",\n    \"seed\": {{ $now.toMillis() }}\n  },\n  \"outputPath\": \"/data/media/template_{{ $json.id }}.mp4\"\n}",
+        "jsonBody": "={\n  \"compositionId\": \"SlotMachineWithEffect\",\n  \"props\": {\n    \"boss\": \"{{ $json.input_boss }}\",\n    \"hero\": \"{{ $json.input_hero }}\",\n    \"seed\": {{ $now.toMillis() }}\n  },\n  \"outputPath\": \"/data/media/template_{{ $json.id }}.mp4\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -893,7 +893,7 @@
         "url": "http://remotion:3001/render",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"compositionId\": \"StitchMedia\",\n  \"props\": {\n    \"media\": [\n      { \"type\": \"video\", \"src\": \"{{ $('Update img_url').item.json.template }}\", \"durationInFrames\": 195 },\n      { \"type\": \"image\", \"src\": \"{{ $('Update img_url').item.json.img_url }}\", \"durationInFrames\": 150 }\n    ],\n    \"transition\": \"none\",\n    \"transitionDuration\": 15\n  },\n  \"outputPath\": \"/data/media/final_{{ $('Update img_url').item.json.id }}.mp4\"\n}",
+        "jsonBody": "={\n  \"compositionId\": \"StitchMedia\",\n  \"props\": {\n    \"media\": [\n      { \"type\": \"video\", \"src\": \"{{ $('Update img_url').item.json.template }}\", \"durationInFrames\": 240 },\n      { \"type\": \"image\", \"src\": \"{{ $('Update img_url').item.json.img_url }}\", \"durationInFrames\": 150 }\n    ],\n    \"transition\": \"none\",\n    \"transitionDuration\": 15\n  },\n  \"outputPath\": \"/data/media/final_{{ $('Update img_url').item.json.id }}.mp4\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -904,6 +904,24 @@
       ],
       "id": "cbc960ad-c887-44fb-991d-eae314fdb686",
       "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://remotion:3001/render",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"compositionId\": \"StitchMedia\",\n  \"props\": {\n    \"media\": [\n      { \"type\": \"video\", \"src\": \"/data/media/template_6.mp4\", \"durationInFrames\": 240 },\n      { \"type\": \"image\", \"src\": \"/data/media/boss_5_eraser_vs_pencil.jpg\", \"durationInFrames\": 150 }\n    ],\n    \"transition\": \"none\",\n    \"transitionDuration\": 15\n  },\n  \"outputPath\": \"/data/media/final_{{ $('Update img_url').item.json.id }}.mp4\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2160,
+        784
+      ],
+      "id": "4576f7a6-9af3-46a8-934d-02614272f422",
+      "name": "HTTP Request2"
     }
   ],
   "connections": {
@@ -1110,9 +1128,9 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "0d296cb0-2db4-4735-a0fb-3f4238131103",
+  "versionId": "25ee2764-215a-4332-a348-4b9947569351",
   "activeVersionId": "7cb0d8ec-1265-4fd7-be29-aee89c3fc13e",
-  "versionCounter": 136,
+  "versionCounter": 146,
   "triggerCount": 0,
   "shared": [
     {

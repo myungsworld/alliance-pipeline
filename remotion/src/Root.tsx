@@ -4,6 +4,7 @@
 // ============================================
 import { Composition } from 'remotion';
 import { SlotMachine } from './compositions/SlotMachine';
+import { SlotMachineWithEffect, SLOT_MACHINE_WITH_EFFECT_DURATION } from './compositions/SlotMachineWithEffect';
 import { StitchMedia, calculateTotalDuration } from './compositions/StitchMedia';
 import { DEFAULT_VIDEO_CONFIG, StitchMediaProps } from './types';
 
@@ -15,6 +16,21 @@ export const RemotionRoot: React.FC = () => {
         id="SlotMachine"
         component={SlotMachine as unknown as React.FC<Record<string, unknown>>}
         durationInFrames={DEFAULT_VIDEO_CONFIG.durationInFrames}
+        fps={DEFAULT_VIDEO_CONFIG.fps}
+        width={DEFAULT_VIDEO_CONFIG.width}
+        height={DEFAULT_VIDEO_CONFIG.height}
+        defaultProps={{
+          boss: "Monday Morning",
+          hero: "Coffee Cup",
+          seed: 12345,
+        }}
+      />
+
+      {/* 슬롯머신 + 줌인 페이드아웃 (다음 장면 연결용) */}
+      <Composition
+        id="SlotMachineWithEffect"
+        component={SlotMachineWithEffect as unknown as React.FC<Record<string, unknown>>}
+        durationInFrames={SLOT_MACHINE_WITH_EFFECT_DURATION}
         fps={DEFAULT_VIDEO_CONFIG.fps}
         width={DEFAULT_VIDEO_CONFIG.width}
         height={DEFAULT_VIDEO_CONFIG.height}
