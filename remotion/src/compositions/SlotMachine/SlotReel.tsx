@@ -12,6 +12,7 @@ interface SlotReelProps {
   startFrame: number;        // 애니메이션 시작 프레임
   duration: number;          // 회전 지속 프레임
   type: 'boss' | 'hero';     // 스타일 구분
+  seed?: number;             // 셔플용 시드 (외부에서 전달)
 }
 
 // 시드 기반 랜덤 셔플 함수
@@ -50,18 +51,21 @@ export const SlotReel: React.FC<SlotReelProps> = ({
   startFrame,
   duration,
   type,
+  seed: externalSeed,
 }) => {
   const frame = useCurrentFrame();
 
   // 릴 아이템들 생성 (랜덤 셔플 + 최종값)
   // useMemo로 매 프레임마다 다시 셔플되지 않도록 함
   const reelItems = useMemo(() => {
-    const seed = stringToSeed(finalValue + type);
+    // 외부 시드가 있으면 사용, 없으면 기존 방식
+    const baseSeed = externalSeed ?? stringToSeed(finalValue);
+    const seed = baseSeed + stringToSeed(type);
     const shuffled1 = seededShuffle(items, seed);
     const shuffled2 = seededShuffle(items, seed + 1);
     const shuffled3 = seededShuffle(items, seed + 2);
     return [...shuffled1, ...shuffled2, ...shuffled3, finalValue];
-  }, [items, finalValue, type]);
+  }, [items, finalValue, type, externalSeed]);
 
   const finalIndex = reelItems.length - 1;
 
@@ -84,17 +88,21 @@ export const SlotReel: React.FC<SlotReelProps> = ({
   // 애니메이션 완료 여부
   const isComplete = frame >= startFrame + duration;
 
+  // 타입별 색상 (항상 적용)
+  const typeColor = type === 'boss' ? COLORS.glowBoss : COLORS.glowHero;
+  const glowRgba = type === 'boss' ? 'rgba(255,68,68,0.5)' : 'rgba(68,170,255,0.5)';
+
   return (
     <div style={{
       height: 100,
       overflow: 'hidden',
       background: COLORS.slotBg,
       borderRadius: 15,
-      border: `4px solid ${isComplete ? COLORS.gold : '#444'}`,
+      border: `4px solid ${typeColor}`,
       position: 'relative',
       boxShadow: isComplete
-        ? `inset 0 0 30px rgba(0,0,0,0.9), 0 0 30px rgba(255,215,0,0.5)`
-        : 'inset 0 0 30px rgba(0,0,0,0.9)',
+        ? `inset 0 0 30px rgba(0,0,0,0.9), 0 0 30px ${glowRgba}`
+        : `inset 0 0 30px rgba(0,0,0,0.9), 0 0 10px ${glowRgba}`,
     }}>
       {/* 릴 컨테이너 */}
       <div style={{
@@ -112,9 +120,9 @@ export const SlotReel: React.FC<SlotReelProps> = ({
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: isComplete && idx === finalIndex ? 24 : 20,
-              color: isComplete && idx === finalIndex ? COLORS.gold : '#fff',
+              color: isComplete && idx === finalIndex ? typeColor : '#fff',
               textShadow: isComplete && idx === finalIndex
-                ? `0 0 15px ${COLORS.gold}`
+                ? `0 0 15px ${typeColor}`
                 : '0 0 8px rgba(255,255,255,0.5)',
               whiteSpace: 'nowrap',
               padding: '0 15px',

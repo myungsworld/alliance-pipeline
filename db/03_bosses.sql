@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS bosses (
     boss_description TEXT,
     hero_description TEXT,
     location TEXT,
+    template TEXT,
 
     -- 생성된 이미지 URL
     img_url TEXT,

@@ -13,7 +13,7 @@ export const DEFAULT_VIDEO_CONFIG: VideoConfig = {
   width: 1080,
   height: 1920,
   fps: 30,
-  durationInFrames: 150, // 5초
+  durationInFrames: 195, // 6.5초
 };
 
 // ============================================
@@ -22,6 +22,7 @@ export const DEFAULT_VIDEO_CONFIG: VideoConfig = {
 export interface SlotMachineProps {
   boss: string;
   hero: string;
+  seed?: number;  // 슬롯 셔플용 시드 (n8n에서 timestamp 등 전달)
 }
 
 // ============================================

@@ -19,6 +19,7 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{
           boss: "Monday Morning",
           hero: "Coffee Cup",
+          seed: 12345,  // 로컬 프리뷰용 기본값 (n8n에서 timestamp 전달)
         }}
       />
       {/* 나중에 다른 컴포지션 추가 */}

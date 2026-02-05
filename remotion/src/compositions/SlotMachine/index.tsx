@@ -7,14 +7,13 @@ import { SlotReel } from './SlotReel';
 import { COLORS, TIMING, BOSS_OPTIONS, HERO_OPTIONS } from './config';
 import { SlotMachineProps } from '../../types';
 
-export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero }) => {
+export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero, seed }) => {
   const frame = useCurrentFrame();
 
   // ========== 타이밍 계산 ==========
   const bossStartFrame = 30;  // 1초 후 시작
   const heroStartFrame = bossStartFrame + TIMING.heroDelay;
   const heroEndFrame = heroStartFrame + TIMING.bossSpinDuration + TIMING.heroExtraTime;
-  const resultShowFrame = heroEndFrame + TIMING.resultDelay;
 
   // ========== 애니메이션 값들 ==========
   // 타이틀 페이드인
@@ -40,24 +39,6 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero }) => {
     [0, 12, 24],
     [1, 1.15, 1],
     { extrapolateRight: 'clamp' }
-  );
-
-  // 결과 표시 애니메이션
-  const resultOpacity = interpolate(
-    frame,
-    [resultShowFrame, resultShowFrame + 18],
-    [0, 1],
-    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
-  );
-  const resultScale = interpolate(
-    frame,
-    [resultShowFrame, resultShowFrame + 18],
-    [0.8, 1],
-    {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-      easing: Easing.out(Easing.back(1.5)),
-    }
   );
 
   // 완료 후 플래시 효과
@@ -130,6 +111,7 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero }) => {
               startFrame={bossStartFrame}
               duration={TIMING.bossSpinDuration}
               type="boss"
+              seed={seed}
             />
           </div>
 
@@ -152,6 +134,7 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero }) => {
               startFrame={heroStartFrame}
               duration={TIMING.bossSpinDuration + TIMING.heroExtraTime}
               type="hero"
+              seed={seed}
             />
           </div>
         </div>
@@ -159,27 +142,6 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero }) => {
         {/* 하단 조명 */}
         <div style={{ marginTop: 25 }}>
           <Lights frame={frame} />
-        </div>
-      </div>
-
-      {/* 결과 텍스트 */}
-      <div style={{
-        marginTop: 40,
-        textAlign: 'center',
-        opacity: resultOpacity,
-        transform: `scale(${resultScale})`,
-      }}>
-        <div style={{ fontSize: 24, color: '#fff', letterSpacing: 3 }}>
-          Today's Battle
-        </div>
-        <div style={{
-          fontSize: 40,
-          color: COLORS.gold,
-          marginTop: 15,
-          textShadow: `0 0 20px ${COLORS.gold}`,
-          fontWeight: 'bold',
-        }}>
-          {boss} vs {hero}
         </div>
       </div>
     </AbsoluteFill>

@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-04T08:13:16.997Z",
-  "createdAt": "2026-02-04T08:13:16.997Z",
-  "id": "xl9ISwsA4fPie67i",
+  "updatedAt": "2026-02-05T04:19:59.258Z",
+  "createdAt": "2026-02-05T04:19:59.258Z",
+  "id": "RzsVaOUZKFeMUZnQ",
   "name": "nomad",
   "description": null,
   "active": true,
@@ -382,42 +382,42 @@
   "staticData": null,
   "meta": null,
   "pinData": null,
-  "versionId": "d0afe688-d6c3-4db7-b816-4795436911c3",
-  "activeVersionId": "d0afe688-d6c3-4db7-b816-4795436911c3",
-  "versionCounter": 4,
+  "versionId": "3bd7f48f-3541-4331-a6e2-734e1a592316",
+  "activeVersionId": "3bd7f48f-3541-4331-a6e2-734e1a592316",
+  "versionCounter": 3,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-04T08:13:16.998Z",
-      "createdAt": "2026-02-04T08:13:16.998Z",
+      "updatedAt": "2026-02-05T04:19:59.259Z",
+      "createdAt": "2026-02-05T04:19:59.259Z",
       "role": "workflow:owner",
-      "workflowId": "xl9ISwsA4fPie67i",
-      "projectId": "4DMuQD4mGf90EGQi",
+      "workflowId": "RzsVaOUZKFeMUZnQ",
+      "projectId": "Pd2AgWCvEle7xN80",
       "project": {
-        "updatedAt": "2026-02-04T04:46:43.839Z",
-        "createdAt": "2026-02-04T04:46:23.298Z",
-        "id": "4DMuQD4mGf90EGQi",
+        "updatedAt": "2026-02-05T04:19:20.550Z",
+        "createdAt": "2026-02-05T04:18:59.793Z",
+        "id": "Pd2AgWCvEle7xN80",
         "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
+        "creatorId": "34366922-2686-4aa9-bba2-faca0c87b2b2",
         "projectRelations": [
           {
-            "updatedAt": "2026-02-04T04:46:23.298Z",
-            "createdAt": "2026-02-04T04:46:23.298Z",
-            "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
-            "projectId": "4DMuQD4mGf90EGQi",
+            "updatedAt": "2026-02-05T04:18:59.793Z",
+            "createdAt": "2026-02-05T04:18:59.793Z",
+            "userId": "34366922-2686-4aa9-bba2-faca0c87b2b2",
+            "projectId": "Pd2AgWCvEle7xN80",
             "user": {
-              "updatedAt": "2026-02-05T00:58:08.000Z",
-              "createdAt": "2026-02-04T04:46:23.180Z",
-              "id": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
+              "updatedAt": "2026-02-05T04:20:55.401Z",
+              "createdAt": "2026-02-05T04:18:59.653Z",
+              "id": "34366922-2686-4aa9-bba2-faca0c87b2b2",
               "email": "myungsworld@gmail.com",
               "firstName": "동명",
               "lastName": "myungsworld@gmail.com",
               "personalizationAnswers": {
                 "version": "v4",
-                "personalization_survey_submitted_at": "2026-02-04T04:46:45.730Z",
+                "personalization_survey_submitted_at": "2026-02-05T04:19:22.722Z",
                 "personalization_survey_n8n_version": "2.4.5"
               },
               "settings": {
@@ -436,10 +436,10 @@
   ],
   "tags": [],
   "activeVersion": {
-    "updatedAt": "2026-02-04T08:13:17.000Z",
-    "createdAt": "2026-02-04T08:13:17.000Z",
-    "versionId": "d0afe688-d6c3-4db7-b816-4795436911c3",
-    "workflowId": "xl9ISwsA4fPie67i",
+    "updatedAt": "2026-02-05T04:19:59.260Z",
+    "createdAt": "2026-02-05T04:19:59.260Z",
+    "versionId": "3bd7f48f-3541-4331-a6e2-734e1a592316",
+    "workflowId": "RzsVaOUZKFeMUZnQ",
     "nodes": [
       {
         "parameters": {},
@@ -814,12 +814,12 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-02-04T08:13:17.200Z",
+        "createdAt": "2026-02-05T04:19:59.558Z",
         "id": 2,
-        "workflowId": "xl9ISwsA4fPie67i",
-        "versionId": "d0afe688-d6c3-4db7-b816-4795436911c3",
+        "workflowId": "RzsVaOUZKFeMUZnQ",
+        "versionId": "3bd7f48f-3541-4331-a6e2-734e1a592316",
         "event": "activated",
-        "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6"
+        "userId": "34366922-2686-4aa9-bba2-faca0c87b2b2"
       }
     ]
   }

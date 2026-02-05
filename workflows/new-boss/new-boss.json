@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-05T01:59:30.176Z",
-  "createdAt": "2026-02-04T08:13:17.075Z",
-  "id": "rgtNFCZRcKne1sh7",
+  "updatedAt": "2026-02-05T04:39:43.775Z",
+  "createdAt": "2026-02-05T04:19:59.368Z",
+  "id": "rs1lfJmdbu59jBDI",
   "name": "new-boss",
   "description": null,
   "active": true,
@@ -13,7 +13,7 @@
       "typeVersion": 1,
       "position": [
         -2256,
-        -64
+        -8
       ],
       "id": "159f34f6-0875-48d9-8e95-990485bd917e",
       "name": "When clicking ‘Execute workflow’"
@@ -21,17 +21,17 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=INPUTS:\nboss: {{ $json.boss }}\nhero: {{ $json.hero }}\n\nTASK:\n1. Analyze each input — determine if it's a creature, object, or concept\n2. Transform accordingly:\n   - Living beings → Epic fantasy enhancement\n   - Objects → Anthropomorphized titan/warrior\n   - Concepts → Elemental manifestation\n\n3. Generate boss_description:\n   - If object: humanoid titan form integrating the object's visual essence\n   - If creature: enhanced mythic version with armor and magical presence\n   - Always: 12+ feet tall, overwhelming, eyes fixed on challenger\n\n4. Generate hero_description:\n   - Same transformation logic as boss\n   - Always: seen from behind, battle stance, back to camera\n   - Smaller scale but radiating power and determination\n\n5. Generate location:\n   - Environment that narratively connects both entities\n   - If both are kitchen items → cursed culinary arena\n   - If dragon vs knight → volcanic fortress\n   - If vacuum vs pizza → surreal domestic battlefield turned epic\n\nReturn ONLY the JSON output.",
+        "text": "=INPUTS:\nboss: {{ $json.input_boss }}\nhero: {{ $json.input_hero }}\n\nTASK:\n1. Analyze each input — determine if it's a creature, object, or concept\n2. Transform accordingly:\n   - Living beings → Epic fantasy enhancement\n   - Objects → Anthropomorphized titan/warrior\n   - Concepts → Elemental manifestation\n\n3. Generate boss_description:\n   - If object: humanoid titan form integrating the object's visual essence\n   - If creature: enhanced mythic version with armor and magical presence\n   - Always: 12+ feet tall, overwhelming, eyes fixed on challenger\n\n4. Generate hero_description:\n   - Same transformation logic as boss\n   - Always: seen from behind, battle stance, back to camera\n   - Smaller scale but radiating power and determination\n\n5. Generate location:\n   - Environment that narratively connects both entities\n   - If both are kitchen items → cursed culinary arena\n   - If dragon vs knight → volcanic fortress\n   - If vacuum vs pizza → surreal domestic battlefield turned epic\n\nReturn ONLY the JSON output.",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "=You are a cinematic prompt composer for epic fantasy battle images.\n\nYour task is to transform ANY input (object, creature, profession, concept)\ninto an epic boss or hero character suitable for AAA game cinematics.\n\nTRANSFORMATION RULES:\n\n1. IF input is already a living being (dragon, wolf, wizard, knight, alien):\n   → Enhance into epic fantasy version with armor, magical effects, battle scars\n   → Maintain original form, amplify presence and power\n\n2. IF input is an inanimate object:\n   → Transform into an EPIC ENTITY form that best fits the object's nature\n   → Core visual identity (shape, color, texture) becomes armor/body design\n   → Object's function becomes weapon/ability\n   → Add face/eyes, limbs, imposing presence \n   → Consider these approaches ANTHROPOMORPHIZE into (choose creatively):\n   - Titan/Warrior (humanoid with object as armor/weapon)\n   - Beast/Dragon (creature shaped by object's silhouette)\n   - Elemental (pure energy manifestation of object's essence)\n   - Construct/Golem (massive mechanical version)\n   - Swarm (thousands forming one entity)\n   - Chimera (object fused with creature parts)\n\n3. IF input is abstract (love, time, chaos):\n   → Manifest as elemental entity or cosmic being\n   → Visual representation of the concept as a physical warrior\n\nUNIVERSAL RULES:\n- Boss: Always COLOSSAL (12+ feet), overwhelming, dominant\n- Hero: Always battle-ready, determined, powerful but smaller scale\n- Both must feel like they belong in the same epic universe\n- Maintain dramatic, mythic, AAA cinematic tone\n- NO humor, NO parody — treat every subject with epic gravitas\n\nOUTPUT:\n{\n  \"boss_description\": \"detailed visual description...\",\n  \"hero_description\": \"detailed visual description, seen from behind...\",\n  \"location\": \"epic battlefield matching the confrontation's theme...\"\n}"
+          "systemMessage": "=You are a cinematic prompt composer for epic fantasy battle images.\n\nYour task is to transform ANY input (object, creature, profession, concept)\ninto an epic boss or hero character suitable for AAA game cinematics.\n\nTRANSFORMATION RULES:\n\n1. IF input is already a living being (dragon, wolf, wizard, knight, alien):\n   → Enhance into epic fantasy version with armor, magical effects, battle scars\n   → Maintain original form, amplify presence and power\n\n2. IF input is an inanimate object:\n   → Transform into an EPIC ENTITY form that best fits the object's nature\n   → Core visual identity (shape, color, texture) becomes armor/body design\n   → **Object's function becomes weapon/ability**\n   → Add face/eyes, limbs, imposing presence \n   → Consider these approaches ANTHROPOMORPHIZE into (choose creatively):\n   - Titan/Warrior (humanoid with object as armor/weapon)\n   - Beast/Dragon (creature shaped by object's silhouette)\n   - Elemental (pure energy manifestation of object's essence)\n   - Construct/Golem (massive mechanical version)\n   - Swarm (thousands forming one entity)\n   - Chimera (object fused with creature parts)\n\n3. IF input is abstract (love, time, chaos):\n   → Manifest as elemental entity or cosmic being\n   → Visual representation of the concept as a physical warrior\n\nUNIVERSAL RULES:\n- Boss: Always COLOSSAL (12+ feet), overwhelming, dominant\n- Hero: Always battle-ready, determined, powerful but smaller scale\n- Both must feel like they belong in the same epic universe\n- Maintain dramatic, mythic, AAA cinematic tone\n- NO humor, NO parody — treat every subject with epic gravitas\n\nOUTPUT:\n{\n  \"boss_description\": \"detailed visual description...\",\n  \"hero_description\": \"detailed visual description, seen from behind...\",\n  \"location\": \"epic battlefield matching the confrontation's theme...\"\n}"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -1824,
-        -64
+        -1152,
+        -16
       ],
       "id": "e0e12113-3697-4223-83d3-c93a95bab98f",
       "name": "AI Agent"
@@ -43,8 +43,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        -1888,
-        144
+        -1152,
+        -272
       ],
       "id": "09183359-45fc-40e0-a828-6092fba33cda",
       "name": "Google Gemini Chat Model",
@@ -62,8 +62,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        -1632,
-        144
+        -1008,
+        -272
       ],
       "id": "63ff266f-71b2-4c91-bcdb-7795476cfa5a",
       "name": "Structured Output Parser"
@@ -73,8 +73,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -1040,
-        -64
+        -1888,
+        688
       ],
       "id": "9e92bef8-1f7b-4e5c-8ba1-5ccd30674275",
       "name": "Wait",
@@ -97,8 +97,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -816,
-        -80
+        -1664,
+        688
       ],
       "id": "7d224d75-fefa-43b1-944b-af9b703d9913",
       "name": "Replicate 결과 확인1"
@@ -130,8 +130,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -608,
-        -80
+        -1424,
+        688
       ],
       "id": "d99301a6-bd80-4275-8b05-262dff732770",
       "name": "이미지 완료?1"
@@ -157,8 +157,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -1248,
-        -64
+        -2064,
+        704
       ],
       "id": "1184c40d-0cd4-4a4f-b1d2-ffa90f813e8c",
       "name": "seedream-5"
@@ -170,21 +170,21 @@
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
-        -400,
-        -80
+        -1184,
+        672
       ],
       "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
       "name": "이미지 저장 (wget)"
     },
     {
       "parameters": {
-        "jsCode": "// stderr에서 저장된 파일 경로 추출\nconst stderr = $input.first().json.stderr || '';\nconst match = stderr.match(/\\/data\\/media\\/(boss_[^']+\\.jpg)/);\nconst filename = match ? match[1] : 'unknown.jpg';\nconst filepath = match ? match[0] : '/data/media/unknown.jpg';\n\n// Insert 노드에서 생성된 row의 id 가져오기\nconst insertedId = $('Insert rows in a table').item.json.id;\n\nreturn [{ json: { id: insertedId, filename, filepath, exitCode: $input.first().json.exitCode } }];"
+        "jsCode": "// stderr에서 저장된 파일 경로 추출\nconst stderr = $input.first().json.stderr || '';\nconst match = stderr.match(/\\/data\\/media\\/(boss_[^']+\\.jpg)/);\nconst filename = match ? match[1] : 'unknown.jpg';\nconst filepath = match ? match[0] : '/data/media/unknown.jpg';\n\n// Insert 노드에서 생성된 row의 id 가져오기\nconst insertedId = $('Update rows in a table1').item.json.id;\n\nreturn [{ json: { id: insertedId, filename, filepath, exitCode: $input.first().json.exitCode } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -176,
-        -80
+        560,
+        -8
       ],
       "id": "c1d2e3f4-a5b6-7890-cdef-123456789abc",
       "name": "파일명 추출"
@@ -340,8 +340,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        48,
-        -80
+        784,
+        -8
       ],
       "id": "d2e3f4a5-b6c7-8901-efab-234567890def",
       "name": "Update img_url",
@@ -359,8 +359,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -2048,
-        -64
+        -2032,
+        -8
       ],
       "id": "e74bac02-99a9-4c28-9044-a6083cde030f",
       "name": "Code in JavaScript"
@@ -381,11 +381,8 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "input_boss": "={{ $('Code in JavaScript').item.json.boss }}",
-            "input_hero": "={{ $('Code in JavaScript').item.json.hero }}",
-            "boss_description": "={{ $json.output.boss_description }}",
-            "hero_description": "={{ $json.output.hero_description }}",
-            "location": "={{ $json.output.location }}"
+            "input_boss": "={{ $json.boss }}",
+            "input_hero": "={{ $json.hero }}"
           },
           "matchingColumns": [
             "id"
@@ -400,6 +397,355 @@
               "type": "number",
               "canBeUsedToMatch": true,
               "removed": true
+            },
+            {
+              "id": "input_boss",
+              "displayName": "input_boss",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "input_hero",
+              "displayName": "input_hero",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "boss_name",
+              "displayName": "boss_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "hero_name",
+              "displayName": "hero_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "boss_description",
+              "displayName": "boss_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "hero_description",
+              "displayName": "hero_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "template",
+              "displayName": "template",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "img_url",
+              "displayName": "img_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1808,
+        -8
+      ],
+      "id": "4e6dbcf8-6b80-4a77-a8cb-8682d4070b13",
+      "name": "Insert rows in a table2",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://remotion:3001/render",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"compositionId\": \"SlotMachine\",\n  \"props\": {\n    \"boss\": \"{{ $json.input_boss }}\",\n    \"hero\": \"{{ $json.input_hero }}\",\n    \"seed\": {{ $now.toMillis() }}\n  },\n  \"outputPath\": \"/data/media/template_{{ $json.id }}.mp4\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1584,
+        -8
+      ],
+      "id": "bedac695-7572-4645-a991-1162d3bc3950",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "bosses",
+          "mode": "list",
+          "cachedResultName": "bosses"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "input_boss": "={{ $('Insert rows in a table2').item.json.input_boss }}",
+            "input_hero": "={{ $('Insert rows in a table2').item.json.input_hero }}",
+            "id": "={{ $('Insert rows in a table2').item.json.id }}",
+            "template": "={{ $json.outputPath }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "input_boss",
+              "displayName": "input_boss",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "input_hero",
+              "displayName": "input_hero",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "boss_name",
+              "displayName": "boss_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "hero_name",
+              "displayName": "hero_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "boss_description",
+              "displayName": "boss_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "hero_description",
+              "displayName": "hero_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "template",
+              "displayName": "template",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "img_url",
+              "displayName": "img_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1360,
+        -8
+      ],
+      "id": "69050f84-e81a-4cf8-bbbf-a08abcb43467",
+      "name": "Update rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "ZwpbCKcvAHS9Ywfz",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "bosses",
+          "mode": "list",
+          "cachedResultName": "bosses"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "input_boss": "={{ $('Code in JavaScript').item.json.boss }}",
+            "input_hero": "={{ $('Code in JavaScript').item.json.hero }}",
+            "boss_description": "={{ $json.output.boss_description }}",
+            "hero_description": "={{ $json.output.hero_description }}",
+            "location": "={{ $json.output.location }}",
+            "id": "={{ $('Insert rows in a table2').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "input_boss",
@@ -511,11 +857,11 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1472,
-        -64
+        -1904,
+        352
       ],
       "id": "b426d26b-d5ac-47d6-b237-d0bb5e819bac",
-      "name": "Insert rows in a table",
+      "name": "Update rows in a table1",
       "credentials": {
         "postgres": {
           "id": "ZwpbCKcvAHS9Ywfz",
@@ -540,7 +886,7 @@
       "main": [
         [
           {
-            "node": "Insert rows in a table",
+            "node": "Update rows in a table1",
             "type": "main",
             "index": 0
           }
@@ -624,18 +970,7 @@
       "main": [
         [
           {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Insert rows in a table": {
-      "main": [
-        [
-          {
-            "node": "seedream-5",
+            "node": "Insert rows in a table2",
             "type": "main",
             "index": 0
           }
@@ -663,6 +998,50 @@
           }
         ]
       ]
+    },
+    "Insert rows in a table2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update rows in a table": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update rows in a table1": {
+      "main": [
+        [
+          {
+            "node": "seedream-5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -673,42 +1052,42 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "704c52d4-5d1d-4d8a-a8ef-899cd05294eb",
-  "activeVersionId": "b7243e4e-7493-4d59-9e63-ad734ec33ff8",
-  "versionCounter": 5,
+  "versionId": "f30a24f5-6915-4849-8fec-ee30c0ed03a2",
+  "activeVersionId": "7cb0d8ec-1265-4fd7-be29-aee89c3fc13e",
+  "versionCounter": 66,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-04T08:13:17.076Z",
-      "createdAt": "2026-02-04T08:13:17.076Z",
+      "updatedAt": "2026-02-05T04:19:59.369Z",
+      "createdAt": "2026-02-05T04:19:59.369Z",
       "role": "workflow:owner",
-      "workflowId": "rgtNFCZRcKne1sh7",
-      "projectId": "4DMuQD4mGf90EGQi",
+      "workflowId": "rs1lfJmdbu59jBDI",
+      "projectId": "Pd2AgWCvEle7xN80",
       "project": {
-        "updatedAt": "2026-02-04T04:46:43.839Z",
-        "createdAt": "2026-02-04T04:46:23.298Z",
-        "id": "4DMuQD4mGf90EGQi",
+        "updatedAt": "2026-02-05T04:19:20.550Z",
+        "createdAt": "2026-02-05T04:18:59.793Z",
+        "id": "Pd2AgWCvEle7xN80",
         "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
+        "creatorId": "34366922-2686-4aa9-bba2-faca0c87b2b2",
         "projectRelations": [
           {
-            "updatedAt": "2026-02-04T04:46:23.298Z",
-            "createdAt": "2026-02-04T04:46:23.298Z",
-            "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
-            "projectId": "4DMuQD4mGf90EGQi",
+            "updatedAt": "2026-02-05T04:18:59.793Z",
+            "createdAt": "2026-02-05T04:18:59.793Z",
+            "userId": "34366922-2686-4aa9-bba2-faca0c87b2b2",
+            "projectId": "Pd2AgWCvEle7xN80",
             "user": {
-              "updatedAt": "2026-02-05T00:58:08.000Z",
-              "createdAt": "2026-02-04T04:46:23.180Z",
-              "id": "016b1826-8ee1-45b4-86f7-314dfd4471c6",
+              "updatedAt": "2026-02-05T04:20:55.401Z",
+              "createdAt": "2026-02-05T04:18:59.653Z",
+              "id": "34366922-2686-4aa9-bba2-faca0c87b2b2",
               "email": "myungsworld@gmail.com",
               "firstName": "동명",
               "lastName": "myungsworld@gmail.com",
               "personalizationAnswers": {
                 "version": "v4",
-                "personalization_survey_submitted_at": "2026-02-04T04:46:45.730Z",
+                "personalization_survey_submitted_at": "2026-02-05T04:19:22.722Z",
                 "personalization_survey_n8n_version": "2.4.5"
               },
               "settings": {
@@ -727,10 +1106,10 @@
   ],
   "tags": [],
   "activeVersion": {
-    "updatedAt": "2026-02-04T08:13:17.078Z",
-    "createdAt": "2026-02-04T08:13:17.078Z",
-    "versionId": "b7243e4e-7493-4d59-9e63-ad734ec33ff8",
-    "workflowId": "rgtNFCZRcKne1sh7",
+    "updatedAt": "2026-02-05T04:19:59.371Z",
+    "createdAt": "2026-02-05T04:19:59.371Z",
+    "versionId": "7cb0d8ec-1265-4fd7-be29-aee89c3fc13e",
+    "workflowId": "rs1lfJmdbu59jBDI",
     "nodes": [
       {
         "parameters": {},
@@ -792,33 +1171,6 @@
         ],
         "id": "63ff266f-71b2-4c91-bcdb-7795476cfa5a",
         "name": "Structured Output Parser"
-      },
-      {
-        "parameters": {
-          "method": "POST",
-          "url": "https://api.replicate.com/v1/models/bytedance/seedance-1-pro-fast/predictions",
-          "sendHeaders": true,
-          "headerParameters": {
-            "parameters": [
-              {
-                "name": "Authorization",
-                "value": "=Bearer {{ $env.REPLICATE_API_TOKEN }}"
-              }
-            ]
-          },
-          "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "={\n\t\"input\": {\n      \"fps\": 24,\n      \"image\": \"{{ $json.output[0] }}\",\n      \"prompt\": \"The couple stand in a grand palace hallare walking forward at a very slow, confident, ceremonial pace, almost like slow motion. They walk straight toward the camera in a steady, graceful manner, with elegant posture. They do NOT look at the camera; instead, their gaze moves slightly around the environment, as if entering an important royal event or ballroom filled with people. The noblewoman's face remains perfectly composed and steady, with no sudden movements or exaggerated expressions. The animal maintains a dignified, controlled walk, matching the rhythm of the noblewoman while keeping a formal and respectful distance. Their clothing moves subtly with each step, showing realistic weight and fabric motion. The lighting is dramatic and warm, with reflections from chandeliers and polished marble floors, matching the palace environment in the image. Ultra-smooth camera motion, cinematic depth of field.\"\n\t}\n}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          -704,
-          368
-        ],
-        "id": "9a36824d-777a-4ad8-9ddf-44b95639a001",
-        "name": "HTTP Request1"
       },
       {
         "parameters": {},
@@ -1423,12 +1775,12 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-02-04T08:13:21.025Z",
+        "createdAt": "2026-02-05T04:20:01.428Z",
         "id": 4,
-        "workflowId": "rgtNFCZRcKne1sh7",
-        "versionId": "b7243e4e-7493-4d59-9e63-ad734ec33ff8",
+        "workflowId": "rs1lfJmdbu59jBDI",
+        "versionId": "7cb0d8ec-1265-4fd7-be29-aee89c3fc13e",
         "event": "activated",
-        "userId": "016b1826-8ee1-45b4-86f7-314dfd4471c6"
+        "userId": "34366922-2686-4aa9-bba2-faca0c87b2b2"
       }
     ]
   }
