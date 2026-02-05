@@ -6,6 +6,11 @@ import { Composition } from 'remotion';
 import { SlotMachine } from './compositions/SlotMachine';
 import { SlotMachineWithEffect, SLOT_MACHINE_WITH_EFFECT_DURATION } from './compositions/SlotMachineWithEffect';
 import { StitchMedia, calculateTotalDuration } from './compositions/StitchMedia';
+import {
+  SketchToColor, SKETCH_TO_COLOR_DURATION,
+  ParticleAssembly, PARTICLE_ASSEMBLY_DURATION,
+  BrushReveal, BRUSH_REVEAL_DURATION,
+} from './compositions/ImageReveal';
 import { DEFAULT_VIDEO_CONFIG, StitchMediaProps } from './types';
 
 export const RemotionRoot: React.FC = () => {
@@ -61,6 +66,50 @@ export const RemotionRoot: React.FC = () => {
           ],
           transition: 'crossfade',
           transitionDuration: 15,
+        }}
+      />
+
+      {/* ============================================ */}
+      {/* Image Reveal 효과들 */}
+      {/* ============================================ */}
+
+      {/* 1. 스케치 → 컬러 */}
+      <Composition
+        id="SketchToColor"
+        component={SketchToColor as unknown as React.FC<Record<string, unknown>>}
+        durationInFrames={SKETCH_TO_COLOR_DURATION}
+        fps={DEFAULT_VIDEO_CONFIG.fps}
+        width={DEFAULT_VIDEO_CONFIG.width}
+        height={DEFAULT_VIDEO_CONFIG.height}
+        defaultProps={{
+          src: '/data/media/boss_5_eraser_vs_pencil.jpg',
+        }}
+      />
+
+      {/* 2. 파티클 조립 */}
+      <Composition
+        id="ParticleAssembly"
+        component={ParticleAssembly as unknown as React.FC<Record<string, unknown>>}
+        durationInFrames={PARTICLE_ASSEMBLY_DURATION}
+        fps={DEFAULT_VIDEO_CONFIG.fps}
+        width={DEFAULT_VIDEO_CONFIG.width}
+        height={DEFAULT_VIDEO_CONFIG.height}
+        defaultProps={{
+          src: '/data/media/boss_5_eraser_vs_pencil.jpg',
+          gridSize: 15,
+        }}
+      />
+
+      {/* 3. 브러시 리빌 */}
+      <Composition
+        id="BrushReveal"
+        component={BrushReveal as unknown as React.FC<Record<string, unknown>>}
+        durationInFrames={BRUSH_REVEAL_DURATION}
+        fps={DEFAULT_VIDEO_CONFIG.fps}
+        width={DEFAULT_VIDEO_CONFIG.width}
+        height={DEFAULT_VIDEO_CONFIG.height}
+        defaultProps={{
+          src: '/data/media/boss_5_eraser_vs_pencil.jpg',
         }}
       />
     </>

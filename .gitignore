@@ -11,3 +11,6 @@
 # 생성된 미디어 파일
 media/
 screenshot/
+
+# Remotion 빌드 결과물
+remotion/build/

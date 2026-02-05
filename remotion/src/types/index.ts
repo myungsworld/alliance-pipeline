@@ -58,15 +58,13 @@ export interface RenderResponse {
 }
 
 // ============================================
-// 나중에 추가될 Composition 타입들 예시
+// ImageReveal Composition 타입들
 // ============================================
-// export interface BattleIntroProps {
-//   boss: string;
-//   hero: string;
-//   imagePath: string;
-// }
-//
-// export interface ResultScreenProps {
-//   winner: 'boss' | 'hero';
-//   score: number;
-// }
+export interface ImageRevealProps {
+  src: string;
+  durationInFrames?: number;
+}
+
+export interface ParticleAssemblyProps extends ImageRevealProps {
+  gridSize?: number;
+}
