@@ -240,7 +240,7 @@ vs_scripts (id, team1_object_id, team1_creature_id, team1_object_name,
 
 ```
 alliance-pipeline/
-├── docker-compose.yaml       # Docker 설정 (n8n, postgres, ngrok)
+├── docker-compose.yaml       # Docker 설정 (n8n, postgres, ngrok, remotion)
 ├── .env                      # 환경변수 (git 제외)
 ├── .env.example              # 환경변수 템플릿
 ├── init.sql                  # DB 스키마 + 시드 데이터

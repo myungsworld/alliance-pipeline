@@ -61,6 +61,19 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - TZ=${TZ}
 
+  remotion:
+    build:
+      context: ./remotion
+      dockerfile: Dockerfile
+    container_name: remotion
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./media:/data/media
+    environment:
+      - TZ=${TZ}
+
 volumes:
   n8n_data:
   postgres_data:

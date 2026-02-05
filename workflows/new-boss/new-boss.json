@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-04T08:13:17.075Z",
+  "updatedAt": "2026-02-05T01:59:30.176Z",
   "createdAt": "2026-02-04T08:13:17.075Z",
   "id": "rgtNFCZRcKne1sh7",
   "name": "new-boss",
@@ -67,33 +67,6 @@
       ],
       "id": "63ff266f-71b2-4c91-bcdb-7795476cfa5a",
       "name": "Structured Output Parser"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.replicate.com/v1/models/bytedance/seedance-1-pro-fast/predictions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "=Bearer {{ $env.REPLICATE_API_TOKEN }}"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n\t\"input\": {\n      \"fps\": 24,\n      \"image\": \"{{ $json.output[0] }}\",\n      \"prompt\": \"The couple stand in a grand palace hallare walking forward at a very slow, confident, ceremonial pace, almost like slow motion. They walk straight toward the camera in a steady, graceful manner, with elegant posture. They do NOT look at the camera; instead, their gaze moves slightly around the environment, as if entering an important royal event or ballroom filled with people. The noblewoman's face remains perfectly composed and steady, with no sudden movements or exaggerated expressions. The animal maintains a dignified, controlled walk, matching the rhythm of the noblewoman while keeping a formal and respectful distance. Their clothing moves subtly with each step, showing realistic weight and fabric motion. The lighting is dramatic and warm, with reflections from chandeliers and polished marble floors, matching the palace environment in the image. Ultra-smooth camera motion, cinematic depth of field.\"\n\t}\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -704,
-        368
-      ],
-      "id": "9a36824d-777a-4ad8-9ddf-44b95639a001",
-      "name": "HTTP Request1"
     },
     {
       "parameters": {},
@@ -699,10 +672,10 @@
   },
   "staticData": null,
   "meta": null,
-  "pinData": null,
-  "versionId": "b7243e4e-7493-4d59-9e63-ad734ec33ff8",
+  "pinData": {},
+  "versionId": "704c52d4-5d1d-4d8a-a8ef-899cd05294eb",
   "activeVersionId": "b7243e4e-7493-4d59-9e63-ad734ec33ff8",
-  "versionCounter": 4,
+  "versionCounter": 5,
   "triggerCount": 0,
   "shared": [
     {
