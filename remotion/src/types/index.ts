@@ -23,6 +23,9 @@ export interface SlotMachineProps {
   boss: string;
   hero: string;
   seed?: number;  // 슬롯 셔플용 시드 (n8n에서 timestamp 등 전달)
+  audioSrc?: string;  // 배경 음악/효과음 경로 (선택)
+  audioVolume?: number;  // 볼륨 (0-1, 기본 1)
+  audioStartFrame?: number;  // 오디오 시작 프레임 (기본: 30 = 1초)
 }
 
 // ============================================

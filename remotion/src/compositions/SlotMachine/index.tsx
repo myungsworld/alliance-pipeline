@@ -2,13 +2,16 @@
 // 슬롯머신 메인 컴포지션
 // 모든 요소를 조합하여 최종 영상 구성
 // ============================================
-import { AbsoluteFill, useCurrentFrame, interpolate, Easing } from 'remotion';
+import { AbsoluteFill, useCurrentFrame, interpolate, Easing, Audio, staticFile } from 'remotion';
 import { SlotReel } from './SlotReel';
 import { COLORS, TIMING, BOSS_OPTIONS, HERO_OPTIONS } from './config';
 import { SlotMachineProps } from '../../types';
 
-export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero, seed }) => {
+export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero, seed, audioSrc, audioVolume = 1 }) => {
   const frame = useCurrentFrame();
+
+  // 오디오 경로: public 폴더 파일은 staticFile() 사용
+  const resolvedAudioSrc = audioSrc ? staticFile(audioSrc) : undefined;
 
   // ========== 타이밍 계산 ==========
   const bossStartFrame = 30;  // 1초 후 시작
@@ -57,6 +60,10 @@ export const SlotMachine: React.FC<SlotMachineProps> = ({ boss, hero, seed }) =>
       alignItems: 'center',
       padding: '40px 20px',
     }}>
+      {/* 배경 오디오 (선택적) */}
+      {resolvedAudioSrc && (
+        <Audio src={resolvedAudioSrc} volume={audioVolume} />
+      )}
       {/* 타이틀 */}
       <div style={{
         textAlign: 'center',

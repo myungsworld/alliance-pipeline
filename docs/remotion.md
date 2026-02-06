@@ -39,7 +39,9 @@ fps: 30
   "props": {
     "boss": "Angry Mom",
     "hero": "Baby Chick",
-    "seed": 12345
+    "seed": 12345,
+    "audioSrc": "audio/slot-machine-sfx.mp3",
+    "audioVolume": 0.8
   },
   "outputPath": "/data/media/intro.mp4"
 }
@@ -51,6 +53,8 @@ fps: 30
 | boss | string | O | 보스 이름 (슬롯 최종값) |
 | hero | string | O | 히어로 이름 (슬롯 최종값) |
 | seed | number | X | 슬롯 셔플 시드 (동일 시드 = 동일 애니메이션) |
+| audioSrc | string | X | 오디오 파일 경로 (public 폴더 기준) |
+| audioVolume | number | X | 볼륨 0-1 (기본: 1) |
 
 **기본 duration:** 195 프레임 (6.5초)
 
@@ -68,7 +72,50 @@ HERO_OPTIONS = ["Baby Chick", "Sleepy Cat", "Confused Dog", ...]
 
 ---
 
-### 2. StitchMedia
+### 2. SlotMachineWithEffect
+
+SlotMachine + 줌인 페이드아웃 효과 (다음 장면 연결용)
+
+**API 요청:**
+```json
+{
+  "compositionId": "SlotMachineWithEffect",
+  "props": {
+    "boss": "Monday Morning",
+    "hero": "Coffee Cup",
+    "seed": 12345,
+    "audioSrc": "audio/slot-machine-sfx.mp3",
+    "audioVolume": 0.8,
+    "audioStartFrame": 30
+  },
+  "outputPath": "/data/media/intro_with_effect.mp4"
+}
+```
+
+**Props:**
+| 이름 | 타입 | 필수 | 설명 |
+|------|------|------|------|
+| boss | string | O | 보스 이름 |
+| hero | string | O | 히어로 이름 |
+| seed | number | X | 슬롯 셔플 시드 |
+| audioSrc | string | X | 오디오 파일 경로 (public 폴더 기준) |
+| audioVolume | number | X | 볼륨 0-1 (기본: 1) |
+| audioStartFrame | number | X | 오디오 시작 프레임 (기본: 30 = 1초) |
+
+**기본 duration:** 240 프레임 (8초)
+
+**타이밍:**
+| 구간 | 프레임 | 시간 |
+|------|--------|------|
+| 슬롯 시작 | 30 | 1.0초 |
+| Boss 멈춤 | 120 | 4.0초 |
+| Hero 멈춤 | 159 | 5.3초 |
+| 줌 효과 시작 | 195 | 6.5초 |
+| 페이드 투 블랙 | 240 | 8.0초 |
+
+---
+
+### 3. StitchMedia
 
 여러 미디어(영상/이미지)를 트랜지션과 함께 연결
 
@@ -117,6 +164,45 @@ HERO_OPTIONS = ["Baby Chick", "Sleepy Cat", "Confused Dog", ...]
 
 ---
 
+### 4. ImageReveal 효과들
+
+이미지를 다양한 효과로 등장시키는 컴포지션들
+
+#### SketchToColor
+스케치에서 컬러로 변환되는 효과
+
+```json
+{
+  "compositionId": "SketchToColor",
+  "props": { "src": "/data/media/image.jpg" },
+  "outputPath": "/data/media/reveal.mp4"
+}
+```
+
+#### ParticleAssembly
+파티클이 모여서 이미지가 조립되는 효과
+
+```json
+{
+  "compositionId": "ParticleAssembly",
+  "props": { "src": "/data/media/image.jpg", "gridSize": 15 },
+  "outputPath": "/data/media/reveal.mp4"
+}
+```
+
+#### BrushReveal
+브러시로 칠하듯 이미지가 드러나는 효과
+
+```json
+{
+  "compositionId": "BrushReveal",
+  "props": { "src": "/data/media/image.jpg" },
+  "outputPath": "/data/media/reveal.mp4"
+}
+```
+
+---
+
 ## 새 컴포지션 추가
 
 1. `src/compositions/NewComp/` 폴더 생성
@@ -146,6 +232,7 @@ export interface NewCompProps {
 
 ## 미디어 파일 경로
 
+### 비디오/이미지 (동적)
 | 위치 | 경로 |
 |------|------|
 | Docker 볼륨 | `./media:/data/media` |
@@ -153,6 +240,14 @@ export interface NewCompProps {
 | HTTP 접근 | `http://localhost:3001/media/xxx.mp4` |
 
 `MediaRenderer.resolveSrc()`가 `/data/media/` → HTTP URL 자동 변환
+
+### 오디오 (정적, Git 포함)
+| 위치 | 경로 |
+|------|------|
+| 파일 위치 | `remotion/public/audio/` |
+| props에서 | `"audioSrc": "audio/xxx.mp3"` |
+
+`staticFile()`로 public 폴더 파일 접근. 렌더링 시 자동으로 번들에 포함됨.
 
 ---
 

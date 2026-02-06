@@ -2,7 +2,7 @@
 // 슬롯머신 + 줌 아웃 효과 컴포지션
 // 슬롯머신 끝난 후 카메라가 앞으로 돌진하듯 줌인 → 검은화면
 // ============================================
-import { AbsoluteFill, useCurrentFrame, interpolate, Easing } from 'remotion';
+import { AbsoluteFill, useCurrentFrame, interpolate, Easing, Audio, Sequence, staticFile } from 'remotion';
 import { SlotReel } from '../SlotMachine/SlotReel';
 import { COLORS, TIMING, BOSS_OPTIONS, HERO_OPTIONS } from '../SlotMachine/config';
 import { SlotMachineProps } from '../../types';
@@ -11,8 +11,11 @@ import { SlotMachineProps } from '../../types';
 const EFFECT_START = 195;  // 6.5초 (슬롯머신 끝나는 시점)
 const EFFECT_DURATION = 45; // 1.5초 (줌인 + 페이드아웃)
 
-export const SlotMachineWithEffect: React.FC<SlotMachineProps> = ({ boss, hero, seed }) => {
+export const SlotMachineWithEffect: React.FC<SlotMachineProps> = ({ boss, hero, seed, audioSrc, audioVolume = 1, audioStartFrame = 30 }) => {
   const frame = useCurrentFrame();
+
+  // 오디오 경로
+  const resolvedAudioSrc = audioSrc ? staticFile(audioSrc) : undefined;
 
   // ========== 슬롯머신 타이밍 (기존과 동일) ==========
   const bossStartFrame = 30;
@@ -76,6 +79,13 @@ export const SlotMachineWithEffect: React.FC<SlotMachineProps> = ({ boss, hero, 
 
   return (
     <AbsoluteFill style={{ background: '#000' }}>
+      {/* 오디오: audioStartFrame 프레임 후 시작 (기본 30 = 1초) */}
+      {resolvedAudioSrc && (
+        <Sequence from={audioStartFrame}>
+          <Audio src={resolvedAudioSrc} volume={audioVolume} />
+        </Sequence>
+      )}
+
       {/* 메인 콘텐츠 (줌 효과 적용) */}
       <AbsoluteFill style={{
         transform: isEffectPhase ? `scale(${zoomScale})` : 'scale(1)',
