@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-02-05T04:20:56.425Z",
-  "createdAt": "2026-02-05T04:19:58.864Z",
-  "id": "zY7o6RvHVjDtAvdt",
+  "updatedAt": "2026-02-06T02:08:18.604Z",
+  "createdAt": "2026-02-06T02:08:18.604Z",
+  "id": "eCICaWPc4JZWgsJ7",
   "name": "boss",
   "description": null,
   "active": true,
@@ -672,44 +672,44 @@
   },
   "staticData": null,
   "meta": null,
-  "pinData": {},
-  "versionId": "41781340-e007-417a-b1e4-6d5752041764",
-  "activeVersionId": "81bf142b-b368-40a8-880a-79dd4e3effe8",
-  "versionCounter": 8,
+  "pinData": null,
+  "versionId": "0f9cdf83-372d-47ab-b100-888d7a45475c",
+  "activeVersionId": "0f9cdf83-372d-47ab-b100-888d7a45475c",
+  "versionCounter": 4,
   "triggerCount": 0,
   "shared": [
     {
-      "updatedAt": "2026-02-05T04:19:58.865Z",
-      "createdAt": "2026-02-05T04:19:58.865Z",
+      "updatedAt": "2026-02-06T02:08:18.605Z",
+      "createdAt": "2026-02-06T02:08:18.605Z",
       "role": "workflow:owner",
-      "workflowId": "zY7o6RvHVjDtAvdt",
-      "projectId": "Pd2AgWCvEle7xN80",
+      "workflowId": "eCICaWPc4JZWgsJ7",
+      "projectId": "vhStiD4QJsvjBVQ8",
       "project": {
-        "updatedAt": "2026-02-05T04:19:20.550Z",
-        "createdAt": "2026-02-05T04:18:59.793Z",
-        "id": "Pd2AgWCvEle7xN80",
+        "updatedAt": "2026-02-06T02:07:40.905Z",
+        "createdAt": "2026-02-06T01:53:45.171Z",
+        "id": "vhStiD4QJsvjBVQ8",
         "name": "동명 myungsworld@gmail.com <myungsworld@gmail.com>",
         "type": "personal",
         "icon": null,
         "description": null,
-        "creatorId": "34366922-2686-4aa9-bba2-faca0c87b2b2",
+        "creatorId": "98fd947b-4b2d-4e37-b5a5-5fc896a61e2e",
         "projectRelations": [
           {
-            "updatedAt": "2026-02-05T04:18:59.793Z",
-            "createdAt": "2026-02-05T04:18:59.793Z",
-            "userId": "34366922-2686-4aa9-bba2-faca0c87b2b2",
-            "projectId": "Pd2AgWCvEle7xN80",
+            "updatedAt": "2026-02-06T01:53:45.171Z",
+            "createdAt": "2026-02-06T01:53:45.171Z",
+            "userId": "98fd947b-4b2d-4e37-b5a5-5fc896a61e2e",
+            "projectId": "vhStiD4QJsvjBVQ8",
             "user": {
-              "updatedAt": "2026-02-05T05:39:30.000Z",
-              "createdAt": "2026-02-05T04:18:59.653Z",
-              "id": "34366922-2686-4aa9-bba2-faca0c87b2b2",
+              "updatedAt": "2026-02-06T04:39:31.000Z",
+              "createdAt": "2026-02-06T01:53:44.759Z",
+              "id": "98fd947b-4b2d-4e37-b5a5-5fc896a61e2e",
               "email": "myungsworld@gmail.com",
               "firstName": "동명",
               "lastName": "myungsworld@gmail.com",
               "personalizationAnswers": {
                 "version": "v4",
-                "personalization_survey_submitted_at": "2026-02-05T04:19:22.722Z",
-                "personalization_survey_n8n_version": "2.4.5"
+                "personalization_survey_submitted_at": "2026-02-06T02:07:41.978Z",
+                "personalization_survey_n8n_version": "2.4.6"
               },
               "settings": {
                 "userActivated": false,
@@ -717,7 +717,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2026-02-05",
+              "lastActiveAt": "2026-02-06",
               "isPending": false
             }
           }
@@ -727,20 +727,20 @@
   ],
   "tags": [],
   "activeVersion": {
-    "updatedAt": "2026-02-05T04:19:58.867Z",
-    "createdAt": "2026-02-05T04:19:58.867Z",
-    "versionId": "81bf142b-b368-40a8-880a-79dd4e3effe8",
-    "workflowId": "zY7o6RvHVjDtAvdt",
+    "updatedAt": "2026-02-06T02:08:18.612Z",
+    "createdAt": "2026-02-06T02:08:18.612Z",
+    "versionId": "0f9cdf83-372d-47ab-b100-888d7a45475c",
+    "workflowId": "eCICaWPc4JZWgsJ7",
     "nodes": [
       {
         "parameters": {},
         "type": "n8n-nodes-base.manualTrigger",
         "typeVersion": 1,
         "position": [
-          -3664,
-          -128
+          -4896,
+          -80
         ],
-        "id": "5d90c2c1-a08b-4ae8-9c48-083ef8c883a7",
+        "id": "e8738a95-99de-4c6a-bbea-89a47982e1b5",
         "name": "When clicking ‘Execute workflow’"
       },
       {
@@ -755,10 +755,10 @@
         "type": "@n8n/n8n-nodes-langchain.agent",
         "typeVersion": 3.1,
         "position": [
-          -3088,
-          -128
+          -4464,
+          -80
         ],
-        "id": "5c8a4543-24de-4f36-8677-f478522a4cc9",
+        "id": "df525e52-255c-4b26-8061-701167d56f7e",
         "name": "AI Agent"
       },
       {
@@ -768,10 +768,10 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1,
         "position": [
-          -3088,
-          80
+          -4528,
+          128
         ],
-        "id": "90a614df-a0a7-4625-94f0-7e248f226028",
+        "id": "b658349f-ae5f-444a-b49a-b265d7d72643",
         "name": "Google Gemini Chat Model",
         "credentials": {
           "googlePalmApi": {
@@ -787,10 +787,10 @@
         "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
         "typeVersion": 1.3,
         "position": [
-          -2736,
-          80
+          -4272,
+          128
         ],
-        "id": "50df7823-7064-4a35-8b95-78e2f312eda0",
+        "id": "9d394a87-aac9-4a63-bfae-d1b3874740f1",
         "name": "Structured Output Parser"
       },
       {
@@ -798,10 +798,10 @@
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          -2240,
-          -128
+          -3680,
+          -80
         ],
-        "id": "246d2df7-9bed-40df-86a1-45362cff2b13",
+        "id": "780db617-bf10-4afe-9b4d-7b6422e9fc02",
         "name": "Wait",
         "webhookId": "7b364253-8119-45e8-92e7-89d92441b76c"
       },
@@ -822,10 +822,10 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          -2016,
-          -144
+          -3456,
+          -96
         ],
-        "id": "6e85304d-cf8c-4d32-9989-dc26430bcac5",
+        "id": "e51681bd-e3fc-40b6-bf6f-f8c74d951cbf",
         "name": "Replicate 결과 확인1"
       },
       {
@@ -855,10 +855,10 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.2,
         "position": [
-          -1808,
-          -144
+          -3248,
+          -96
         ],
-        "id": "cc7dc423-a97b-4e65-b4a0-abea4538bd0b",
+        "id": "6bc4b5e3-5a42-445b-9b5c-4e685aecc979",
         "name": "이미지 완료?1"
       },
       {
@@ -882,10 +882,10 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -2448,
-          -128
+          -3888,
+          -80
         ],
-        "id": "1a48c669-6bb9-4242-a942-c8ca4bdd1439",
+        "id": "f0a0cfd8-de02-47c5-ab98-695e61660eb2",
         "name": "seedream-5"
       },
       {
@@ -895,10 +895,10 @@
         "type": "n8n-nodes-base.executeCommand",
         "typeVersion": 1,
         "position": [
-          -1600,
-          -144
+          -3040,
+          -96
         ],
-        "id": "ce0d3134-a9a6-4ae2-859b-0bea20878e71",
+        "id": "b5813eab-7257-4a94-adfa-3b33af83fa4a",
         "name": "이미지 저장 (wget)"
       },
       {
@@ -908,10 +908,10 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -1376,
-          -144
+          -2816,
+          -96
         ],
-        "id": "bdcf1395-b6e2-4a23-8575-e95320ca56ee",
+        "id": "ea39044f-9604-4ec7-94d0-9739060e6df8",
         "name": "파일명 추출"
       },
       {
@@ -1065,10 +1065,10 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -1152,
-          -144
+          -2592,
+          -96
         ],
-        "id": "d104d71c-50de-4f9e-8491-a0671feecf3d",
+        "id": "fd0c652c-8f17-4859-b99f-411d6b71ee84",
         "name": "Update img_url",
         "credentials": {
           "postgres": {
@@ -1084,10 +1084,10 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -3456,
-          -128
+          -4688,
+          -80
         ],
-        "id": "ee83cb2c-d266-4223-9c22-314b15429400",
+        "id": "0685abd8-4288-47da-99ec-f9d07ffd07da",
         "name": "Code in JavaScript"
       },
       {
@@ -1236,10 +1236,10 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -2688,
-          -128
+          -4112,
+          -80
         ],
-        "id": "85658c9d-6b89-4c4f-b762-9fb11581448b",
+        "id": "a82e6991-5caf-43a0-ab4b-d34781a4870c",
         "name": "Insert rows in a table",
         "credentials": {
           "postgres": {
@@ -1247,24 +1247,6 @@
             "name": "Postgres account"
           }
         }
-      },
-      {
-        "parameters": {
-          "method": "POST",
-          "url": "http://remotion:3001/render",
-          "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "={\n  \"compositionId\": \"SlotMachine\",\n  \"props\": {\n    \"boss\": \"{{ $json.boss }}\",\n    \"hero\": \"{{ $json.hero }}\"\n  },\n  \"outputPath\": \"/data/media/intro_1.mp4\"\n}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          -3440,
-          144
-        ],
-        "id": "82b1834c-583b-40df-a770-4ceafa25dea0",
-        "name": "HTTP Request"
       }
     ],
     "connections": {
@@ -1389,7 +1371,7 @@
         "main": [
           [
             {
-              "node": "HTTP Request",
+              "node": "AI Agent",
               "type": "main",
               "index": 0
             }
@@ -1398,12 +1380,13 @@
       },
       "Insert rows in a table": {
         "main": [
-          []
-        ]
-      },
-      "HTTP Request": {
-        "main": [
-          []
+          [
+            {
+              "node": "seedream-5",
+              "type": "main",
+              "index": 0
+            }
+          ]
         ]
       }
     },
@@ -1413,12 +1396,12 @@
     "autosaved": false,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-02-05T04:19:59.490Z",
-        "id": 1,
-        "workflowId": "zY7o6RvHVjDtAvdt",
-        "versionId": "81bf142b-b368-40a8-880a-79dd4e3effe8",
+        "createdAt": "2026-02-06T02:08:20.439Z",
+        "id": 3,
+        "workflowId": "eCICaWPc4JZWgsJ7",
+        "versionId": "0f9cdf83-372d-47ab-b100-888d7a45475c",
         "event": "activated",
-        "userId": "34366922-2686-4aa9-bba2-faca0c87b2b2"
+        "userId": "98fd947b-4b2d-4e37-b5a5-5fc896a61e2e"
       }
     ]
   }
