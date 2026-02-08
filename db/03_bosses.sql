@@ -16,8 +16,10 @@ CREATE TABLE IF NOT EXISTS bosses (
     location TEXT,
     template TEXT,
 
-    -- 생성된 이미지 URL
-    img_url TEXT,
+    -- 생성된 미디어
+    img_url TEXT,              -- 로컬 경로 (/data/media/...)
+    img_url_public TEXT,       -- 공개 URL (Replicate 등 외부 API용)
+    video_url TEXT,            -- 생성된 영상 URL
 
     -- 상태 관리
     status VARCHAR(20) DEFAULT 'pending',

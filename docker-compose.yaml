@@ -30,6 +30,7 @@ services:
       # API Keys
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - REPLICATE_API_TOKEN=${REPLICATE_API_TOKEN}
+      - XAI_API_KEY=${XAI_API_KEY}
       # Execute Command 노드 활성화 (보안 위험 인지 - n8n 2.0+)
       # NODES_EXCLUDE를 빈 배열로 설정하여 모든 노드 허용
       - NODES_EXCLUDE=[]

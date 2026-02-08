@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-06T03:15:18.337Z",
+  "updatedAt": "2026-02-08T09:57:28.156Z",
   "createdAt": "2026-02-06T02:08:18.659Z",
   "id": "ueut4ILDjD4xAW6i",
   "name": "new-boss",
@@ -151,7 +151,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, dramatic lighting with volumetric rays and particle effects. {{ $json.boss_description.replace(/\"/g, '\\\\\"') }} In the foreground, {{ $json.hero_description.replace(/\"/g, '\\\\\"') }}, seen from behind, back facing the camera,standing firmly on the battlefield. His full silhouette visible, shoulders squared, gaze locked directly onto the colossal boss. Directly ahead of him, towering in the distance, boss, facing the hero head-on,its eyes fixed upon its challenger with absolute intent. Location: {{ $json.location.replace(/\"/g, '\\\\\"') }} Both figures fully visible in a wide cinematic shot, the boss towering 3 times over the hero. Tension frozen at the moment both unleash their ultimate abilities - spells colliding in a cataclysmic shockwave. Camera angle: dramatic low angle with slight dutch tilt. Lighting: boss backlit by sickly green deathglow, archmage emanating pure white arcane radiance with extreme contrast between the two forces. Photography style: AAA game cinematic, 4K ultra-detailed, ray-traced reflections, epic fantasy realism, dramatic depth of field, particle effects, motion blur hints on energy effects.\"\n\n\t}\n} ",
+        "jsonBody": "={\n\t\"input\": {\n      \"size\" : \"4K\",\n      \"width\" : 2048,\n      \"height\" : 2048,\n      \"aspect_ratio\": \"9:16\",\n      \"max_images\" : 1,\n      \"prompt\": \"Cinematic photographic image, dramatic lighting with volumetric rays and particle effects. {{ $json.boss_description.replace(/\"/g, '\\\\\"') }} In the foreground, {{ $json.hero_description.replace(/\"/g, '\\\\\"') }}, seen from behind, back facing the camera,keeps its gaze locked on the boss ahead,standing firmly on the battlefield. His full silhouette visible, shoulders squared, gaze locked directly onto the colossal boss. Directly ahead of him, towering in the distance, boss, facing the hero head-on,its eyes fixed upon its challenger with absolute intent. Location: {{ $json.location.replace(/\"/g, '\\\\\"') }} Both figures fully visible in a wide cinematic shot, the boss towering 3 times over the hero. Tension frozen at the moment both unleash their ultimate abilities - spells colliding in a cataclysmic shockwave. Camera angle: dramatic low angle with slight dutch tilt. Lighting: boss backlit by sickly green deathglow, archmage emanating pure white arcane radiance with extreme contrast between the two forces. Photography style: AAA game cinematic, 4K ultra-detailed, ray-traced reflections, epic fantasy realism, dramatic depth of field, particle effects, motion blur hints on energy effects.\"\n\n\t}\n} ",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -184,7 +184,7 @@
       "typeVersion": 2,
       "position": [
         -1216,
-        240
+        224
       ],
       "id": "c1d2e3f4-a5b6-7890-cdef-123456789abc",
       "name": "파일명 추출"
@@ -208,7 +208,8 @@
           "value": {
             "id": "={{ $json.id }}",
             "img_url": "={{ $json.filepath }}",
-            "status": "completed"
+            "status": "completed",
+            "img_url_public": "={{ $('이미지 완료?1').item.json.output[0] }}"
           },
           "matchingColumns": [
             "id"
@@ -294,6 +295,16 @@
               "removed": false
             },
             {
+              "id": "template",
+              "displayName": "template",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
               "id": "img_url",
               "displayName": "img_url",
               "required": false,
@@ -330,6 +341,26 @@
               "type": "dateTime",
               "canBeUsedToMatch": true,
               "removed": false
+            },
+            {
+              "id": "img_url_public",
+              "displayName": "img_url_public",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "video_url",
+              "displayName": "video_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -340,8 +371,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -1024,
-        240
+        -992,
+        224
       ],
       "id": "d2e3f4a5-b6c7-8901-efab-234567890def",
       "name": "Update img_url",
@@ -354,7 +385,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"eraser\";\n  item.json.hero = \"pencil\"\n}\n\nreturn $input.all();"
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"Sand\";\n  item.json.hero = \"wolf\"\n}\n\nreturn $input.all();"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -872,56 +903,159 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOSS_BOT_TOKEN }}/sendPhoto",
+        "url": "http://remotion:3001/render",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\",\n  \"photo\": \"{{ $('Replicate 결과 확인1').item.json.output }}\",\n  \"caption\": \"🎨 {{ $json.input_boss }} vs {{ $json.input_hero }}\",\n  \"reply_markup\": {\n    \"inline_keyboard\": [\n      [\n        {\n          \"text\": \"🎬 영상 생성\",\n          \"callback_data\": \"boss_{{ $json.id }}\"\n        }\n      ]\n    ]\n  }\n}",
+        "jsonBody": "={\n  \"compositionId\": \"{{ $json.selected }}\",\n  \"props\": { \"src\": \"{{ $('파일명 추출').item.json.filepath }}\" },\n  \"outputPath\": \"/data/media/boss_impact_{{ $('Update rows in a table1').item.json.id }}.mp4\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -544,
+        224
+      ],
+      "id": "805e8e5a-8ab4-4029-b5fd-e78f45329c27",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 여러 값 중 랜덤 선택\nconst options = [\"SketchToColor\", \"ParticleAssembly\", \"BrushReveal\"];\nconst index = Date.now() % options.length;\n\nreturn [{ json: { selected: options[index] } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -784,
+        224
+      ],
+      "id": "3ca1d27e-80db-4dbd-9257-a7515ebbb495",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://remotion:3001/render",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"compositionId\": \"StitchMedia\",\n  \"props\": {\n    \"media\": [\n      { \"type\": \"video\", \"src\": \"{{ $('Update img_url').item.json.template }}\", \"durationInFrames\": 240 },\n      { \"type\": \"video\", \"src\": \"{{ $('HTTP Request3').item.json.outputPath }}\", \"durationInFrames\": 150 },\n      { \"type\": \"video\", \"src\": \"/data/media/boss_{{ $('Update rows in a table1').item.json.id }}_{{ $('Code in JavaScript').item.json.boss.replace(/ /g, '_') }}_vs_{{ $('Code in JavaScript').item.json.hero.replace(/ /g, '_') }}.mp4\",\n\"durationInFrames\":150}\n    ],\n    \"transition\": \"none\",\n    \"transitionDuration\": 15\n  },\n  \"outputPath\": \"/data/media/final_{{ $('Update img_url').item.json.id }}.mp4\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1200,
+        544
+      ],
+      "id": "41da8895-0f5a-4fcb-a346-bd7686be2a79",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -2096,
+        528
+      ],
+      "id": "9b3d72bb-0f25-4e74-ba1a-221ad94fb82a",
+      "name": "Wait2",
+      "webhookId": "7b364253-8119-45e8-92e7-89d92441b76c"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.x.ai/v1/videos/{{ $json.request_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.XAI_API_KEY }}"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -832,
-        304
+        -1888,
+        528
       ],
-      "id": "0fda802c-9c9d-4d38-aaee-7c78ad37aff1",
-      "name": "Telegram 이미지 전송"
+      "id": "6c80401e-6f6b-435e-afa7-6fef918a129a",
+      "name": "Replicate 결과 확인2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              },
+              "id": "condition-succeeded"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1696,
+        528
+      ],
+      "id": "effcfb59-1eb5-4e81-8162-9a01b2b7d9a2",
+      "name": "동영상 완료?1"
+    },
+    {
+      "parameters": {
+        "command": "=wget -O \"/data/media/boss_{{ $('Update rows in a table1').item.json.id }}_{{ $('Code in JavaScript').item.json.boss.replace(/ /g, '_') }}_vs_{{ $('Code in JavaScript').item.json.hero.replace(/ /g, '_') }}.mp4\" \"{{ $json.video.url }}\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -1472,
+        544
+      ],
+      "id": "5d88819e-9437-4ab0-b8a8-8ee62170b3f4",
+      "name": "이미지 저장 (wget)2"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "http://remotion:3001/render",
+        "url": "https://api.x.ai/v1/videos/generations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.XAI_API_KEY }}"
+            }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"compositionId\": \"StitchMedia\",\n  \"props\": {\n    \"media\": [\n      { \"type\": \"video\", \"src\": \"{{ $('Update img_url').item.json.template }}\", \"durationInFrames\": 240 },\n      { \"type\": \"image\", \"src\": \"{{ $('Update img_url').item.json.img_url }}\", \"durationInFrames\": 150 }\n    ],\n    \"transition\": \"none\",\n    \"transitionDuration\": 15\n  },\n  \"outputPath\": \"/data/media/final_{{ $('Update img_url').item.json.id }}.mp4\"\n}",
+        "jsonBody": "={    \n  \"model\": \"grok-imagine-video\",\n  \"image\": {\n      \"url\": \"{{ $('Update img_url').item.json.img_url_public }}\"\n    },\n  \"duration\": 5,\n  \"aspect_ratio\": \"9:16\",\n  \"prompt\": \"The boss is {{ $('Update img_url').item.json.input_boss }} and the hero is {{ $('Update img_url').item.json.input_hero }}. The scene begins exactly as shown in the input image. The hero is seen from behind throughout the entire video, never turning around. Both characters charge toward each other and clash in an epic slow-motion battle. Cinematic camera movement, dramatic depth of field, volumetric lighting, particle effects, 4K.\"\n  }",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -2256,
-        592
+        -2288,
+        528
       ],
-      "id": "cbc960ad-c887-44fb-991d-eae314fdb686",
-      "name": "HTTP Request1"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "http://remotion:3001/render",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"compositionId\": \"StitchMedia\",\n  \"props\": {\n    \"media\": [\n      { \"type\": \"video\", \"src\": \"/data/media/template_6.mp4\", \"durationInFrames\": 240 },\n      { \"type\": \"image\", \"src\": \"/data/media/boss_5_eraser_vs_pencil.jpg\", \"durationInFrames\": 150 }\n    ],\n    \"transition\": \"none\",\n    \"transitionDuration\": 15\n  },\n  \"outputPath\": \"/data/media/final_{{ $('Update img_url').item.json.id }}.mp4\"\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        -2160,
-        784
-      ],
-      "id": "4576f7a6-9af3-46a8-934d-02614272f422",
-      "name": "HTTP Request2"
+      "id": "758a8e90-b352-4686-9869-16c97f3feafd",
+      "name": "X request"
     }
   ],
   "connections": {
@@ -1101,18 +1235,96 @@
       "main": [
         [
           {
-            "node": "Telegram 이미지 전송",
+            "node": "Code in JavaScript1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Telegram 이미지 전송": {
+    "Code in JavaScript1": {
       "main": [
         [
           {
-            "node": "HTTP Request1",
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "X request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        []
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Replicate 결과 확인2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replicate 결과 확인2": {
+      "main": [
+        [
+          {
+            "node": "동영상 완료?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "동영상 완료?1": {
+      "main": [
+        [
+          {
+            "node": "이미지 저장 (wget)2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "X request": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이미지 저장 (wget)2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
             "type": "main",
             "index": 0
           }
@@ -1128,9 +1340,9 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "ce36f77c-8faa-4ed6-a6da-24515ee064c0",
+  "versionId": "b36768f4-d670-49d3-95c2-1a7d81cbf333",
   "activeVersionId": null,
-  "versionCounter": 7,
+  "versionCounter": 234,
   "triggerCount": 0,
   "shared": [
     {
@@ -1155,7 +1367,7 @@
             "userId": "98fd947b-4b2d-4e37-b5a5-5fc896a61e2e",
             "projectId": "vhStiD4QJsvjBVQ8",
             "user": {
-              "updatedAt": "2026-02-06T04:39:31.000Z",
+              "updatedAt": "2026-02-08T09:10:50.000Z",
               "createdAt": "2026-02-06T01:53:44.759Z",
               "id": "98fd947b-4b2d-4e37-b5a5-5fc896a61e2e",
               "email": "myungsworld@gmail.com",
@@ -1172,7 +1384,7 @@
               },
               "disabled": false,
               "mfaEnabled": false,
-              "lastActiveAt": "2026-02-06",
+              "lastActiveAt": "2026-02-08",
               "isPending": false
             }
           }
