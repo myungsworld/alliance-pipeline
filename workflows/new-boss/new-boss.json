@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-08T09:57:28.156Z",
+  "updatedAt": "2026-02-08T12:12:07.355Z",
   "createdAt": "2026-02-06T02:08:18.659Z",
   "id": "ueut4ILDjD4xAW6i",
   "name": "new-boss",
@@ -385,7 +385,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"Sand\";\n  item.json.hero = \"wolf\"\n}\n\nreturn $input.all();"
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.boss = \"Volcano\";\n  item.json.hero = \"Lego\"\n}\n\nreturn $input.all();"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -950,7 +950,9 @@
       "name": "HTTP Request4"
     },
     {
-      "parameters": {},
+      "parameters": {
+        "amount": 15
+      },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
@@ -1045,7 +1047,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={    \n  \"model\": \"grok-imagine-video\",\n  \"image\": {\n      \"url\": \"{{ $('Update img_url').item.json.img_url_public }}\"\n    },\n  \"duration\": 5,\n  \"aspect_ratio\": \"9:16\",\n  \"prompt\": \"The boss is {{ $('Update img_url').item.json.input_boss }} and the hero is {{ $('Update img_url').item.json.input_hero }}. The scene begins exactly as shown in the input image. The hero is seen from behind throughout the entire video, never turning around. Both characters charge toward each other and clash in an epic slow-motion battle. Cinematic camera movement, dramatic depth of field, volumetric lighting, particle effects, 4K.\"\n  }",
+        "jsonBody": "={    \n  \"model\": \"grok-imagine-video\",\n  \"image\": {\n      \"url\": \"{{ $('Update img_url').item.json.img_url_public }}\"\n    },\n  \"duration\": 5,\n  \"aspect_ratio\": \"9:16\",\n  \"prompt\": \"The boss is {{ $('Update img_url').item.json.input_boss }} and the hero is {{ $('Update img_url').item.json.input_hero }}. The scene begins exactly as shown in the input image. The hero is seen from behind throughout the entire video, never turning around. Both characters charge toward each other and clash in an epic slow-motion battle.  In the final moment, the slow motion suddenly breaks into extreme speed ,the hero flies away helplessly and disappears from the screen as fuck. Cinematic camera movement, dramatic depth of field, volumetric lighting, particle effects, 4K.\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -1340,9 +1342,9 @@
   "staticData": null,
   "meta": null,
   "pinData": {},
-  "versionId": "b36768f4-d670-49d3-95c2-1a7d81cbf333",
+  "versionId": "e4763d8a-8ce4-423d-961a-32e2c9f3b2ba",
   "activeVersionId": null,
-  "versionCounter": 234,
+  "versionCounter": 256,
   "triggerCount": 0,
   "shared": [
     {
